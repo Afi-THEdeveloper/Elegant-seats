@@ -1,0 +1,127 @@
+<%- include('../../partials/Aheader') -%>
+
+<body>
+  <div class="container-scroller">
+
+    <%- include('../../partials/AdminNav') -%>
+
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial -->
+
+      <!-- partial:../../partials/_sidebar.html -->
+      <%- include('../../partials/Adminsidebar') -%>
+
+        <!-- partial -->
+      <div class="main-panel"> 
+
+       
+        
+        
+        <div class="content-wrapper">
+          <div class="row">
+        
+            
+            <div class="col-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Add new category</h4>
+                  
+                  <form class="forms-sample" action="/admin/categories" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                      <label for="exampleInputName1">Category Name</label>
+                      <input type="text" class="form-control" name="name" id="exampleInputName1" placeholder="Name">
+                    </div>
+                  
+                    <div class="form-group">
+                      <label>Image upload</label>
+                      <!-- <input type="file" name="photo" class="file-upload-default"> -->
+                      <div class="input-group col-xs-12">
+                        <input type="file" accept="image/*" name="photo" class="form-control file-upload-info" placeholder="Upload Image" id="preview-input" />
+                      </div>
+                    </div>
+
+                    <div class="form-group" id="preview-group" style="display: none;">
+                        <div class="card">
+                            <div class="card-header">
+                                Preview Image
+                            </div>
+                            <div class="card-body">
+                                <img src="" alt="img" class="preview" id="preview-img" style="max-width: 440px; object-fit: cover;" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary mr-2">Add</button>
+                      <a href="/admin/category" class="btn btn-light">Cancel</a>
+                  </form>
+                </div>
+              </div>
+            </div>
+            
+              
+            </div>
+          </div>
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:../../partials/_footer.html -->
+        <!-- <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2021.  Premium <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap admin template</a> from BootstrapDash. All rights reserved.</span>
+            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="ti-heart text-danger ml-1"></i></span>
+          </div>
+        </footer> -->
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+     
+  <script>
+    function hideErrorMessage() {
+      var errorMessageElement = document.getElementById('error-message');
+      if (errorMessageElement) {
+        setTimeout(()=>{
+          errorMessageElement.style.display = 'none';
+        }, 4000);
+        
+      }
+    }
+    hideErrorMessage();
+
+    const previewArea = document.getElementById('preview-group')
+    const previewInput = document.getElementById('preview-input')
+    const previewImg = document.getElementById('preview-img')
+
+    previewInput.onchange = e => {
+        if (e.target.files && e.target.files.length) {
+            const imgSrc = URL.createObjectURL(e.target.files[0])
+            previewImg.src = imgSrc
+            previewArea.style.display = 'block'
+        }
+    }
+  </script>
+  <!-- plugins:js -->
+  <script src="/admin/vendors/js/vendor.bundle.base.js"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page -->
+  <script src="/admin/vendors/typeahead.js/typeahead.bundle.min.js"></script>
+  <script src="/admin/vendors/select2/select2.min.js"></script>
+  <!-- End plugin js for this page -->
+  <!-- inject:js -->
+  <script src="/admin/js/off-canvas.js"></script>
+  <script src="/admin/js/hoverable-collapse.js"></script>
+  <script src="/admin/js/template.js"></script>
+  <script src="/admin/js/settings.js"></script>
+  <script src="/admin/js/todolist.js"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <script src="/admin/js/file-upload.js"></script>
+  <script src="/admin/js/typeahead.js"></script>
+  <script src="/admin/js/select2.js"></script>
+  <!-- End custom js for this page-->
+</body>
+
+<%- include('../../partials/Afooter') -%>
