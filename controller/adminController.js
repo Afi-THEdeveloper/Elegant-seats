@@ -122,7 +122,6 @@ exports.destroyCategory = async (req, res) => {
 //products managment
 exports.showProducts= async (req,res)=>{
     const products = await Product.find({}).populate('category')
-    console.log(products)
     res.render('Admin/products/products',{products})
 }
 
@@ -160,6 +159,7 @@ exports.showEditProduct=async (req,res)=>{
         console.log(error.message)
     }
 }
+
 
 exports.destroyProduct = async (req, res) => {
     const id = req.body.id;

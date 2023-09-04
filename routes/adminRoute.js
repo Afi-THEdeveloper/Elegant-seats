@@ -20,9 +20,12 @@ router.patch('/categories/:id',isAdminlogged, Imagemiddleware.uploadCategoryImag
 router.get('/products',isAdminlogged,adminController.showProducts)
 router.get('/products/create',isAdminlogged,adminController.showAddProduct)
 router.post('/products',isAdminlogged,Imagemiddleware.uploadProductImages, Imagemiddleware.resizeProductImages, adminController.createProduct)
-router.get('/products/:id/edit',isAdminlogged,adminController.showEditProduct)
-// router.patch('/categories/:id',adminController.editProduct)
 router.post('/products/destroy',isAdminlogged,adminController.destroyProduct)
+
+
+
+
+
 
 
 //users

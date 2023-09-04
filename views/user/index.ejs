@@ -20,10 +20,10 @@
                                     <a class="nav-link" href="/">Home</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="blog.html" id="navbarDropdown_1"
-                                        role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <a class="nav-link" href="/shop">
                                         Shop
                                     </a>
+                                        
                                     <!-- <div class="dropdown-menu" aria-labelledby="navbarDropdown_1">
                                         <a class="dropdown-item" href=""> shop category</a>
                                         <a class="dropdown-item" href="single-product.html">product details</a>
@@ -201,15 +201,17 @@
             <div class="row align-items-center justify-content-between">
                 <% categories.forEach(function(category) { %>
                 <% if (!category.isDestroyed) { %>
+                   
                 <div class="col-lg-5 col-sm-6">
                     <div class="single_feature_post_text">
-                        <p class="" ><%=category.name%></p>
+                        <p><%=category.name%></p>
                         <a href="#" class="feature_btn">EXPLORE NOW <i class="fas fa-play"></i></a>
                         <img src="<%= category.image %>" alt="">
                     </div>
                 </div>
                 <% } %>
                 <% }); %>  
+                    
                         
                     
                 <!-- <div class="col-lg-5 col-sm-6">
@@ -255,14 +257,43 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="product_list_slider owl-carousel">
-                    <% products.forEach(function(product) { %>
-                        <% if (!product.softDeleted) { %>
+                     <% products.forEach((product)=> { %>
+                     <% if (!product.softDeleted) { %>
                         <div class="single_product_list_slider">
                             <div class="row align-items-center justify-content-between">
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="single_product_item">
                                         <a href="/product/<%= product._id %>">
                                             <img  src="<%= product.images[0] %>" alt="">
+                                        </a>
+                                        <div class="single_product_text">
+                                            <h4><%= product.name %></h4>
+                                            <h3><%= product.price %></h3>
+                                            <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                                
+                            </div>
+                        </div>
+                        <% } %>
+                    <% }); %> 
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="product_list_slider owl-carousel">
+                     <% products.forEach((product)=> { %>
+                     <% if (!product.softDeleted) { %>
+                        <div class="single_product_list_slider">
+                            <div class="row align-items-center justify-content-between">
+                                <div class="col-lg-3 col-sm-6">
+                                    <div class="single_product_item">
+                                        <a href="/product/<%= product._id %>">
+                                            <img  src="<%= product.images[1] %>" alt="">
                                         </a>
                                         <div class="single_product_text">
                                             <h4><%= product.name %></h4>
@@ -337,7 +368,9 @@
                         <% products.forEach(function(product) { %>
                         <% if (!product.softDeleted) { %>
                         <div class="single_product_item">
-                            <img src="<%= product.images[0] %>" alt="">
+                            <a href="/product/<%= product._id %>">
+                                <img src="<%= product.images[0] %>" alt="">
+                            </a>
                             <div class="single_product_text">
                                 <h4><%= product.name %></h4>
                                 <h3><%= product.price %></h3>
@@ -345,6 +378,7 @@
                         </div>
                         <% } %>
                         <% }); %>
+
                         <!-- <div class="single_product_item">
                             <img src="img/product/product_2.png" alt="">
                             <div class="single_product_text">

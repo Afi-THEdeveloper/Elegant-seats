@@ -12,18 +12,16 @@ const fileFilter = (req,file,cb)=>{
     cb(err,false)
   }
 }
-
 const upload = multer({ storage, fileFilter })
 
-exports.uploadCategoryImage = upload.single('photo')
 
+//products
 exports.uploadProductImages = upload.fields([
   {
     name: 'images',
     maxCount: 3
   }
 ])
-
 exports.resizeProductImages = async (req, res, next) => {
   if(!req.files.images) return next();
   req.body.images = []
@@ -41,7 +39,8 @@ exports.resizeProductImages = async (req, res, next) => {
   )
   next()
 }
-
+//category
+exports.uploadCategoryImage = upload.single('photo')
 exports.resizeCategoryImage = async(req, res, next) => {
     try {
          if(!req.file) return next();

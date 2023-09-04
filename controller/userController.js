@@ -5,7 +5,7 @@ const bcrypt=require('bcrypt')
 require('dotenv').config()
 const email=require('../util/email')
 const randomString=require('randomstring')
-const catchAsync=require('../util/catchAsync')
+
 
 
 
@@ -112,18 +112,16 @@ exports.verifyOtp=async (req,res)=>{
     try {
         const user = await User.findOne({otp})
         if(!user){
-            req.flash('error','invalid otp')
+            // req.flash('error','invalid otp')
             res.redirect('/verifyOtp')
         }
         else{
             const isVerified=await User.findOneAndUpdate({_id:user._id},{$set:{verified:true}},{new:true})
             if(isVerified.verified){
-                req.flash('success','verification successfull')
                 req.session.user=user._id
                 res.redirect('/')
             }
             else{
-                req.flash('error','verification failed')
                 res.redirect('/verifyOtp')
             }
         }
@@ -137,17 +135,25 @@ exports.verifyOtp=async (req,res)=>{
 
 //products 
 
-exports.showSingle=async (req,res)=>{
-    const id=req.params
-    
+exports.showShop=async (req,res)=>{
     try {
-        const product=await Products.find()
-         console.log(product)
-        res.render('user/singleView',product)
+        res.render('user/shop')
     } catch (error) {
         console.log(error.message)
     }
 }
+
+exports.showSingle=async (req,res)=>{
+   
+    try {
+        const product=await Products.findOne({_id:req.params.id})
+        const category=await Category.findOne({_id:product.category})
+        res.render('user/singleView',{product,category})
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+   
 
 
 //logout
