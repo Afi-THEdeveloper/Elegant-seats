@@ -20,24 +20,36 @@
         
         <div class="content-wrapper">
           <div class="row">
-        
+            
+            
             
             <div class="col-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title">Add new category</h4>
                   
+
                   <form class="forms-sample" action="/admin/categories" method="post" enctype="multipart/form-data">
+
+                    <% if (error && error.length > 0) { %>
+                      <div class="alert alert-danger">
+                        <% error.forEach(function(message) { %>
+                          <p><%= message %></p>
+                        <% }); %>
+                      </div>
+                    <% } %>
+
+
                     <div class="form-group">
                       <label for="exampleInputName1">Category Name</label>
-                      <input type="text" class="form-control" name="name" id="exampleInputName1" placeholder="Name">
+                      <input type="text" class="form-control" name="name" id="exampleInputName1" placeholder="Name" >
                     </div>
                   
                     <div class="form-group">
                       <label>Image upload</label>
                       <!-- <input type="file" name="photo" class="file-upload-default"> -->
                       <div class="input-group col-xs-12">
-                        <input type="file" accept="image/*" name="photo" class="form-control file-upload-info" placeholder="Upload Image" id="preview-input" />
+                        <input type="file" accept="image/*" name="photo" class="form-control file-upload-info" placeholder="Upload Image" id="preview-input"  />
                       </div>
                     </div>
 

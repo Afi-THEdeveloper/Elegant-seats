@@ -1,4 +1,4 @@
-const user=require('../model/userModel')
+const User=require('../model/userModel')
 
 
 exports.islogout= (req, res, next)=>{

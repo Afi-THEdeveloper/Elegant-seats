@@ -6,6 +6,7 @@ const config=require('./config.js/db')
 const path = require('path')
 const mongoose=require('mongoose')
 const morgan = require('morgan');
+const flash=require('express-flash')
 const methodOverride=require('method-override')
 config.dbConnect()
 
@@ -21,8 +22,9 @@ app.use(session({
     secret: 'fhdsjfhdgbvmn',
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } //30 days
+    // cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } //30 days
 }));
+app.use(flash())
 app.use(nocache());
 
 app.use('/', require('./routes/userRoute'))

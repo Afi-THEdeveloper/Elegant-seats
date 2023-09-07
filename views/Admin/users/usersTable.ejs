@@ -201,7 +201,7 @@
                                 <td class="fw-bold">Phone</td> 
                                 <td class="fw-bold">Email</td>
                                 <td class="fw-bold">is Verified</td> 
-                                <td class="fw-bold">Actions</td> 
+                                <td class="fw-bold"><p>Tap to block/Unblock</p></td>
                               </tr>
 
                             <% users.forEach(user => { %>
@@ -230,14 +230,14 @@
                                       <form action="/admin/users/block" method="post">
                                         <input type="hidden" name="id" value="<%= user._id %>">
                                         <input type="hidden" name="state" value="">
-                                        <button type="submit" class="btn btn-sm btn-danger">Un block</button>
+                                        <button type="submit" class="btn btn-sm btn-danger">blocked</button>
                                       </form>
                                    
                                       <% } else { %>
                                         <form action="/admin/users/block" method="post">
                                           <input type="hidden" name="id" value="<%= user._id %>">
                                           <input type="hidden" name="state" value="1">
-                                          <button type="submit" class="btn btn-sm btn-danger">block</button>
+                                          <button type="submit" class="btn btn-sm btn-success">Active</button>
                                         </form>
                                       <%}%>   
                                   </td>

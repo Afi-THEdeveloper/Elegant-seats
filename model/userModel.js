@@ -49,7 +49,7 @@ const userSchema = new mongoose.Schema({
     },
     otp:{
         type:Number,
-        createdAt:{type:Date,expires:'5m',default: Date.now()}
+        createdAt:{type:Date,expires:'1m',default: Date.now()}
     },
     verified: {
         type:Boolean,

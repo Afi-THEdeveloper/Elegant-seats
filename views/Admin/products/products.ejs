@@ -188,9 +188,19 @@
               <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
+                    
+                  
+
                     <div class="d-flex justify-content-between align-items-center">
                         <h4 class="card-title">Products table</h4>
-                        <a href="/admin/products/create" class="btn btn-primary badge">Add Products</a>
+                        <form action="/admin/products/search" method="GET">
+                          <div class="d-flex">
+                              <input type="search" name="q" placeholder="Search Product" class="form-control rounded-pill" />
+                              <button type="submit" class="btn btn-success rounded-pill ms-2">Search</button>
+                          </div>
+                       </form>
+                       <a href="/admin/products/create" class="btn btn-primary badge">Add Products</a>
+
                     </div>
                     <div class="table-responsive">
                       <table class="table table-striped">
@@ -219,10 +229,14 @@
                                               Images
                                             </th>
                                             <th>
-                                              Actions
+                                              Edit
+                                            </th>
+                                            <th>
+                                              Tap to Activate/DeActivate
                                             </th>
                                           </tr>
                                         </thead>
+        
                                         <tbody>
                                             <% products.forEach(pdt => { %>
                                             <tr>
@@ -242,24 +256,27 @@
                                                     <% pdt.images.forEach(img => { %>
                                                         <div class="row">
                                                             <div class="col-4">
-                                                                <img src="<%= img %>" alt="">
+                                                                <img src="<%= img %>" alt="" class="img-click">
                                                             </div>
                                                         </div>
                                                     <% }) %>
                                                 </td>
                                                 <td>
-                                                    <a href="/admin/products/<%= pdt._id %>/edit" class="btn btn-info btn-sm">Edit</a>
+                                                  <a href="/admin/products/<%= pdt._id %>/edit" class="btn btn-info btn-sm">Edit</a>
+                                                </td>
+                                                <td>
+                                                    
                                                     <%if(pdt.softDeleted){%>
                                                         <form action="/admin/products/destroy" method="post" class="d-inline">
                                                           <input type="hidden" name="id" value="<%= pdt._id %>">
                                                           <input type="hidden" name="state" value="">
-                                                          <button type="submit" class="btn btn-danger btn-sm">Acivate</button>
+                                                          <button type="submit" class="btn btn-danger btn-sm">not Active</button>
                                                         </form>
                                                     <% } else { %>
                                                         <form action="/admin/products/destroy" method="post" class="d-inline">
                                                             <input type="hidden" name="id" value="<%=pdt._id%>">
                                                             <input type="hidden" name="state" value="1">
-                                                            <button type="submit" class="btn btn-danger btn-sm">De activate</button>
+                                                            <button type="submit" class="btn btn-success btn-sm">Active</button>
                                                           </form>
                                                     <%}%> 
                                                 </td>

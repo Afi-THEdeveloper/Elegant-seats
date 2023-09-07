@@ -192,6 +192,15 @@
                         <h4 class="card-title">Category table</h4>
                         <a href="/admin/category/create" class="btn btn-primary badge">Add category</a>
                     </div>
+
+                    <% if (success && success.length > 0) { %>
+                      <div class="alert alert-success">
+                        <% success.forEach(function(message) { %>
+                          <p><%= message %></p>
+                        <% }); %>
+                      </div>
+                    <% } %>
+
                     <div class="table-responsive">
                       <table class="table table-striped">
                         <thead>
@@ -238,13 +247,13 @@
                                                 <form action="/admin/category" method="post" class="d-inline">
                                                   <input type="hidden" name="id" value="<%= cat._id %>">
                                                   <input type="hidden" name="state" value="">
-                                                  <button type="submit" class="btn btn-danger btn-sm">Acivate</button>
+                                                  <button type="submit" class="btn btn-danger btn-sm">not Active</button>
                                                 </form>
                                               <% } else { %>
                                                 <form action="/admin/category" method="post" class="d-inline">
                                                     <input type="hidden" name="id" value="<%=cat._id%>">
                                                     <input type="hidden" name="state" value="1">
-                                                    <button type="submit" class="btn btn-danger btn-sm">De activate</button>
+                                                    <button type="submit" class="btn btn-success btn-sm">Active</button>
                                                   </form>
                                               <%}%>
                                             </td>

@@ -17,12 +17,16 @@ router.get('/categories/:id/edit',isAdminlogged,adminController.showEdit)
 router.patch('/categories/:id',isAdminlogged, Imagemiddleware.uploadCategoryImage, Imagemiddleware.resizeCategoryImage, adminController.updateCategory)
 
 //products
-router.get('/products',isAdminlogged,adminController.showProducts)
-router.get('/products/create',isAdminlogged,adminController.showAddProduct)
-router.post('/products',isAdminlogged,Imagemiddleware.uploadProductImages, Imagemiddleware.resizeProductImages, adminController.createProduct)
-router.post('/products/destroy',isAdminlogged,adminController.destroyProduct)
+router.get('/products', isAdminlogged, adminController.showProducts)
+router.get('/products/create', isAdminlogged, adminController.showAddProduct)
+router.post('/products', isAdminlogged, Imagemiddleware.uploadProductImages, Imagemiddleware.resizeProductImages, adminController.createProduct)
+router.post('/products/destroy', isAdminlogged, adminController.destroyProduct)
+router.get('/products/:id/edit', isAdminlogged, adminController.showEditProduct)
+router.patch('/products/:id', isAdminlogged, adminController.updateProduct)
+router.delete('/products/:id/img/delete', isAdminlogged, adminController.destroyProductImage)
+router.patch('/products/:id/img/add', isAdminlogged, Imagemiddleware.uploadProductImages, Imagemiddleware.resizeProductImages, adminController.updateProductImages)
 
-
+router.get('/products/search',isAdminlogged,adminController.searchProduct)
 
 
 
@@ -39,5 +43,7 @@ router.get('/logout',adminController.logout)
 
 
 module.exports=router
+
+
 
 
