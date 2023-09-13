@@ -200,14 +200,14 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="single_product_menu d-flex">
+                                <!-- <div class="single_product_menu d-flex">
                                     <form action="/products/search" method="GET">
                                         <div class="d-flex">
                                             <input type="search" name="q" placeholder="Search Product" class="form-control rounded-pill" />
                                             <button type="submit" class="btn btn-success rounded-pill ms-2">Search</button>
                                         </div>
                                      </form>
-                               </div>
+                               </div> -->
                            </div>
                        </div>
                                                 
@@ -225,7 +225,7 @@
                                     <div class="single_product_text">
                                         <h4><%= product.name %></h4>
                                         <h3>$<%= product.price %></h3>
-                                        <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
+                                        <a href="/addToCart/<%= product._id  %>" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
                                     </div>
                                 </div>
                             </div>

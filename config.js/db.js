@@ -8,3 +8,4 @@ const dbConnect=()=> mongoose.set('strictQuery',true).connect(process.env.MONGO_
 module.exports={
     dbConnect
 }
+

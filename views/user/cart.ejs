@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="zxx">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Elegant seats</title>
+  <link rel="icon" href="img/favicon.png">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <!-- animate CSS -->
+  <link rel="stylesheet" href="css/animate.css">
+  <!-- owl carousel CSS -->
+  <link rel="stylesheet" href="css/owl.carousel.min.css">
+  <!-- nice select CSS -->
+  <link rel="stylesheet" href="css/nice-select.css">
+  <!-- font awesome CSS -->
+  <link rel="stylesheet" href="css/all.css">
+  <!-- flaticon CSS -->
+  <link rel="stylesheet" href="css/flaticon.css">
+  <link rel="stylesheet" href="css/themify-icons.css">
+  <!-- font awesome CSS -->
+  <link rel="stylesheet" href="css/magnific-popup.css">
+  <!-- swiper CSS -->
+  <link rel="stylesheet" href="css/slick.css">
+  <link rel="stylesheet" href="css/price_rangs.css">
+  <!-- style CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <%- include('../partials/header') -%>
+
+  
+  
+    <!--================Home Banner Area =================-->
+    <!-- breadcrumb start-->
+    <section class="breadcrumb breadcrumb_bg">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <div class="breadcrumb_iner">
+              <div class="breadcrumb_iner_item">
+                <h2>Cart Products</h2>
+                <p>Home <span>-</span>Cart Products</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- breadcrumb start-->
+  
+    <!--================Cart Area =================-->
+    <section class="cart_area padding_top">
+      <div class="container">
+        <div class="cart_inner">
+          
+          <% if (success && success.length > 0) { %>
+            <div class="alert alert-success">
+              <% success.forEach(function(message) { %>
+                <p><%= message %></p>
+              <% }); %>
+            </div>
+          <% } else if(error && error.length >0) { %>
+            <div class="alert alert-danger">
+              <% error.forEach(function(message) { %>
+                <p><%= message %></p>
+              <% }); %>
+            </div>
+          <% } %>
+          
+          <%if(cart.length){%>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Product</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">quantity</th>
+                  <th scope="col">actions</th>
+                  <th scope="col"> Total</th>
+                </tr>
+              </thead>
+              <tbody>
+              
+              <% cart.forEach((cartprdt,index) => { %>
+
+                <tr>
+                  <td>
+                    <div class="media">
+                      <div class="d-flex">
+                       
+                        <img src="<%= cartprdt.product.images[0] %>" alt="" width="140" height="100">
+                      
+                      </div>
+                      <div class="media-body">
+                        <p><%= cartprdt.product.name  %></p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <h5><%= cartprdt.product.price %></h5>
+                  </td>
+                  <td>
+                    <div class="input-group">
+                        <button
+                         class="btn btn-primary  input-number-decrement"
+                         data-action="qty-decrement"
+                         data-cart-item-id="<%= cartprdt._id %>">-
+                        </button>
+                        <input
+                            class="form-control input-number" 
+                            type="number"
+                            value="<%= cartprdt.quantity %>"
+                            min="0" max="10"
+                        >
+                        <button 
+                            class="btn btn-primary btn-sm input-number-increment"
+                            data-action="qty-increment"
+                            data-cart-item-id="<%= cartprdt._id %>">+
+                        </button> 
+                    </div>
+                </td>
+                  <td>
+                    <a  href="/destroyCartItem/<%= cartprdt._id %>" onclick="confirmDelete('{{ cartprdt._id }}')" class="btn btn-danger btn-sm">remove</a>
+                  </td>
+                 
+                  <td>
+                    <h5 class="price" id="cartTotal_<%= cartprdt._id %>" data-cart-total-id="change_total" name="totalAmount"
+                      >&#8377;<%=cartprdt.total %></h5
+                    >
+                  </td>
+                </tr>
+                <% }); %>
+
+                <!-- <tr class="bottom_button">
+                  <td>
+                    <div class="cupon_text float-right">
+                      <a class="btn_1" href="#">Close Coupon</a>
+                    </div>
+                  </td>
+                  <td> -->
+                    <!-- <a class="btn_1" href="#">Update Cart</a> -->
+                  <!-- </td>
+                  <td></td>
+                  <td></td>
+                  
+                </tr>
+                 -->
+
+                <tr class="shipping_area">
+                  
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <h5>
+                      <span>Subtotal:</span>
+                      <span id="subtotalAmount">&#8377;<%= totalCartAmount %></span>
+                    </h5>
+                  </td>
+                  
+                      
+
+                
+
+
+  
+                  
+                  
+                  <td>
+                    <div class="shipping_box">
+                      <ul class="list">
+                        <li>
+                          <a href="#">Flat Rate: $0.00</a>
+                        </li>
+                        <li>
+                          <a href="#">Free Shipping</a>
+                        </li>
+                        <!-- <li>
+                          <a href="#">Flat Rate: $10.00</a>
+                        </li>
+                        <li class="active">
+                          <a href="#">Local Delivery: $2.00</a>
+                        </li> -->
+                        <hr>
+                        <li>
+                          <h5>
+                          <span><strong>Total:</strong></span>
+                          <span id="totalAmount">&#8377;<%= totalCartAmount %></span>
+                          </h5>
+                        </li>
+                      </ul>
+                      <!-- <h6>
+                        Calculate Shipping
+                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                      </h6>
+                      <select class="shipping_select">
+                        <option value="1">Bangladesh</option>
+                        <option value="2">India</option>
+                        <option value="4">Pakistan</option>
+                      </select>
+                      <select class="shipping_select section_bg">
+                        <option value="1">Select a State</option>
+                        <option value="2">Select a State</option>
+                        <option value="4">Select a State</option>
+                      </select>
+                      <input type="text" placeholder="Postcode/Zipcode" />
+                      <a class="btn_1" href="#">Update Details</a> -->
+                    </div>
+                  </td>
+                </tr>
+
+
+
+                
+
+
+              </tbody>
+            </table>
+              
+            <% } else { %>
+              <h6>cart is empty</h6>
+            <% } %>
+            <div class="checkout_btn_inner float-right">
+              <a class="btn_1" href="/shop">Continue Shopping</a>
+              <a class="btn_1 checkout_btn_1" href="/cart/checkout">Proceed to checkout</a>
+            </div>
+          </div>
+        </div>
+    </section>
+    <!--================End Cart Area =================-->
+  
+   
+
+    
+    <!-- jquery plugins here-->
+    <!-- jquery -->
+    <script src="/js/jquery-1.12.1.min.js"></script>
+    <!-- popper js -->
+    <script src="/js/popper.min.js"></script>
+    <!-- bootstrap js -->
+    <script src="/js/bootstrap.min.js"></script>
+    <!-- easing js -->
+    <script src="/js/jquery.magnific-popup.js"></script>
+    <!-- swiper js -->
+    <script src="/js/swiper.min.js"></script>
+    <!-- swiper js -->
+    <script src="/js/masonry.pkgd.js"></script>
+    <!-- particles js -->
+    <script src="/js/owl.carousel.min.js"></script>
+    <script src="/js/jquery.nice-select.min.js"></script>
+    <!-- slick js -->
+    <script src="/js/slick.min.js"></script>
+    <script src="/js/jquery.counterup.min.js"></script>
+    <script src="/js/waypoints.min.js"></script>
+    <script src="/js/contact.js"></script>
+    <script src="/js/jquery.ajaxchimp.min.js"></script>
+    <script src="/js/jquery.form.js"></script>
+    <script src="/js/jquery.validate.min.js"></script>
+    <script src="/js/mail-script.js"></script>
+    <script src="/js/stellar.js"></script>
+    <script src="/js/price_rangs.js"></script>
+    <!-- custom js -->
+    <script src="/js/custom.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script>
+      $(document).ready(function() {
+    // Get all input elements and increment/decrement buttons
+    const inputNumbers = $(".input-number");
+    const incrementButtons = $(".input-number-increment");
+    const decrementButtons = $(".input-number-decrement");
+
+    // Add click event listeners for all increment and decrement buttons
+    incrementButtons.on("click", function() {
+        const inputElement = $(this).siblings(".input-number");
+        updateCartItemQuantity(inputElement, "increment");
+    });
+
+    decrementButtons.on("click", function() {
+        const inputElement = $(this).siblings(".input-number");
+        updateCartItemQuantity(inputElement, "decrement");
+    });
+
+    function updateCartItemQuantity(inputElement, action) {
+        const cartItemId = inputElement
+            .siblings(".input-number-increment")
+            .data("cart-item-id");
+
+        let currentValue = parseInt(inputElement.val());
+
+        if (!isNaN(currentValue)) {
+            if (action === "increment" && currentValue < 10) {
+                currentValue++;
+            } else if (action === "decrement" && currentValue > 1) {
+                currentValue--;
+            }
+
+            // Update the input value
+            inputElement.val(currentValue);
+
+            // Perform an AJAX request to update the cart item's quantity on the server
+            // Replace '/update-cart-item-quantity' with your server endpoint
+            $.ajax({
+                url: "/update-cart-item-quantity", // Replace with your server-side route
+                method: "POST", // or 'PUT' depending on your API
+                data: {
+                    cartItemId: cartItemId,
+                    quantity: currentValue,
+                },
+                success: function(response) {
+                    if (response) {
+                        const newTotal = response.total;
+                        const cartTotal = $(`#cartTotal_${cartItemId}`);
+                        cartTotal.text(newTotal);
+
+                        const newTotalAmount = response.totalCartAmount;
+                        const totalAmountElement = $("#totalAmount");
+                        totalAmountElement.text(`₹${newTotalAmount}`);
+
+                        const subtotalAmount = response.totalCartAmount;
+                        const subtotalAmountElement = $("#subtotalAmount");
+                        subtotalAmountElement.text(`₹${subtotalAmount}`);
+                    } else {
+                        // Handle the error, e.g., display a message
+                    }
+                },
+                error: function() {
+                    // Handle the AJAX error
+                },
+            });
+        }
+    }
+});
+
+
+//remove from cart confirmation
+function confirmDelete(cartItemId) {
+        // Display a confirmation dialog
+        if (confirm("Are you sure you want to remove this item from your cart?")) {
+            // If the user confirms, redirect to the delete route
+            window.location.href = '/delete-cart-item/' + cartItemId;
+            return true
+        }
+        else{
+          event.preventDefault()
+          return false
+        }
+}
+</script>
+
+
+
+
+
+  </body>
+  
+  </html>

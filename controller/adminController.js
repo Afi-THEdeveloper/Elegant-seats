@@ -277,6 +277,7 @@ exports.blockUser=async (req,res)=>{
   const state=Boolean(req.body.state)
   try {
     const users=await User.findByIdAndUpdate(id,{$set:{ blocked:state}},{new:true})
+    req.session.user=null
     res.redirect('/admin/users')  
   } catch (error) {
     console.log(error.message)

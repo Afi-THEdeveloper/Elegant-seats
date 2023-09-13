@@ -282,8 +282,8 @@
 
     function init(el) {
 
-      els.dec.on('click', decrement);
-      els.inc.on('click', increment);
+      els.dec.on('click', Odecrement);
+      els.inc.on('click', Oincrement);
 
       function decrement() {
         var value = el[0].value;

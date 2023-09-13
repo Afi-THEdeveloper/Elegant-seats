@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegant seats</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Elegant seats</title>
+    <link rel="icon" href="img/favicon.png">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <!-- animate CSS -->
+    <link rel="stylesheet" href="/css/animate.css">
+    <!-- owl carousel CSS -->
+    <link rel="stylesheet" href="/css/owl.carousel.min.css">
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="/css/all.css">
+    <!-- flaticon CSS -->
+    <link rel="stylesheet" href="/css/flaticon.css">
+    <link rel="stylesheet" href="/css/themify-icons.css">
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="/css/magnific-popup.css">
+    <!-- swiper CSS -->
+    <link rel="stylesheet" href="/css/slick.css">
+   
+    <style>
+        /* Basic styling for the readonly box */
+        .readonly-box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            max-width: 500px;
+            margin:0 100px;
+            background-color: #f9f9f9;
+        }
+            
+
+        /* Style for the user details */
+        .user-details {
+            font-weight: normal;
+        }
+
+        /* Add responsiveness for smaller screens */
+        @media (max-width: 768px) {
+            .readonly-box {
+                max-width: 90%;
+            }
+        }
+    </style>
+
+
+
+    
+</head>
+<body>
+    <!-- Navbar -->
+    <%- include('../../partials/accountNav') -%>
+
+
+    <!-- Sidebar -->
+    <div class="container-fluid">
+        <div class="row">
+            
+            <%- include('../../partials/accountSidebar') -%>
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+
+                
+
+                <div class="col-12 grid-margin stretch-card">
+                    <div class="card">
+                      <div class="card-body">
+                        <h4 class="card-title">Edit profile</h4>
+                        
+                        <form class="forms-sample" action="/profile/edit?_method=PATCH" method="post" enctype="multipart/form-data">
+                          <div class="form-group">
+                            <label for="exampleInputName1">Name</label>
+                            <input type="text" class="form-control" name="name" value="<%= user.name %>" id="exampleInputName1" placeholder="Name">
+                          </div>
+                          <div class="form-group">
+                            <label for="exampleInputName1">phone</label>
+                            <input type="number" class="form-control" name="phone" value="<%= user.mobile  %>" id="exampleInputName1" placeholder="phone">
+                          </div>
+      
+                        
+                          <div class="form-group">
+                            <label>profile image</label>
+                            <!-- <input type="file" name="photo" class="file-upload-default"> -->
+                            <div class="input-group col-xs-12">
+                              <input type="file" accept="image/*" name="image" class="form-control file-upload-info" placeholder="Upload Image" id="preview-input" />
+                            </div>
+                          </div>
+      
+                          <div class="form-group" id="preview-group">
+                              <div class="card">
+                                  <div class="card-header">
+                                      Preview Image
+                                  </div>
+                                  <div class="card-body">
+                                      <div class="d-flex justify-content-center">
+                                          <img src="<%= user.profile  %>" alt="img" class="preview" id="preview-img" style="max-width: 440px; object-fit: cover;" />
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          
+                            <button type="submit" class="btn btn-primary mr-2">Update</button>
+                            <!-- <a href="/admin/category" class="btn btn-light">Cancel</a> -->
+                            <button type="button" onclick="return back()" class="btn btn-secondary">Cancel</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                
+        
+            </main>
+        </div>
+    </div>
+
+
+    <script src="/js/zoomImg.js"></script>
+    <script>
+      function back() {
+          window.history.back()
+      }
+  
+      const img = document.getElementById('preview-img')
+      img.onclick = () => zoomImg(img)
+  
+      function hideErrorMessage() {
+        var errorMessageElement = document.getElementById('error-message');
+        if (errorMessageElement) {
+          setTimeout(()=>{
+            errorMessageElement.style.display = 'none';
+          }, 4000);
+          
+        }
+      }
+      hideErrorMessage();
+  
+      const previewArea = document.getElementById('preview-group')
+      const previewInput = document.getElementById('preview-input')
+      const previewImg = document.getElementById('preview-img')
+  
+      previewInput.onchange = e => {
+          if (e.target.files && e.target.files.length) {
+              const imgSrc = URL.createObjectURL(e.target.files[0])
+              previewImg.src = imgSrc
+              previewArea.style.display = 'block'
+          }
+      }
+  
+      
+    </script>
+
+<%- include('../../partials/accountFooter') -%>

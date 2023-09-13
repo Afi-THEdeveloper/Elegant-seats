@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegant seats</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Elegant seats</title>
+    <link rel="icon" href="img/favicon.png">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <!-- animate CSS -->
+    <link rel="stylesheet" href="/css/animate.css">
+    <!-- owl carousel CSS -->
+    <link rel="stylesheet" href="/css/owl.carousel.min.css">
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="/css/all.css">
+    <!-- flaticon CSS -->
+    <link rel="stylesheet" href="/css/flaticon.css">
+    <link rel="stylesheet" href="/css/themify-icons.css">
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="/css/magnific-popup.css">
+    <!-- swiper CSS -->
+    <link rel="stylesheet" href="/css/slick.css">
+   
+    <style>
+        /* Basic styling for the readonly box */
+        .readonly-box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            max-width: 500px;
+            margin:0 100px;
+            background-color: #f9f9f9;
+        }
+            
+
+        /* Style for the user details */
+        .user-details {
+            font-weight: normal;
+        }
+
+        /* Add responsiveness for smaller screens */
+        @media (max-width: 768px) {
+            .readonly-box {
+                max-width: 90%;
+            }
+        }
+    </style>
+
+
+
+    
+</head>
+<body>
+    <!-- Navbar -->
+    <%- include('../../partials/accountNav') -%>
+
+
+    <!-- Sidebar -->
+    <div class="container-fluid">
+        <div class="row">
+            
+            <%- include('../../partials/accountSidebar') -%>
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+
+                <% if (success && success.length > 0) { %>
+                    <div class="alert alert-success">
+                      <% success.forEach(function(message) { %>
+                        <p><%= message %></p>
+                      <% }); %>
+                    </div>
+                <% } %>
+
+                <section class="vh-10" style="background-color: #f9f9f9;">
+                    <div class="container py-5 h-100">
+                      <div class="row d-flex justify-content-center align-items-center h-100">
+                        <div class="col col-md-9 col-lg-7 col-xl-5">
+                          <div class="card" style="border-radius: 15px; background-color: #f9f9f9;">
+                            <div class="card-body p-4 text-black">
+                              <div>
+                                <h6 class="mb-4">Profile</h6>
+                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                  <p class="small mb-0"><i class="me-2"></i></p>
+                                  <p class="fw-bold mb-0">verified</p>
+                                </div>
+                              </div>
+                              <div class="d-flex align-items-center mb-4">
+                                <div class="flex-shrink-0">
+                                  <img src="<%= user.profile  %>"
+                                    alt="Generic placeholder image" class="img-fluid rounded-circle border border-dark border-3"
+                                    style="width: 70px;">
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                  <div class="d-flex flex-row align-items-center mb-2 ml-5">
+                                    <p class="mb-0 me-2"><b>name</b><br><%= user.name  %></p>
+                                </div>
+                                <div class="ml-5">
+                                  <p class="mb-0 me-2"><b>Email </b> <br> <%= user.email  %></p>
+                                  <p class="mb-0 me-2"><b>Phone </b><br> <%= user.mobile  %></p>
+                                </div>
+                                    
+                                    
+                                    
+                                    
+                                </div>
+                              </div>
+                              <hr>
+                              <p class="my-4 pb-1"></p>
+                              <a href="/profile/edit" class="btn btn-primary btn-rounded btn-block btn-sm"><i
+                                  class="me-2"></i>Edit Profile</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                
+        
+            </main>
+        </div>
+    </div>
+
+<%- include('../../partials/accountFooter') -%>  
+
+
+

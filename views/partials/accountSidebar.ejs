@@ -1,0 +1,36 @@
+<nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar" style="background-color: #ECFDFF">
+    <div class="position-sticky">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <h6>Hello <%= user.name  %></h6>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/profile">
+                    profile
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/profile/address">
+                    Address
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/myOrders">
+                    My orders
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    payments
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/editPassword" onclick="confirmReset()">
+                    Reset password 
+                </a>
+            </li>
+            <!-- Add more sidebar links as needed -->
+        </ul>
+    </div>
+</nav>

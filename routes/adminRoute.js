@@ -1,5 +1,6 @@
 const router =require('express').Router()
 const adminController=require('../controller/adminController')
+const orderController=require('../controller/orderController')
 const Imagemiddleware=require('../middlewares/imageUpload')
 const {isAdminLogout,isAdminlogged}=require('../middlewares/auth')
 
@@ -25,10 +26,13 @@ router.get('/products/:id/edit', isAdminlogged, adminController.showEditProduct)
 router.patch('/products/:id', isAdminlogged, adminController.updateProduct)
 router.delete('/products/:id/img/delete', isAdminlogged, adminController.destroyProductImage)
 router.patch('/products/:id/img/add', isAdminlogged, Imagemiddleware.uploadProductImages, Imagemiddleware.resizeProductImages, adminController.updateProductImages)
-
 router.get('/products/search',isAdminlogged,adminController.searchProduct)
 
 
+//orders
+router.get('/ordersTable', isAdminlogged, orderController.showOrdersTable)
+router.patch('/ordersTable', isAdminlogged, orderController.updateStatus)
+router.get('/orders/details/:id', isAdminlogged, orderController.orderDetails)
 
 
 
@@ -39,7 +43,7 @@ router.post('/users/block',isAdminlogged,adminController.blockUser)
 
 
 //logout
-router.get('/logout',adminController.logout)
+router.get('/logout', isAdminlogged, adminController.logout)
 
 
 module.exports=router

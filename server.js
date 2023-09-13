@@ -4,6 +4,7 @@ const session=require('express-session')
 const nocache=require('nocache')
 const config=require('./config.js/db')
 const path = require('path')
+const cookieParser=require('cookie-parser')
 const mongoose=require('mongoose')
 const morgan = require('morgan');
 const flash=require('express-flash')
@@ -18,12 +19,14 @@ app.set('view engine','ejs')
 // app.use(morgan('dev')) 
 app.use(methodOverride('_method'))
 app.use(express.urlencoded({extended:true}))
+app.use(cookieParser())
 app.use(session({
     secret: 'fhdsjfhdgbvmn',
     resave: false,
     saveUninitialized: true,
-    // cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } //30 days
-}));
+}))
+    
+
 app.use(flash())
 app.use(nocache());
 
@@ -35,5 +38,8 @@ app.use((req,res)=>{res.send('<h1> <center>404-page not found</center> </h1>')})
 
 
 
-const port=process.env.PORT || 5000
+const port = process.env.PORT || 5000
 app.listen(port,()=>{console.log('server started')})
+  
+
+

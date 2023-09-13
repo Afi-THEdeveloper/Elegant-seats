@@ -82,21 +82,22 @@
             <p>
               <%= product.description %>
             </p>
+            <form action="/addToCart" method="post">
+               <div class="card_area d-flex justify-content-between align-items-center">
+                 
+                   <input  type="hidden" name="quantity" value="1">
+                   <input type="hidden" name="productId" value="<%= product._id %>">
+                   <button type="submit" class="btn_3">add to cart</button>
+                 
+                 <a href="#" class="like_us"> <i class="ti-heart"></i> </a>
+               </div>
+            </form>
             <div class="card_area d-flex justify-content-between align-items-center">
-              <div class="product_count">
+              <!-- <div class="product_count">
                 <span class="inumber-decrement"> <i class="ti-minus"></i></span>
                 <input class="input-number" type="text" value="1" min="0" max="10">
                 <span class="number-increment"> <i class="ti-plus"></i></span>
-              </div>
-              <a href="#" class="btn_3">add to cart</a>
-              <a href="#" class="like_us"> <i class="ti-heart"></i> </a>
-            </div>
-            <div class="card_area d-flex justify-content-between align-items-center">
-              <div class="product_count">
-                <span class="inumber-decrement"> <i class="ti-minus"></i></span>
-                <input class="input-number" type="text" value="1" min="0" max="10">
-                <span class="number-increment"> <i class="ti-plus"></i></span>
-              </div>
+              </div> -->
               <a href="#" class="btn_3">Buy now</a>
               
             </div>
@@ -131,8 +132,8 @@
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
           <p>
-            Beryl Cook is one of Britain’s most talented and amusing artists
-            .Beryl’s pictures feature women of all shapes and sizes enjoying
+            Beryl Cook is one of Britain's most talented and amusing artists
+            .Beryl's pictures feature women of all shapes and sizes enjoying
             themselves .Born between the two world wars, Beryl Cook eventually
             left Kendrick School in Reading at the age of 15, where she went
             to secretarial school and then into an insurance office. After
@@ -142,11 +143,11 @@
             for a year before John took a job in Southern Rhodesia with a
             motor company. Beryl bought their young son a box of watercolours,
             and when showing him how to use it, she decided that she herself
-            quite enjoyed painting. John subsequently bought her a child’s
+            quite enjoyed painting. John subsequently bought her a child's
             painting set for her birthday and it was with this that she
             produced her first significant work, a half-length portrait of a
             dark-skinned lady with a vacant expression and large drooping
-            breasts. It was aptly named ‘Hangover’ by Beryl’s husband and
+            breasts. It was aptly named 'Hangover' by Beryl's husband and
           </p>
           <p>
             It is often frustrating to attempt to plan meals that are designed

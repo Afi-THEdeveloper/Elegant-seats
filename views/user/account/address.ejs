@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegant seats</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Elegant seats</title>
+    <link rel="icon" href="img/favicon.png">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <!-- animate CSS -->
+    <link rel="stylesheet" href="/css/animate.css">
+    <!-- owl carousel CSS -->
+    <link rel="stylesheet" href="/css/owl.carousel.min.css">
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="/css/all.css">
+    <!-- flaticon CSS -->
+    <link rel="stylesheet" href="/css/flaticon.css">
+    <link rel="stylesheet" href="/css/themify-icons.css">
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="/css/magnific-popup.css">
+    <!-- swiper CSS -->
+    <link rel="stylesheet" href="/css/slick.css">
+   
+    <style>
+        /* Basic styling for the readonly box */
+        .readonly-box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            max-width: 500px;
+            margin:0 100px;
+            background-color: #f9f9f9;
+        }
+            
+
+        /* Style for the user details */
+        .user-details {
+            font-weight: normal;
+        }
+
+        /* Add responsiveness for smaller screens */
+        @media (max-width: 768px) {
+            .readonly-box {
+                max-width: 90%;
+            }
+        }
+    </style>
+
+
+
+    
+</head>
+<body>
+    <!-- Navbar -->
+    <%- include('../../partials/accountNav') -%>
+    <!-- Sidebar -->
+    <div class="container-fluid">
+        <div class="row">
+            
+            <%- include('../../partials/accountSidebar') -%>
+
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                
+                <div class="main-panel">
+                    <div class="content-wrapper">
+                      <div class="row">
+                        <div class="col-lg-6 grid-margin stretch-card">
+                          <div class="card">
+                            <div class="card-body">
+
+                                <div class="table-responsive">
+                                    <table class="table">
+                                      <thead>
+                                        
+                                      </thead>
+                                      <tbody>
+                                        
+                                        <a href="/profile/addAddress" class="btn btn-outline-primary">Add address</a>
+                                
+                                      </tbody>
+                                    </table>
+                                </div>
+
+
+                                <div class="table-responsive">
+                                    <table class="table">
+                                      <thead>
+                                        <tr>
+                                          <th>Default Address</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <% addresses.forEach(function(address, index) { %>
+                                        <tr>
+                                        <% if(address.defaultAddress){ %>
+                                            <td>
+                                                <span><%= address.phone %></span><br>
+                                                <span><%= address.address %>,<%= address.landMark  %>,<%= address.locality %>,
+                                                    <%= address.district  %> District,<%= address.state  %>,<%= address.pincode %>.
+                                                </span>
+                                            </td>
+                                            <td><a href="/profile/editAddress/<%= address._id %>" class="">edit</a></td>
+                                        <% } %>
+                                       </tr>
+                                       <% }); %>
+                            
+                                  </tbody>
+                                </table>
+                            </div>
+                                           
+                                
+
+                             
+                              
+<!-- addressList.ejs -->
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>no.</th>
+                <th>secondary address</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% addresses.forEach(function(address, index) { %>
+            <% if(!address.defaultAddress){ %>     
+                <tr>
+                     
+                    <td><%= index + 1 %></td>
+                    
+
+                    <td>
+                        <span><%= address.phone %></span><br>
+                        <span><%= address.address %>,<%= address.landMark  %>,<%= address.locality %>,
+                            <%= address.district  %> District,<%= address.state  %>,<%= address.pincode %>.
+                        </span>
+                    </td>
+                    <td>
+                      
+                        <a href="/profile/editAddress/<%= address._id %>" class="">edit</a>
+                        <a href="/profile/deleteAddress/<%=address._id%>" class="">remove</a>
+
+                        <form action="/profile/setDefaultAddress" method="post">
+                            <input type="hidden" name="id" value="<%= address._id  %>">
+                            <button type="submit" class="btn btn-sm btn-secondary mt-2">Set as default</button>
+                        </form>
+                     
+                    </td>
+                      
+                     
+                </tr>
+            <% } %>   
+            <% }); %>
+        </tbody>
+    </table>
+</div>
+
+
+                            </div>
+                          </div>
+                        </div>
+                                      
+                                      
+
+
+            </main>
+        </div>
+    </div>
+
+<%- include('../../partials/accountFooter') -%>   

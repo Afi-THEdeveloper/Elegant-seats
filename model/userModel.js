@@ -18,31 +18,38 @@ const userSchema = new mongoose.Schema({
         required:true
     },
     profile:{
-        type:String
+        type:String,
+        default:'avatar.png'
     },
-    cart:[{
-        productId:{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Products',
-        },
-        quantity:{
-            type : Number,
-            default: 1
-        },
-        productPrice:{
-            type: Number,
-            required : true
-        },
-        discountPrice:{
-            type : Number,
-            required : true
+    cart:[
+        {
+           product:{
+               type: mongoose.Schema.Types.ObjectId,
+               ref: 'Product',
+           },
+           quantity:{
+               type : Number,
+               default: 1
+           },
+           total:{
+              type:Number,
+              default:0
+           }
         }
-    }],
+    ],
+    totalCartAmount:{
+        type:Number,
+        default:0
+    },
     wishlist:[{
         type : mongoose.Schema.Types.ObjectId,
         ref: 'Products'
     }],
     address:Array,
+    defaultAddress:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Address',
+    },
     blocked :{
         type:Boolean,
         default:false

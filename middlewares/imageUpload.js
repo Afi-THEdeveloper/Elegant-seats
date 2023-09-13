@@ -59,3 +59,24 @@ exports.resizeCategoryImage = async(req, res, next) => {
    }
 
 }
+
+
+//profile
+exports.uploadProfileImage = upload.single('image');
+
+exports.resizeProfileImage =async  (req,res,next) => {
+  try {
+    if(!req.file) return next();
+    req.file.originalname = `userProfile-${Date.now()}.png`;
+    console.log('Working me...')
+    req.body.image = req.file.originalname
+    await sharp(req.file.buffer)
+    .resize(300,300)
+    .toFormat('jpeg')
+    .png({quality:90}).toFile(`public/profile/${req.file.originalname}`);
+    next();
+    
+  } catch (error) {
+    console.log(error.message)
+  }
+}
