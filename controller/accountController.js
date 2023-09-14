@@ -145,8 +145,7 @@ exports.setDefaultAddress=async (req,res)=>{
 
 exports.deleteAddress=async (req,res)=>{
     try {
-        await Address.deleteOne({_id:req.params.id});
-        const samedDeliveryAddress=await Order.find({deliveryAddress:req.params.id})
+        await Address.findOneAndUpdate({_id:req.params.id},{softDeleted:true})
         res.redirect('/profile/address')
     } catch (error) {
         console.log(error.message)

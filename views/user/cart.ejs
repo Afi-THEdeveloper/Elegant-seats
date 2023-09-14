@@ -92,7 +92,7 @@
                     <div class="media">
                       <div class="d-flex">
                        
-                        <img src="<%= cartprdt.product.images[0] %>" alt="" width="140" height="100">
+                        <img src="<%= cartprdt.product.images[0] %>" alt="" width="140" height="120">
                       
                       </div>
                       <div class="media-body">
@@ -104,7 +104,7 @@
                     <h5><%= cartprdt.product.price %></h5>
                   </td>
                   <td>
-                    <div class="input-group">
+                    <div class="input-group" style="width: 100px">
                         <button
                          class="btn btn-primary  input-number-decrement"
                          data-action="qty-decrement"
@@ -112,9 +112,9 @@
                         </button>
                         <input
                             class="form-control input-number" 
-                            type="number"
+                            type="text"
                             value="<%= cartprdt.quantity %>"
-                            min="0" max="10"
+                            readonly
                         >
                         <button 
                             class="btn btn-primary btn-sm input-number-increment"
@@ -124,7 +124,7 @@
                     </div>
                 </td>
                   <td>
-                    <a  href="/destroyCartItem/<%= cartprdt._id %>" onclick="confirmDelete('{{ cartprdt._id }}')" class="btn btn-danger btn-sm">remove</a>
+                    <a  href="/destroyCartItem/<%= cartprdt._id %>" class="btn btn-danger btn-sm">remove</a>
                   </td>
                  
                   <td>
@@ -226,6 +226,7 @@
             <div class="checkout_btn_inner float-right">
               <a class="btn_1" href="/shop">Continue Shopping</a>
               <a class="btn_1 checkout_btn_1" href="/cart/checkout">Proceed to checkout</a>
+              <hr>
             </div>
           </div>
         </div>
@@ -310,45 +311,46 @@
                     cartItemId: cartItemId,
                     quantity: currentValue,
                 },
-                success: function(response) {
-                    if (response) {
-                        const newTotal = response.total;
-                        const cartTotal = $(`#cartTotal_${cartItemId}`);
-                        cartTotal.text(newTotal);
+                success: function(response,status, xhr) {
+                  if (response) {
 
-                        const newTotalAmount = response.totalCartAmount;
-                        const totalAmountElement = $("#totalAmount");
-                        totalAmountElement.text(`₹${newTotalAmount}`);
+                       if(response.stock){
+                         alert('out of stock')
+                         currentValue=response.stock
+                         return inputElement.val(currentValue);
+                       }
+                       const newTotal = response.total;
+                       const cartTotal = $(`#cartTotal_${cartItemId}`);
+                       cartTotal.text(newTotal);
 
-                        const subtotalAmount = response.totalCartAmount;
-                        const subtotalAmountElement = $("#subtotalAmount");
-                        subtotalAmountElement.text(`₹${subtotalAmount}`);
-                    } else {
-                        // Handle the error, e.g., display a message
-                    }
-                },
-                error: function() {
+                       const newTotalAmount = response.totalCartAmount;
+                       const totalAmountElement = $("#totalAmount");
+                       totalAmountElement.text(`₹${newTotalAmount}`);
+
+                       const subtotalAmount = response.totalCartAmount;
+                       const subtotalAmountElement = $("#subtotalAmount");
+                       subtotalAmountElement.text(`₹${subtotalAmount}`);
+                   } else {
+                      alert("An error occurred while updating the cart item.");// Handle the error, e.g., display a message
+                   }
+               },
+                    
+
+              error: function(xhr, stock, errorThrown) {
                     // Handle the AJAX error
-                },
+                    if(xhr.status === 422){
+                      alert('product is out of stock')
+                    }
+                    else if(xhr.status === 404){
+                      alert('an error occured')
+                    }
+              },
             });
         }
     }
 });
 
 
-//remove from cart confirmation
-function confirmDelete(cartItemId) {
-        // Display a confirmation dialog
-        if (confirm("Are you sure you want to remove this item from your cart?")) {
-            // If the user confirms, redirect to the delete route
-            window.location.href = '/delete-cart-item/' + cartItemId;
-            return true
-        }
-        else{
-          event.preventDefault()
-          return false
-        }
-}
 </script>
 
 

@@ -193,7 +193,7 @@
 
                     <div class="table-responsive">
 
-                    
+                      <% if(orders.length){%>
                       <table class="table table-striped">
                         <thead>
                           <tr>
@@ -246,7 +246,7 @@
                             </td>
 
                             <td>
-                              <%if(order.status != 'Cancel'){%>
+                              <%if(order.status != 'Cancelled'){%>
                                 <form action="/admin/ordersTable?_method=PATCH" method="POST">
                                     <select name="status" class="status_order <%=order.status%>" id="floatingSelectGrid">
                                         <%for (const option of ['Pending', 'Processing','Shipped', 'Delivered']){%>
@@ -260,7 +260,7 @@
                                     <button type="submit" class="status_update btn btn-outline-primary">Update</button>
                                 </form>
                               <%}else{%>
-                                 <p class="Cancel">Order Cancelled</p>
+                                 <p class="Cancel text-danger">Order Cancelled</p>
                               <%}%>
                             </td>
 
@@ -290,8 +290,9 @@
                     </div>
 
 
-                   
-                    <!-- <p>no orders</p> -->
+                    <% } else { %>
+                    <p>no orders</p>
+                    <% } %>
 
                 </div>
             </div>

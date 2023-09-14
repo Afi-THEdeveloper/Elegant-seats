@@ -58,10 +58,12 @@
 
               
                 <button class="btn w-100 login_submit">Submit</button>
-                
-                    
-               
             </form>
+            <form action="/resendOtp?_method=PATCH" method="post">
+                <button type="submit" class="btn btn-secondary w-100 mt-2" >Resend OTP</button>    
+            </form>
+               
+            
             <% } else { %>
                 <form action="/forgetVerifyOtp" method="post">
                 <h3 class="mb-3">Enter your OTP</h3>
@@ -74,14 +76,16 @@
                 </div>
 
               
-                <button class="btn w-100 login_submit">proceed</button>
+                <button class="btn w-100 login_submit" type="submit">proceed</button>
+                </form>
+                <form action="/resendOtp?_method=PATCH" method="post">
+                    <button type="submit" class="btn btn-secondary w-100 mt-2" >Resend OTP</button>    
+                </form>
                 
             <% } %>   
             
             
-            <form action="/resendOtp?_method=PATCH" method="post">
-                <button type="submit" class="btn btn-secondary w-100 mt-2" >Resend OTP</button>    
-            </form>
+            
         </div>
     </div>
 </div>

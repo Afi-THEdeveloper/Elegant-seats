@@ -196,7 +196,7 @@ exports.updatePassword=async (req,res)=>{
 
 exports.resendOtp=async (req,res)=>{
     try {
-        const userId=req.session.user
+        const userId=req.session.user  || req.cookies.userId
         const newOtp =randomString.generate({
             length:4,
             charset:'numeric'
@@ -422,9 +422,14 @@ exports.updateCartQauntity = async  (req,res) => {
         if (!cartItem) {
             return res.status(404).json({ message: 'Cart item not found' });
         }
-        
+
         // Calculate the new total based on the product's price and new quantity
         const product = await Products.findById(cartItem.product);
+
+        if(newQuantity > product.stock){
+            return res.json({stock:product.stock});
+        }
+            
         const newTotal = newQuantity * product.price;
         
         // Update cart item properties

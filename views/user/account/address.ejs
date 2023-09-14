@@ -130,7 +130,9 @@
         </thead>
         <tbody>
             <% addresses.forEach(function(address, index) { %>
-            <% if(!address.defaultAddress){ %>     
+             <% if(!address.softDeleted) {%>   
+             <% if(!address.defaultAddress){ %> 
+                    
                 <tr>
                      
                     <td><%= index + 1 %></td>
@@ -156,7 +158,8 @@
                       
                      
                 </tr>
-            <% } %>   
+            <% } %> 
+            <% } %> 
             <% }); %>
         </tbody>
     </table>

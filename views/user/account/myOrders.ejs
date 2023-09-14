@@ -100,20 +100,48 @@
                                <span><h5 class="mb-1 me-1">$ <%= order.totalPrice  %></h5></span>
                                <!-- <span class="text-danger"><s>$20.99</s></span> -->
                              </div>
-                             <h6 class="text-success"><%= order.status  %></h6>
-                             <div class="d-flex flex-column mt-4">
-                              <form action="/myOrders/orderDetails" method="post">
-                                <input type="hidden" name="orderId" value="<%= order.orderId %>">
-                                <button  class="btn btn-primary btn-sm" type="submit">Details</button>
-                              </form> 
-                              <form action="/myOrders/cancel" method="post" onsubmit="return confirm('are you sure to cancel')">
-                                <input type="hidden" name="orderId" value="<%= order.orderId %>">
-                                <button class="btn btn-outline-primary btn-sm mt-2"  type="submit">
-                                  cancel Order
-                                </button>
-                              </form>   
+                             <% if(order.status==='Cancelled'){  %>
+                                 <h6 class="text-danger"><%= order.status  %></h6>
+                             <% } else { %>
+                                 <h6 class="text-success"><%= order.status  %></h6>
+                                 <div class="d-flex flex-column mt-4">
+                                  <form action="/myOrders/orderDetails" method="post">
+                                    <input type="hidden" name="orderId" value="<%= order.orderId %>">
+                                    <button  class="btn btn-primary btn-sm" type="submit">Details</button>
+                                  </form> 
+                                  <form action="/myOrders/cancel" method="post" novalidate="novalidate">
+                                    <input type="hidden" name="orderId" value="<%= order.orderId %>">
+                                    <button class="btn btn-outline-primary btn-sm mt-2" data-toggle="modal" data-target="#orderModal"  type="button">
+                                      cancel Order
+                                    </button>
+<!-- Modal -->
+<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="orderModalLabel">Confirm Order</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure to cancel the Order?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <button type="submit" class="btn btn-primary">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+                                  </form>
+                                </div>   
+                             <% } %>
                               
-                             </div>
+                             
                            </div>
                            
                          </div>

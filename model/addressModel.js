@@ -42,6 +42,10 @@ const addressSchema = new mongoose.Schema({
         type:Boolean,
         default:false
     },
+    softDeleted:{
+        type:Boolean,
+        default:false
+    },
     landMark:{
         type:String
     }

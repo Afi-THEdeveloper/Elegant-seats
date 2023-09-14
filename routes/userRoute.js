@@ -5,29 +5,33 @@ const middlewares= require('../middlewares/imageUpload')
 const router = require('express').Router()
 const { islogout, islogged }= require('../middlewares/auth')
 
-
+//home and login
 router.get('/',userController.showHome)
 router.get('/login', islogout, userController.showLogin)
 router.post('/login', islogout, userController.validlogin)
 
+//forgot and reset password
 router.get('/forgotPassword',userController.showVerify)
 router.post('/verifyEmail', userController.verifyEmail)
 router.get('/editPassword', userController.showEditPassword)
 router.post('/reset-password',userController.updatePassword)
 
+//register
 router.get('/register', islogout, userController.showRegister)
 router.post('/register', islogout, userController.insertUser)
 
+//otp verification
 router.get('/verifyOtp',userController.showVerifyOtp)
 router.get('/verifyOtp/:id',userController.showVerifyOtp)
 router.post('/verifyOtp',userController.verifyOtp)
 router.post('/forgetVerifyOtp',userController.forgetVerifyOtp)
 router.patch('/resendOtp',userController.resendOtp)
 
+//shop
 router.get('/product/:id',userController.showSingle)
 router.get('/shop',userController.showShop)
 router.post('/shop',userController.showShop)
-// router.get('/products/search',userController.searchProduct)
+
 
 //cart
 router.get('/cart', islogged, userController.showCart)
@@ -59,7 +63,7 @@ router.post('/profile/setDefaultAddress', islogged, accountController.setDefault
 
 
 
-
+//logout
 router.get('/logout',islogged,userController.logout)
 
 

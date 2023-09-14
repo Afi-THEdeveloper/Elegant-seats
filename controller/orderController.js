@@ -198,7 +198,7 @@ exports.updateStatus=async (req,res)=>{
 
 exports.cancelOrder=async (req,res)=>{
   try {
-    await Order.findOneAndDelete({orderId:req.body.orderId})
+    await Order.findOneAndUpdate({orderId:req.body.orderId}, {$set:{status:'Cancelled'}} )
     res.redirect('/myOrders')
   } catch (error) {
     console.log(error.message)
