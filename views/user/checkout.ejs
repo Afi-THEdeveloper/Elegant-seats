@@ -24,119 +24,31 @@
   <link rel="stylesheet" href="/css/magnific-popup.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
+
   <!-- swiper CSS -->
   <link rel="stylesheet" href="/css/slick.css">
   <link rel="stylesheet" href="/css/price_rangs.css">
   <!-- style CSS -->
   <link rel="stylesheet" href="/css/style.css">
+
 </head>
 
 <body>
-    <%- include('../partials/header') -%>
+  <%- include('../partials/header') -%>
 
-  
-  
 
-  <!--================Checkout Area =================-->
-  <section class="checkout_area padding_top">
-    <div class="container">
-      <!-- <div class="returning_customer">
-        <div class="check_title">
-          <h2>
-            Returning Customer?
-            <a href="#">Click here to login</a>
-          </h2>
-        </div>
-        <p>
-          If you have shopped with us before, please enter your details in the
-          boxes below. If you are a new customer, please proceed to the
-          Billing & Shipping section.
-        </p>
-        <form class="row contact_form" action="#" method="post" novalidate="novalidate">
-          <div class="col-md-6 form-group p_star">
-            <input type="text" class="form-control" id="name" name="name" value=" " />
-            <span class="placeholder" data-placeholder="Username or Email"></span>
-          </div>
-          <div class="col-md-6 form-group p_star">
-            <input type="password" class="form-control" id="password" name="password" value="" />
-            <span class="placeholder" data-placeholder="Password"></span>
-          </div>
-          <div class="col-md-12 form-group">
-            <button type="submit" value="submit" class="btn_3">
-              log in
-            </button>
-            <div class="creat_account">
-              <input type="checkbox" id="f-option" name="selector" />
-              <label for="f-option">Remember me</label>
-            </div>
-            <a class="lost_pass" href="#">Lost your password?</a>
-          </div>
-        </form>
-      </div> -->
-      <!-- <div class="cupon_area">
-        <div class="check_title">
-          <h2>
-            Have a coupon?
-            <a href="#">Click here to enter your code</a>
-          </h2>
-        </div>
-        <input type="text" placeholder="Enter coupon code" />
-        <a class="tp_btn" href="#">Apply Coupon</a>
-      </div> --> 
-      <div class="billing_details">
-        <div class="row">
-          <div class="col-lg-8">
-            <h3>Billing Details</h3>
-            <form class="row contact_form" action="#" method="post" novalidate="novalidate">
-              <!-- <div class="col-md-6 form-group p_star">
-                <input type="text" class="form-control" id="first" name="name" />
-                <span class="placeholder" data-placeholder="Full name"></span>
-              </div>
-              <div class="col-md-6 form-group p_star">
-                <input type="text" class="form-control" id="last" name="name" />
-                <span class="placeholder" data-placeholder="Last name"></span>
-              </div>
-              <div class="col-md-12 form-group">
-                <input type="text" class="form-control" id="company" name="company" placeholder="Company name" />
-              </div>
-              <div class="col-md-6 form-group p_star">
-                <input type="text" class="form-control" id="number" name="number" />
-                <span class="placeholder" data-placeholder="Phone number"></span>
-              </div>
-              <div class="col-md-6 form-group p_star">
-                <input type="text" class="form-control" id="email" name="compemailany" />
-                <span class="placeholder" data-placeholder="Email Address"></span>
-              </div>
-              <div class="col-md-12 form-group p_star">
-                <select class="country_select">
-                  <option value="1">Country</option>
-                  <option value="2">Country</option>
-                  <option value="4">Country</option>
-                </select>
-              </div>
-              <div class="col-md-12 form-group p_star">
-                <input type="text" class="form-control" id="add1" name="add1" />
-                <span class="placeholder" data-placeholder="Address line 01"></span>
-              </div>
-              <div class="col-md-12 form-group p_star">
-                <input type="text" class="form-control" id="add2" name="add2" />
-                <span class="placeholder" data-placeholder="Address line 02"></span>
-              </div>
-              <div class="col-md-12 form-group p_star">
-                <input type="text" class="form-control" id="city" name="city" />
-                <span class="placeholder" data-placeholder="Town/City"></span>
-              </div>
-              <div class="col-md-12 form-group p_star">
-                <select class="country_select">
-                  <option value="1">District</option>
-                  <option value="2">District</option>
-                  <option value="4">District</option>
-                </select>
-              </div>
-              <div class="col-md-12 form-group">
-                <input type="text" class="form-control" id="zip" name="zip" placeholder="Postcode/ZIP" />
-              </div> -->
-              
+
+
+    <!--================Checkout Area =================-->
+    <section class="checkout_area padding_top">
+      <div class="container">
+
+        <div class="billing_details">
+          <div class="row">
+            <div class="col-lg-8">
+              <h3>Billing Details</h3>
+
+
               <div class="table-responsive">
                 <table class="table">
                   <thead>
@@ -145,30 +57,35 @@
                     </tr>
                   </thead>
                   <tbody>
-                    
-                    <tr>
-                    <% if(defAddress){ %>
-                        <td>
-                            <span><%= defAddress.phone %></span><br>
-                            <span><%= defAddress.address %>,<%= defAddress.landMark  %>,<%= defAddress.locality %>,
-                                <%= defAddress.district  %> District,<%= defAddress.state  %>,<%= defAddress.pincode %>.
-                            </span>
-                        </td>
-                        
-                    <% } else if(defAddress===null)  { %>
-                        <td>
-                          <p>(add or set default address)</p>
-                          <a href="/profile/address"><i class="fas fa-plus">Add</i>
-                        </td>
-                    <% } %>
-                   </tr>
-                   
-        
-                </tbody>
-              </table>
-            </div>
 
-              
+                    <tr>
+                      <% if(defAddress){ %>
+                        <td>
+                          <span>
+                            <%= defAddress.phone %>
+                          </span><br>
+                          <span>
+                            <%= defAddress.address %>,<%= defAddress.landMark %>,<%= defAddress.locality %>,
+                                  <%= defAddress.district %> District,<%= defAddress.state %>,<%= defAddress.pincode %>.
+                          </span>
+                        </td>
+
+                        <% } else if(defAddress===null) { %>
+                          <td>
+                            <p>(add or set default address)</p>
+                            <a href="/profile/address"><i class="fas fa-plus">Add</i>
+                          </td>
+                          <% } %>
+                    </tr>
+
+
+                  </tbody>
+                </table>
+              </div>
+
+
+
+
               <!-- <div class="col-md-12 form-group">
                 <div class="creat_account">
                   <input type="checkbox" id="f-option2" name="selector" />
@@ -176,49 +93,97 @@
                 </div>
               </div> -->
               <% if(defAddress){ %>
-              <div class="col-md-12 form-group">
-                <div class="creat_account">
-                  <label for="f-option3">Ship to a different address?</label>
-                  <p>(add new address and make it default)</p>
-                  <a href="/profile/addAddress"><i class="fas fa-plus">Add</i>
-                  </a>
-                </div>
-               
-                <!-- <textarea class="form-control" name="message" id="message" rows="1"
+                <div class="col-md-12 form-group">
+                  <div class="creat_account">
+                    <label for="f-option3">Ship to a different address?</label>
+                    <p>(add new address and make it default)</p>
+                    <a href="/profile/addAddress"><i class="fas fa-plus">Add</i>
+                    </a>
+                  </div>
+
+                  <!-- <textarea class="form-control" name="message" id="message" rows="1"
                   placeholder="Order Notes"></textarea> -->
-              </div>
-              <% } %>
-            </form>
+                </div>
+                <% } %>
+
+                  <div class="cupon_area hidedAfterapply">
+                    <div class="check_title">
+                      <h2>
+                        Have a coupon?
+                        <!-- <a href="#">Click here to enter your code</a> -->
+                      </h2>
+                    </div>
+                   
+                    <input type="hidden" id="orderTotal" value="<%= user.totalCartAmount %>">
+                    <input type="text" id="couponCodeInput" placeholder="Enter coupon code" />
+                    <button class="tp_btn apply-coupon-btn">Apply Coupon</button>
+                    
+                  </div>
+
+
+
+
+                  <div class="card ml-5 hidedAfterapply" style="width: 18rem;">
+                    <h6>Available Coupons</h6><br>
+                    <ul class="list-group list-group-light">
+
+                    <% coupons.forEach((coupon, index) => { %>
+                        <li class="list-group-item px-0">
+                            <fieldset>
+                                <input type="text" id="textToCopy<%= index %>" style="display: none;" value="<%= coupon.code %>"><%= coupon.code %>
+                                <button class="btn btn-link copy-button" data-copy-target="textToCopy<%= index %>"
+                                    data-message-target="message<%= index %>">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                                <div class="message" id="message<%= index %>"></div><br>
+                                <p><%= coupon.description %></p>
+                            </fieldset>
+                        </li>
+                    <% }) %>
+                          
+
+                    </ul>
+                  </div>
+
+
+                  <div class="coupon-success" style="display: none;">
+                    <p>Coupon applied successfully!</p>
+                    <button class="btn btn-secondary cancel-coupon-btn">Cancel</button>
+                  </div>
+
+
+
           </div>
-
           
-
+          
           <div class="col-lg-4">
             <div class="order_box">
               <h2>Your Order</h2>
 
               <ul class="list">
-                
+
                 <li>
                   <a href="#">Product
                     <span>Total</span>
                   </a>
                 </li>
-                <%user.cart.forEach((item)=>{ %>
-                <li>
-                  <a href="#"><%= item.product.name  %>
-                    <span class="middle">x <%=item.quantity  %></span>
-                    <span class="last">$ <%=item.total  %></span>
-                  </a>
-                </li>
-                <%})%>
+                <%user.cart.forEach((item,index)=>{ %>
+                  <li>
+                    <a href="#">
+                      <%= item.product.name %>
+                        <span class="middle">x <%=item.quantity %></span>
+                        <span class="last">$ <%=item.total %></span>
+                    </a>
+                  </li>
+                  <%})%>
               </ul>
 
               <ul class="list list_2">
                 
+
                 <li>
                   <a href="#">Subtotal
-                    <span>$<%= user.totalCartAmount  %></span>
+                    <span>$<%= user.totalCartAmount %></span>
                   </a>
                 </li>
                 <li>
@@ -226,77 +191,85 @@
                     <span>Free</span>
                   </a>
                 </li>
+
+                <li>
+                  <a href="#">Discount
+                    <span>100</span>
+                  </a>
+                </li>
+
                 <li>
                   <a href="#">Total
-                    <span>$<%= user.totalCartAmount  %></span>
+                    <span>$<%= user.totalCartAmount %></span>
                   </a>
                 </li>
               </ul>
 
 
-      <form id="orderForm" class="row contact_form" action="/checkout" method="post" novalidate="novalidate">
+           <form id="orderForm" class="row contact_form" action="/checkout" method="post" novalidate="novalidate">
 
-           
-              <div class="payment_item">
-                <div class="radion_btn">
-                  <input type="radio" id="f-option5" name="paymentMethod" value="cod" />
-                  <label for="f-option5">Cash on Delivery</label>
-                  <div class="check"></div>
-                </div>
-                <!-- <p>
-                  Please send a check to Store Name, Store Street, Store Town,
-                  Store State / County, Store Postcode.
-                </p> -->
+
+            <div class="payment_item">
+              <div class="radion_btn">
+                 <input type="radio" id="f-option5" name="paymentOptions" value="cod" />
+                 <label for="f-option5">Cash on Delivery</label>
+                 <div class="check"></div>
               </div>
-              <div class="payment_item active">
-                <div class="radion_btn">
-                  <input type="radio" id="f-option6" name="paymentMethod" value="paypal" />
-                  <label for="f-option6">Paypal </label>
-                  <img src="img/product/single-product/card.jpg" alt="" />
-                  <div class="check"></div>
-                </div>
-                
-              </div> 
-               
-              <% if (error && error.length > 0) { %>
-                <div class="alert alert-danger">
-                  <% error.forEach(function(message) { %>
-                    <p><%= message %></p>
-                  <% }); %>
-                </div>
-             <% } %>
-              <!-- <div class="creat_account">
-                <input type="checkbox" id="f-option4" name="selector" />
-                <label for="f-option4">I’ve read and accept the </label>
-                <a href="#">terms & conditions*</a>
-              </div> -->
-              <button class="btn_3" data-toggle="modal" data-target="#orderModal" type="button">Proceed to Order</button>
+           </div> 
+                 
+               <div class="payment_item active">
+                  <div class="radion_btn">
+                     <input type="radio" id="f-option6" name="paymentOptions" value="razorpay"/>
+                     <label for="f-option6">Razorpay</label>
+                     <img src="img/product/single-product/card.jpg" alt="" />
+                     <div class="check"></div>
+                  </div>
+               </div>
 
-              
 
-<!-- Modal -->
-<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="orderModalLabel">Confirm Order</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to place your order?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
-        <button type="submit" class="btn_1">Place Order</button>
-      </div>
-    </div>
-  </div>
-</div>
-                
-</form>
-          
+                <% if (error && error.length> 0) { %>
+                  <div class="alert alert-danger">
+                    <% error.forEach(function(message) { %>
+                      <p>
+                        <%= message %>
+                      </p>
+                      <% }); %>
+                  </div>
+                  <% } %>
+                    <!-- <div class="creat_account">
+              <input type="checkbox" id="f-option4" name="selector" />
+              <label for="f-option4">I’ve read and accept the </label>
+              <a href="#">terms & conditions*</a>
+            </div> -->
+                    <button class="btn_3" data-toggle="modal" data-target="#orderModal" type="button">Proceed to
+                      Order</button>
+
+
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="orderModal" tabindex="-1" role="dialog"
+                      aria-labelledby="orderModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="orderModalLabel">Confirm Order</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            Are you sure you want to place your order?
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn_1">Place Order</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+            
+                  </form>
 
 
 
@@ -312,55 +285,199 @@
 
 
   <%- include('../partials/footer') -%>
- 
 
-  <!-- jquery plugins here-->
-  <!-- jquery -->
-  <script src="/js/jquery-1.12.1.min.js"></script>
-  <!-- popper js -->
-  <script src="/js/popper.min.js"></script>
-  <!-- bootstrap js -->
-  <script src="/js/bootstrap.min.js"></script>
-  <!-- easing js -->
-  <script src="/js/jquery.magnific-popup.js"></script>
-  <!-- swiper js -->
-  <script src="/js/swiper.min.js"></script>
-  <!-- swiper js -->
-  <script src="/js/masonry.pkgd.js"></script>
-  <!-- particles js -->
-  <script src="/js/owl.carousel.min.js"></script>
-  <script src="/js/jquery.nice-select.min.js"></script>
-  <!-- slick js -->
-  <script src="/js/slick.min.js"></script>
-  <script src="/js/jquery.counterup.min.js"></script>
-  <script src="/js/waypoints.min.js"></script>
-  <script src="/js/contact.js"></script>
-  <script src="/js/jquery.ajaxchimp.min.js"></script>
-  <script src="/js/jquery.form.js"></script>
-  <script src="/js/jquery.validate.min.js"></script>
-  <script src="/js/mail-script.js"></script>
-  <script src="/js/stellar.js"></script>
-  <script src="/js/price_rangs.js"></script>
-  <!-- custom js -->
-  <script src="/js/custom.js"></script>
 
-  <script>
-    function confirmOrder() {
-      // Display a confirmation dialog
-      if (confirm("Are you sure to place Order")) {
-          return true
-      }
-      else{
-        event.preventDefault()
-        return false
-      }
+
+    <!-- jquery plugins here-->
+    <!-- jquery -->
+    <script src="/js/jquery-1.12.1.min.js"></script>
+    <!-- popper js -->
+    <script src="/js/popper.min.js"></script>
+    <!-- bootstrap js -->
+    <script src="/js/bootstrap.min.js"></script>
+    <!-- easing js -->
+    <script src="/js/jquery.magnific-popup.js"></script>
+    <!-- swiper js -->
+    <script src="/js/swiper.min.js"></script>
+    <!-- swiper js -->
+    <script src="/js/masonry.pkgd.js"></script>
+    <!-- particles js -->
+    <script src="/js/owl.carousel.min.js"></script>
+    <script src="/js/jquery.nice-select.min.js"></script>
+    <!-- slick js -->
+    <script src="/js/slick.min.js"></script>
+    <script src="/js/jquery.counterup.min.js"></script>
+    <script src="/js/waypoints.min.js"></script>
+    <script src="/js/contact.js"></script>
+    <script src="/js/jquery.ajaxchimp.min.js"></script>
+    <script src="/js/jquery.form.js"></script>
+    <script src="/js/jquery.validate.min.js"></script>
+    <script src="/js/mail-script.js"></script>
+    <script src="/js/stellar.js"></script>
+    <script src="/js/price_rangs.js"></script>
+    <!-- custom js -->
+    <script src="/js/custom.js"></script>
+
+    
+<script>
+    $(document).ready(function() {
+    const couponCodeInput = $("#couponCodeInput"); // Select the input element by its ID
+    const orderTotalInput = $("#orderTotal"); // Select the input element by its ID
+    const applyCouponButton = $(".apply-coupon-btn");
+    const couponSuccessDiv = $(".coupon-success");
+    const hidedDiv= $(".hidedAfterapply")
+    const cancelCouponButton = $(".cancel-coupon-btn");
+
+
+    applyCouponButton.on('click', function() {
+        const couponCode = couponCodeInput.val(); // Get the value from the input field
+        const orderTotal = parseFloat(orderTotalInput.val()); // Parse the value as a float
+        
+
+        validateCoupon(couponCode, orderTotal);
+    });
+
+
+    function showCouponSuccess() {
+        couponSuccessDiv.show();
     }
 
+    function hideCouponArea(){
+      hidedDiv.hide()
+    }
 
-  </script>
+    // Function to hide the success message and cancel button
+    function showCouponArea() {
+        hidedDiv.show()
+    }
 
-  
+    // Function to handle cancel button click
+    cancelCouponButton.on('click', function() {
+       showCouponArea()
+       couponSuccessDiv.hide()
+    });
+
+
+    function validateCoupon(couponCode, orderTotal) {
+        $.ajax({
+            url: "/validate-coupon", // Replace with your server-side route
+            method: "POST", // or 'PUT' depending on your API
+            data: JSON.stringify({
+                couponCode: couponCode,
+                orderTotal: orderTotal,
+            }),
+            contentType: "application/json", // Set the content type for JSON data
+
+            success: function(response, status, xhr) {
+                 if (response.invalidCoupon) {
+                     alert('Invalid coupon');
+                 } else if (response.usageLimit) {
+                     alert('Usage limit exceeded');
+                 } else if (response.criteriaFailure) {
+                     alert('You do not meet the coupon criteria');
+                 } else if (response.validCoupon) {
+                     hideCouponArea()
+                     showCouponSuccess()
+                 }else {
+                     alert('Unknown response from server');
+                 }
+            },
+
+            error: function(xhr, status, error) {
+                console.error('Error:', status, error);
+                alert('An error occurred while applying the coupon.');
+            }
+        });
+    }
+});
+
+</script>
+<script>
+      
+
+      
+      document.addEventListener('DOMContentLoaded', function () {
+        const copyButtons = document.querySelectorAll('.copy-button');
+        copyButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                const targetId = this.getAttribute('data-copy-target');
+                const textToCopy = document.getElementById(targetId);
+
+                textToCopy.select();
+                textToCopy.setSelectionRange(0, 99999); // For mobile devices
+
+                try {
+                    navigator.clipboard.writeText(textToCopy.value);
+                    const message = document.getElementById(this.getAttribute('data-message-target'));
+                    message.textContent = 'Coupon code copied to clipboard!';
+                } catch (err) {
+                    console.error(err);
+                    // Handle the error
+                }
+
+                window.getSelection().removeAllRanges();
+            });
+        });
+    });
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </body>
+
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

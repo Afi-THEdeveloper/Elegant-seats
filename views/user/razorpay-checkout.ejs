@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Razorpay Payment</title>
+    <!-- Include Razorpay's script with your key_id -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js" data-key="<%= key_id %>"></script>
+</head>
+<body>
+    <h5>Payment Processing...</h5>
+    <script>
+        // Initialize Razorpay checkout
+        var options = {
+            key: "<%= key_id %>",
+            amount: <%=order.amount%> , // Amount in paise
+            currency: "INR",
+            name: "froza",
+            description: "Order Payment",
+            order_id: "<%= order.id %>", // Order ID from the server
+            handler: function (response) {
+                // Handle successful payment
+                console.log(response);
+                console.log('success')
+                window.location.href = "/myOrders";
+                // Redirect to a thank you page or handle order confirmation
+            },
+            prefill: {
+                name: "<%= user.name %>",
+                email: "<%= user.email %>",
+                contact: "<%= user.mobile %>"
+            },
+            theme: {
+                color: "#ECFDFF"
+            }
+        };
+
+        var rzp = new Razorpay(options);
+        rzp.open();
+    </script>
+</body>
+</html>

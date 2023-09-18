@@ -56,7 +56,9 @@
     <section class="cart_area padding_top">
       <div class="container">
         <div class="cart_inner">
-          
+
+          <div class="invalid-feedback" id="afi"><p>Please enter a valid password.</p></div>
+
           <% if (success && success.length > 0) { %>
             <div class="alert alert-success">
               <% success.forEach(function(message) { %>
@@ -135,31 +137,26 @@
                 </tr>
                 <% }); %>
 
-                <!-- <tr class="bottom_button">
+                <tr>
                   <td>
-                    <div class="cupon_text float-right">
-                      <a class="btn_1" href="#">Close Coupon</a>
-                    </div>
+                    <!-- <div class="cupon_text float-right">
+                      <a class="btn_1" href="#">Claim Coupon</a>
+                    </div> -->
                   </td>
-                  <td> -->
-                    <!-- <a class="btn_1" href="#">Update Cart</a> -->
-                  <!-- </td>
+                  <!-- <td>  
+                     <a class="btn_1" href="#">Update Cart</a> 
+                  </td>
                   <td></td>
-                  <td></td>
-                  
+                  <td></td> -->
                 </tr>
-                 -->
+                  
+                 
 
                 <tr class="shipping_area">
                   
                   <td></td>
                   <td></td>
-                  <td>
-                    <h5>
-                      <span>Subtotal:</span>
-                      <span id="subtotalAmount">&#8377;<%= totalCartAmount %></span>
-                    </h5>
-                  </td>
+                 
                   
                       
 
@@ -173,17 +170,13 @@
                     <div class="shipping_box">
                       <ul class="list">
                         <li>
-                          <a href="#">Flat Rate: $0.00</a>
+                          <h5>Subtotal: &#8377;<%= totalCartAmount %></h5>
                         </li>
+                        
                         <li>
-                          <a href="#">Free Shipping</a>
+                          <p>Discount: $10.00</p>
                         </li>
-                        <!-- <li>
-                          <a href="#">Flat Rate: $10.00</a>
-                        </li>
-                        <li class="active">
-                          <a href="#">Local Delivery: $2.00</a>
-                        </li> -->
+                        
                         <hr>
                         <li>
                           <h5>
@@ -191,23 +184,12 @@
                           <span id="totalAmount">&#8377;<%= totalCartAmount %></span>
                           </h5>
                         </li>
+
                       </ul>
-                      <!-- <h6>
-                        Calculate Shipping
-                        <i class="fa fa-caret-down" aria-hidden="true"></i>
-                      </h6>
-                      <select class="shipping_select">
-                        <option value="1">Bangladesh</option>
-                        <option value="2">India</option>
-                        <option value="4">Pakistan</option>
-                      </select>
-                      <select class="shipping_select section_bg">
-                        <option value="1">Select a State</option>
-                        <option value="2">Select a State</option>
-                        <option value="4">Select a State</option>
-                      </select>
-                      <input type="text" placeholder="Postcode/Zipcode" />
-                      <a class="btn_1" href="#">Update Details</a> -->
+                         
+                      
+                   
+                   
                     </div>
                   </td>
                 </tr>
@@ -268,7 +250,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <script>
-      $(document).ready(function() {
+    $(document).ready(function() {
     // Get all input elements and increment/decrement buttons
     const inputNumbers = $(".input-number");
     const incrementButtons = $(".input-number-increment");
@@ -302,6 +284,8 @@
             // Update the input value
             inputElement.val(currentValue);
 
+
+            
             // Perform an AJAX request to update the cart item's quantity on the server
             // Replace '/update-cart-item-quantity' with your server endpoint
             $.ajax({
@@ -315,10 +299,11 @@
                   if (response) {
 
                        if(response.stock){
-                         alert('out of stock')
-                         currentValue=response.stock
-                         return inputElement.val(currentValue);
-                       }
+                        alert('out of stock')
+                        currentValue=response.stock
+                        return inputElement.val(currentValue);
+                      }
+                         
                        const newTotal = response.total;
                        const cartTotal = $(`#cartTotal_${cartItemId}`);
                        cartTotal.text(newTotal);
@@ -338,10 +323,8 @@
 
               error: function(xhr, stock, errorThrown) {
                     // Handle the AJAX error
-                    if(xhr.status === 422){
-                      alert('product is out of stock')
-                    }
-                    else if(xhr.status === 404){
+                    
+                    if(xhr.status === 404){
                       alert('an error occured')
                     }
               },

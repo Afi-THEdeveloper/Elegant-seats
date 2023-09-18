@@ -82,6 +82,9 @@
             <p>
               <%= product.description %>
             </p>
+            <% if(product.stock === 0) { %>
+              <h6 class="text-danger"> <center>Out of stock!</center></h6>
+            <% }else{ %>
             <form action="/addToCart" method="post">
                <div class="card_area d-flex justify-content-between align-items-center">
                  
@@ -89,7 +92,7 @@
                    <input type="hidden" name="productId" value="<%= product._id %>">
                    <button type="submit" class="btn_3">add to cart</button>
                  
-                 <a href="#" class="like_us"> <i class="ti-heart"></i> </a>
+                   <a href="#" class="like_us"> <i class="ti-heart"></i> </a>
                </div>
             </form>
             <div class="card_area d-flex justify-content-between align-items-center">
@@ -101,6 +104,7 @@
               <a href="#" class="btn_3">Buy now</a>
               
             </div>
+            <% } %>
           </div>
         </div>
       </div>

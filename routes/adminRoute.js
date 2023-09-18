@@ -1,8 +1,9 @@
-const router =require('express').Router()
-const adminController=require('../controller/adminController')
-const orderController=require('../controller/orderController')
-const Imagemiddleware=require('../middlewares/imageUpload')
-const {isAdminLogout,isAdminlogged}=require('../middlewares/auth')
+const router = require('express').Router()
+const adminController = require('../controller/adminController')
+const orderController = require('../controller/orderController')
+const couponController = require('../controller/couponController')
+const Imagemiddleware = require('../middlewares/imageUpload')
+const { isAdminLogout, isAdminlogged } = require('../middlewares/auth')
 
 router.get('/',isAdminLogout,adminController.showLogin)
 router.post('/',isAdminLogout,adminController.verifyAdminLogin)
@@ -40,7 +41,17 @@ router.get('/orders/details/:id', isAdminlogged, orderController.orderDetails)
 router.get('/users',isAdminlogged,adminController.showUsers)
 router.post('/users/block',isAdminlogged,adminController.blockUser)
 
+//coupons
+router.route('/coupons')
+    .get(couponController.showCoupons)
 
+router.route('/coupon/addCoupon')
+    .get(couponController.showAddcoupon) 
+    .post(couponController.addCoupon) 
+    
+router.route('/coupons/edit/:id')
+    .get(couponController.showEditCoupon) 
+    .post(couponController.updateCoupon)   
 
 //logout
 router.get('/logout', isAdminlogged, adminController.logout)

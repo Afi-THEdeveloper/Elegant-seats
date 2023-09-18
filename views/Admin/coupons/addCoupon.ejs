@@ -185,111 +185,58 @@
           <div class="content-wrapper">
             <div class="row">
   
-              <div class="col-lg-12 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
+              
+
                     
-                  
 
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h4 class="card-title">Products table</h4>
-                        <form action="/admin/products/search" method="GET">
-                          <div class="d-flex">
-                              <input type="search" name="q" placeholder="Search Product" class="form-control rounded-pill" />
-                              <button type="submit" class="btn btn-success rounded-pill ms-2">Search</button>
-                          </div>
-                       </form>
-                       <a href="/admin/products/create" class="btn btn-primary badge">Add Products</a>
+                    
 
+                            
+
+              <div class="container">
+                <h3 class="mt-4">Add Coupon</h3>
+                <form action="/admin/coupon/addCoupon" method="POST">
+                    <div class="mb-3">
+                        <label for="code" class="form-label">Coupon Code prefix:</label>
+                        <input type="text" class="form-control" id="code" name="codePrefix" placeholder="(eg:ELEGANT)" required>
                     </div>
-                    <div class="table-responsive">
-                      <table class="table table-striped">
-                        <tbody>
-
-                            
-                                    
-                                    
-                                    <div class="table-responsive">
-                                      <table class="table table-striped">
-                                        <thead>
-                                          <tr>
-                                            <th>
-                                              Name
-                                            </th>
-                                            <th>
-                                              Price
-                                            </th>
-                                            <th>
-                                              Stock
-                                            </th>
-                                            <th>
-                                              Category
-                                            </th>
-                                            <th>
-                                              Images
-                                            </th>
-                                            <th>
-                                              Edit
-                                            </th>
-                                            <th>
-                                              Tap to Activate/DeActivate
-                                            </th>
-                                          </tr>
-                                        </thead>
         
-                                        <tbody>
-                                            <% products.forEach(pdt => { %>
-                                            <tr>
-                                                <td class="py-1">
-                                                    <p><%= pdt.name %></p>
-                                                </td>
-                                                <td>
-                                                    <p><%= pdt.price %></p>
-                                                </td>
-                                                <td>
-                                                    <p><%= pdt.stock %></p>
-                                                </td>
-                                                <td>
-                                                    <p><%= pdt.category.name %></p>
-                                                </td>
-                                                <td>
-                                                    <% pdt.images.forEach(img => { %>
-                                                        <div class="row">
-                                                            <div class="col-4">
-                                                                <img src="<%= img %>" alt="" class="img-click">
-                                                            </div>
-                                                        </div>
-                                                    <% }) %>
-                                                </td>
-                                                <td>
-                                                  <a href="/admin/products/<%= pdt._id %>/edit" class="btn btn-info btn-sm">Edit</a>
-                                                </td>
-                                                <td>
-                                                    
-                                                    <%if(pdt.softDeleted){%>
-                                                        <form action="/admin/products/destroy" method="post" class="d-inline">
-                                                          <input type="hidden" name="id" value="<%= pdt._id %>">
-                                                          <input type="hidden" name="state" value="">
-                                                          <button type="submit" class="btn btn-danger btn-sm">not Active</button>
-                                                        </form>
-                                                    <% } else { %>
-                                                        <form action="/admin/products/destroy" method="post" class="d-inline">
-                                                            <input type="hidden" name="id" value="<%=pdt._id%>">
-                                                            <input type="hidden" name="state" value="1">
-                                                            <button type="submit" class="btn btn-success btn-sm">Active</button>
-                                                        </form>
-                                                    <%}%> 
-                                                </td>
-                                                </tr>
-                                            <% }) %>
-                                        </tbody>
-                                      </table>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            
-
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description:</label>
+                        <input type="text" class="form-control" id="description" name="description" required>
+                    </div>
+        
+                    <div class="mb-3">
+                        <label for="discountType" class="form-label">Discount Type:</label>
+                        <select class="form-select" id="discountType" name="discountType" required>
+                            <option value="Fixed Amount">Fixed Amount</option>
+                        </select>
+                    </div>
+        
+                    <div class="mb-3">
+                        <label for="discountAmount" class="form-label">Discount Amount (in Rs):</label>
+                        <input type="number" class="form-control" id="discountAmount" name="discountAmount" required>
+                    </div>
+        
+                    <div class="mb-3">
+                        <label for="minPurchase" class="form-label">Minimum Purchase Amount (in Rs):</label>
+                        <input type="number" class="form-control" id="minPurchase" name="minPurchase" required>
+                    </div>
+        
+                    <div class="mb-3">
+                        <label for="usageLimit" class="form-label">Usage Limit:</label>
+                        <input type="number" class="form-control" id="usageLimit" name="usageLimit" value="1" required>
+                    </div>
+        
+                    <div class="mb-3">
+                        <label for="expiryDate" class="form-label">Expiry Date:</label>
+                        <input type="date" class="form-control" id="expiryDate" name="expiryDate" required>
+                    </div>
+        
+                    <button type="submit" class="btn btn-primary">Add Coupon</button>
+                </form>
+            </div>
+        
 
 
                             
@@ -300,17 +247,13 @@
 
                                  
                                   
+                                  
 
                         
                               
 
 
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                       
 
               
               
@@ -319,27 +262,17 @@
               </div>
             </div>
           </div>
-          <!-- content-wrapper ends -->
-          <!-- partial:../../partials/_footer.html -->
-          <!-- <footer class="footer">
-            <div class="d-sm-flex justify-content-center justify-content-sm-between">
-              <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2021.  Premium <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap admin template</a> from BootstrapDash. All rights reserved.</span>
-              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="ti-heart text-danger ml-1"></i></span>
-            </div>
-          </footer> -->
-          <!-- partial -->
+         
         </div>
         <!-- main-panel ends -->
       </div>
       <!-- page-body-wrapper ends -->
     </div>
-    <script src="/js/zoomImg.js"></script>
-    <script>
-        const images = document.querySelectorAll('.img-click')
-        images.forEach(img => {
-            img.addEventListener('click', () => zoomImg(img))
-        })
-    </script>
+
+
+    <!-- Include Bootstrap JS and Popper.js for Bootstrap functionality -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-lfS6p5SG5d8jjiZ/x/y3z5bD6b7KvHQ5j5uZ+8U8KGvb5K2cZ4Ck6F5b5b5b5b5b5b5" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-lfS6p5SG5d8jjiZ/x/y3z5bD6b7KvHQ5j5uZ+8U8KGvb5K2cZ4Ck6F5b5b5b5b5b5b5" crossorigin="anonymous"></script>
     <!-- container-scroller -->
     <!-- plugins:js -->
     <script src="../../vendors/js/vendor.bundle.base.js"></script>
@@ -353,8 +286,9 @@
     <script src="../../js/settings.js"></script>
     <script src="../../js/todolist.js"></script>
     <!-- endinject -->
-    <!-- Custom js for this page-->
-    <!-- End custom js for this page-->
+    
+    
+    <!-- <script src="/validations/couponValidation.js"></script> -->
   </body>
 
 

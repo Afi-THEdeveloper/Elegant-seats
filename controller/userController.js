@@ -7,6 +7,8 @@ const email=require('../util/email')
 const randomString=require('randomstring')
 const cookie=require('cookie')
 
+const mongoose = require('mongoose')
+
 
 
 
@@ -20,8 +22,12 @@ const securePassword=async (password)=>{
     }
 }
 
-exports.showLogin= (req,res)=>{res.render('user/login')}
-exports.showRegister= (req,res)=>{res.render('user/register')}
+exports.showLogin= (req,res)=>{
+    res.render('user/login')
+}
+exports.showRegister= (req,res)=>{
+    res.render('user/register')
+}
 
 exports.showHome=async(req,res)=>{
     try {
@@ -32,6 +38,8 @@ exports.showHome=async(req,res)=>{
         console.log(error.message)
     }
 }
+        
+
 
 
 // insert form data into database as an user
@@ -294,30 +302,103 @@ exports.forgetVerifyOtp=async (req,res)=>{
 
 exports.showShop=async (req,res)=>{
     try {
-        let totalPages=await Products.find({}).count()
-        totalPages=Math.ceil(totalPages/6)
-        const pageNumber=req.body.pageNumber || 0
-        const products=await Products.find({}).skip(pageNumber*6).limit(6)
-        res.render('user/shop',{products,totalPages})
+        
+        const categories= await Category.find({isDestroyed:false})
+        const pageNumber = req.body.pageNumber || 0;
+        const productsPerPage = 6;
+        let neededFilter;
+
+        if(req.query.category){  
+          console.log(req.query.category)
+          neededFilter={ 'category.isDestroyed':false, 'category.name':req.query.category}
+        }else if(req.query.min && req.query.max){
+            let min=parseInt(req.query.min) || 0
+            let max=parseInt(req.query.max) || Number.MAX_SAFE_INTEGER
+            neededFilter={ 'category.isDestroyed':false, price:{ $gte:min,$lte:max } }
+        }else if(req.body.searchItem){
+            const searched=req.body.searchItem
+            neededFilter={'category.isDestroyed':false, name:{ $regex: ".*" +searched+ ".*", $options:'i'}  }  
+        }
+        else{
+            neededFilter={'category.isDestroyed':false}
+        }
+
+      
+        const aggragationPipeline =[
+            {
+                $lookup:{
+                    from:'categories',
+                    localField:'category',
+                    foreignField:'_id',
+                    as:'category'
+                }
+            },
+            {
+                $unwind:'$category'
+            },
+            {
+                $match:neededFilter
+            },
+            {
+                $facet:{
+                  products:[
+                    {
+                        $skip:pageNumber * productsPerPage
+                    },
+                    {
+                        $limit:productsPerPage
+                    }
+                  ],
+                  totalPages:[
+                    {
+                        $count:'total'
+                    }
+                  ]
+                }
+            }
+        ]
+
+        const prdt = await Products.aggregate(aggragationPipeline);
+        let totalPages = prdt[0].totalPages[0].total;
+        totalPages = Math.ceil(totalPages/6)
+        const products = prdt[0].products;
+        res.render('user/shop', { products, totalPages, categories});
+                
+        
     } catch (error) {
         console.log(error.message)
     }
 }
 
-exports.searchProduct=async (req,res)=>{
-    const { q } = req.query
-    try {
-        let products;
-        if (q) {
-            products = await Products.find({ name: { $regex: '.*' + q + '.*' }, softDeleted: 0 })
-        } else {
-            products=await Products.find({ softDeleted: 0 })   // Fetch all users from the database
-        }
-        res.render('user/shop',{products})
-    } catch (error) {
-        console.log(error.message)
-    }
-  }
+
+        
+//search 
+// exports.searchProduct= async (req,res)=>{
+//     try {
+//         const searched=req.body.searchItem
+//         const searchedProduct = await Products.find({ name:{ $regex:".*"+searched+".*", $options:'i' }  }) 
+//         console.log(searchedProduct)
+//         if(searchedProduct.length > 0){
+
+//         }else{
+//             res.redirect('/')
+//         }
+//     } catch (error) {
+//         console.log(error.message)
+//         res.status(500).send('Internal Server Error');
+//     }
+// }
+                    
+                
+            
+           
+
+
+
+
+        
+      
+
 
 
 exports.showSingle=async (req,res)=>{
@@ -325,12 +406,14 @@ exports.showSingle=async (req,res)=>{
     try {
         const product=await Products.findOne({_id:req.params.id})
         const category=await Category.findOne({_id:product.category})
-        res.render('user/singleView',{product,category})
+        res.render('user/singleView',{product,category,user})
     } catch (error) {
         console.log(error.message)
         res.status(500).send('Internal Server Error');
     }
 }
+        
+
 
 
 
@@ -340,7 +423,7 @@ exports.showCart=async (req,res)=>{
         const user=await User.findById(req.session.user).populate('cart.product')  
         const cart=user.cart
         const totalCartAmount=user.totalCartAmount   
-        res.render('user/cart',{success:req.flash('success'), error:req.flash('error'), cart,totalCartAmount})       
+        res.render('user/cart',{success:req.flash('success'), error:req.flash('error'), cart,totalCartAmount,user})       
     } catch (error) {
         console.log(error.message)
         res.status(500).send('Internal Server Error');
@@ -410,11 +493,11 @@ exports.destroyCartItem =async (req,res) => {
 
 
 exports.updateCartQauntity = async  (req,res) => {
-
+    
     try {
         const user = await User.findById(req.session.user);
         const cartItemId = req.body.cartItemId;
-        const newQuantity = req.body.quantity; // Assuming you send the new quantity in the request body
+        const newQuantity = req.body.quantity; 
         
         // Find the cart item by its ID
         const cartItem = user.cart.find(item => item._id.equals(cartItemId));
@@ -436,18 +519,12 @@ exports.updateCartQauntity = async  (req,res) => {
         cartItem.quantity = newQuantity;
         cartItem.total = newTotal;
         
-        // Update totalCartAmount by calculating the sum of all cart item totals
         let totalCartAmount = 0;
         user.cart.forEach(item => {
             totalCartAmount += item.total;
         });
-        
-        // Update user's totalCartAmount
         user.totalCartAmount = totalCartAmount;
-        
-        // Save the changes to the user document
         await user.save();
-        
         res.json({ message: 'Cart item quantity updated successfully',totalCartAmount, total: newTotal });
         
     } catch (error) {
@@ -456,10 +533,12 @@ exports.updateCartQauntity = async  (req,res) => {
 
     }
 }
-
-
-
-  
+        
+        
+       
+        
+        
+        
 
 
 
@@ -470,6 +549,10 @@ exports.logout= (req,res)=>{
     req.session.user=null
     res.redirect('/')
 }
+  
+
+
+
     
 
 

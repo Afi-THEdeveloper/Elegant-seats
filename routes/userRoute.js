@@ -1,6 +1,7 @@
 const userController= require('../controller/userController')
 const accountController= require('../controller/accountController')
 const orderController= require('../controller/orderController')
+const couponController= require('../controller/couponController')
 const middlewares= require('../middlewares/imageUpload')
 const router = require('express').Router()
 const { islogout, islogged }= require('../middlewares/auth')
@@ -33,6 +34,11 @@ router.get('/shop',userController.showShop)
 router.post('/shop',userController.showShop)
 
 
+//search
+router.post('/searchProduct', userController.showShop)
+
+
+
 //cart
 router.get('/cart', islogged, userController.showCart)
 router.post('/addToCart', islogged, userController.addTocart)
@@ -61,6 +67,9 @@ router.put('/profile/editAddress/:id', islogged, accountController.editAddress)
 router.get('/profile/deleteAddress/:id', islogged, accountController.deleteAddress)
 router.post('/profile/setDefaultAddress', islogged, accountController.setDefaultAddress)
 
+
+//coupon
+router.post('/validate-coupon', couponController.validateCoupon)
 
 
 //logout

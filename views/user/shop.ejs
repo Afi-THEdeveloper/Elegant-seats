@@ -58,34 +58,50 @@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="left_sidebar_area">
+                        <a href="/shop" class="btn btn-outline-secondary">clear filters</a>
                         <aside class="left_widgets p_filter_widgets">
                             <div class="l_w_title">
                                 <h3>Browse Categories</h3>
                             </div>
                             <div class="widgets_inner">
                                 <ul class="list">
+                                    <% categories.forEach((cat, index)=> { %>
                                     <li>
-                                        <a href="#">Sofa</a>
-                                        <span>(250)</span>
+                                        <a href="/shop?category=<%= cat.name %>"> <%= cat.name %> </a>
+                                        <span><img src="<%= cat.image  %>"
+                                            alt="Generic placeholder image" class="img-fluid rounded-circle border border-dark border-3"
+                                            style="width: 40px;"></span>
                                     </li>
-                                    <li>
-                                        <a href="#">sitout</a>
-                                        <span>(250)</span>
-                                    </li>
-                                    <li>
-                                        <a href="#">Dining</a>
-                                        <span>(250)</span>
-                                    </li>
-                                    <li>
-                                        <a href="#">Outdoor</a>
-                                        <span>(250)</span>
-                                    </li>
+                                    <% }) %>
                                 </ul>
                             </div>
                         </aside>
-                            
 
-                        <aside class="left_widgets p_filter_widgets">
+                        <aside class="left_widgets p_filter_widgets price_rangs_aside">
+                            <div class="l_w_title">
+                                <h3>Price Filter</h3>
+                            </div>
+                            <div class="widgets_inner">
+                                <div class="range_item">
+                                    <input type="text" class="js-range-slider" value="" />
+                                    <div class="d-flex">
+                                        <div class="price_text">
+                                            <p>Price :</p>
+                                        </div>
+                                        <div class="price_value d-flex justify-content-center">
+                                            <input type="text" class="js-input-from" id="amount-from"  />
+                                            <span>to</span>
+                                            <input type="text" class="js-input-to" id="amount-to"  />
+                                        </div>
+                                    </div>
+                                    <a href="#" class="btn" style="background-color:#8dd5df" id="apply-button">apply</a>
+                                </div>
+                            </div>
+                        </aside>
+                        
+                                        
+
+                        <!-- <aside class="left_widgets p_filter_widgets">
                             <div class="l_w_title">
                                 <h3>Product filters</h3>
                             </div>
@@ -125,9 +141,9 @@
                                     </li>
                                 </ul>
                             </div>
-                        </aside>
+                        </aside> -->
 
-                        <aside class="left_widgets p_filter_widgets">
+                        <!-- <aside class="left_widgets p_filter_widgets">
                             <div class="l_w_title">
                                 <h3>Color Filter</h3>
                             </div>
@@ -150,29 +166,9 @@
                                     </li>
                                 </ul>
                             </div>
-                        </aside>
+                        </aside> -->
 
-                        <aside class="left_widgets p_filter_widgets price_rangs_aside">
-                            <div class="l_w_title">
-                                <h3>Price Filter</h3>
-                            </div>
-                            <div class="widgets_inner">
-                                <div class="range_item">
-                                    <!-- <div id="slider-range"></div> -->
-                                    <input type="text" class="js-range-slider" value="" />
-                                    <div class="d-flex">
-                                        <div class="price_text">
-                                            <p>Price :</p>
-                                        </div>
-                                        <div class="price_value d-flex justify-content-center">
-                                            <input type="text" class="js-input-from" id="amount" readonly />
-                                            <span>to</span>
-                                            <input type="text" class="js-input-to" id="amount" readonly />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </aside>
+                       
                     </div>
                 </div>
                 <div class="col-lg-9">
@@ -214,70 +210,68 @@
                     </div>
 
 
-                    <div class="row align-items-center latest_product_inner">
-                        <% products.forEach(function(product, index) { %>
-                            
-                            <div class="col-lg-4 col-sm-6">
-                                <div class="single_product_item">
-                                    <a href="/product/<%= product._id %>">
-                                        <img src="<%= product.images[0] %>" alt="<%= product.name %>">
-                                    </a>
-                                    <div class="single_product_text">
-                                        <h4><%= product.name %></h4>
-                                        <h3>$<%= product.price %></h3>
-                                        <a href="/addToCart/<%= product._id  %>" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
+                    
+                        <div class="row align-items-center latest_product_inner">
+                            <% products.forEach(function(product, index) { %>
+                                
+                                <div class="col-lg-4 col-sm-6">
+                                    <div class="single_product_item">
+                                        <a href="/product/<%= product._id %>">
+                                            <img src="<%= product.images[0] %>" alt="<%= product.name %>">
+                                        </a>
+                                        <% if(product.stock === 0) { %>
+                                            <div class="single_product_text">
+                                                <h4><%= product.name %></h4>
+                                                <h3>&#8377;<%= product.price %></h3>
+                                                <a href="#" class="add_cart">Out of stock!<i class="ti-heart"></i></a>
+                                            </div>
+                                        <% }else{ %>
+                                        <div class="single_product_text">
+                                            <h4><%= product.name %></h4>
+                                            <h3>&#8377;<%= product.price %></h3>
+                                            <a href="/addToCart/<%= product._id  %>" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
+                                        </div>
+                                        <% } %>
                                     </div>
                                 </div>
-                            </div>
-                            
-                        <% }); %>
+                            <% }); %>
+                                            
+                                                
+                                            
+                                            
 
+                                            
 
-
-                    <div class="pageination">
-                        <nav aria-label="Page navigation example">
-                            <ul class="pagination justify-content-center">
-                                <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Previous">
-                                        <i class="ti-angle-double-left"></i>
-                                    </a>
-                                </li>
-                    
                                 
+    
+    
+    
+                        <div class="pageination">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination justify-content-center">
                                     <li class="page-item">
-                                        <form action="/shop" method="post">
-                                            <input type="hidden" name="pageNumber" value="0">
-                                            <button class="page-link">1</button>
-                                        </form>
+                                        <a class="page-link" href="#" aria-label="Previous">
+                                            <i class="ti-angle-double-left"></i>
+                                        </a>
                                     </li>
+                        
+                                    <% for (let page = 1; page <= totalPages; page++) { %>
+                                        <li class="page-item">
+                                            <form action="/shop" method="post">
+                                                <input type="hidden" name="pageNumber" value="<%= page-1 %>">
+                                                <button class="page-link" type="submit"><%= page  %></button>
+                                            </form>
+                                        </li>
+                                    <% } %>
+                        
                                     <li class="page-item">
-                                        <form action="/shop" method="post">
-                                            <input type="hidden" name="pageNumber" value="1">
-                                            <button class="page-link">2</button>
-                                        </form>
+                                        <a class="page-link" href="#" aria-label="Next">
+                                            <i class="ti-angle-double-right"></i>
+                                        </a>
                                     </li>
-                                    <li class="page-item">
-                                        <form action="/shop" method="post">
-                                            <input type="hidden" name="pageNumber" value="2">
-                                            <button class="page-link">3</button>
-                                        </form>
-                                    </li>
-                                    <li class="page-item">
-                                        <form action="/shop" method="post">
-                                            <input type="hidden" name="pageNumber" value="3">
-                                            <button class="page-link">4</button>
-                                        </form>
-                                    </li>
-                                
-                    
-                                <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Next">
-                                        <i class="ti-angle-double-right"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
+                                </ul>
+                            </nav>
+                        </div>
                     
                         
                 </div>
@@ -355,9 +349,32 @@
      <script src="js/price_rangs.js"></script>
      <!-- custom js -->
      <script src="js/custom.js"></script>
+
+     
+<!--for the price filter-->   
+<script>
+$(document).ready(function () {
+    $("#apply-button").click(function (e) {
+        e.preventDefault(); // Prevent the default behavior of the anchor tag
+
+        // Get the input values
+        const minPrice = $("#amount-from").val();
+        const maxPrice = $("#amount-to").val();
+
+        // Construct the URL with query parameters
+        const url = `/shop?min=${minPrice}&max=${maxPrice}`;
+
+        // Redirect the user to the new URL
+        window.location.href = url;
+    });
+});
+
+</script>
+
+
  </body>
- 
  </html>      
+ 
 
 
 

@@ -111,11 +111,11 @@
                                   </form> 
                                   <form action="/myOrders/cancel" method="post" novalidate="novalidate">
                                     <input type="hidden" name="orderId" value="<%= order.orderId %>">
-                                    <button class="btn btn-outline-primary btn-sm mt-2" data-toggle="modal" data-target="#orderModal"  type="button">
+                                    <button class="btn btn-outline-primary btn-sm mt-2" data-toggle="modal" data-target="#orderModal<%= order.orderId %>"  type="button">
                                       cancel Order
                                     </button>
 <!-- Modal -->
-<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
+<div class="modal fade" id="orderModal<%= order.orderId %>" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">

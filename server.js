@@ -29,6 +29,7 @@ app.use(session({
 
 app.use(flash())
 app.use(nocache());
+app.use(express.json());
 
 app.use('/', require('./routes/userRoute'))
 app.use('/admin',require('./routes/adminRoute'))
