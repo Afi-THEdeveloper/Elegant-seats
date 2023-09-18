@@ -406,7 +406,7 @@ exports.showSingle=async (req,res)=>{
     try {
         const product=await Products.findOne({_id:req.params.id})
         const category=await Category.findOne({_id:product.category})
-        res.render('user/singleView',{product,category,user})
+        res.render('user/singleView',{product,category})
     } catch (error) {
         console.log(error.message)
         res.status(500).send('Internal Server Error');
