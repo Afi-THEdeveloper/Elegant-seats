@@ -32,8 +32,9 @@ router.patch('/resendOtp',userController.resendOtp)
 router.get('/product/:id',userController.showSingle)
 router.get('/shop',userController.showShop)
 router.post('/shop',userController.showShop)
-
-
+router.get('/wishlist', userController.shoWishlist)
+router.get('/addTowishlist/:id', userController.addToWishlist)
+router.get('/wishlist/remove/:id', userController.destroyWishitem)
 //search
 router.post('/searchProduct', userController.showShop)
 
@@ -48,10 +49,12 @@ router.get('/destroyCartItem/:id', islogged, userController.destroyCartItem)
 
 //checkout and order
 router.get('/cart/checkout', islogged, orderController.showCheckout)
+// router.get('/buyNow/:id', orderController.showCheckout)
 router.post('/checkout', islogged, orderController.placeOrder)
 router.get('/myOrders', islogged, orderController.showOrders)
 router.post('/myOrders/orderDetails', islogged, orderController.orderDetails)
 router.post('/myOrders/cancel', islogged, orderController.cancelOrder)
+router.get('/razorpay/CreateOrder', orderController.createOrder)
 
 //profile
 router.get('/profile', islogged, accountController.showProfile)

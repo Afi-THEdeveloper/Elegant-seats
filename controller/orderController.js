@@ -10,11 +10,19 @@ const Razorpay = require('razorpay')
 //checkout
 exports.showCheckout=async (req,res)=>{
     try {
-        const user=await User.findById(req.session.user).populate('cart.product')
-        const coupons= await Coupon.find({})
+      const user=await User.findById(req.session.user).populate('cart.product')
+      const coupons= await Coupon.find({})
+      //buy single
+       if(req.params.id){
+         var singleproduct = await Product.findById(req.params.id)
+         const defAddress=await Address.findById(user.defaultAddress)
+         return res.render('user/checkout',{singleproduct,user,defAddress,coupons, error:req.flash('error')})
+       }
+
+        //cart checkout
         if(user.cart.length){
             const defAddress=await Address.findById(user.defaultAddress)
-            res.render('user/checkout',{user,defAddress,coupons, error:req.flash('error')})
+            res.render('user/checkout',{user,defAddress,coupons, error:req.flash('error'), singleproduct})
         }else{
             req.flash('error','cart is empty')
             res.redirect('/cart')
@@ -109,7 +117,6 @@ exports.placeOrder=async (req,res)=>{
         try {
              
              const user = await User.findById(req.session.user)
-             const cart = user.cart
              const totalCartAmount = user.totalCartAmount * 100
 
              const options = {
@@ -119,20 +126,85 @@ exports.placeOrder=async (req,res)=>{
              }
        
              const order = await razorpay.orders.create(options);
-             const newOrder = new Order({
-               customer:user._id,
-               orderId:order.id,
-               paymentMethod: 'Razorpay',
-               totalPrice:totalCartAmount/100,
-               deliveryAddress:user.defaultAddress,
-               products:user.cart
-             });
-             await newOrder.save()
+            //  const newOrder = new Order({
+            //    customer:user._id,
+            //    orderId:order.id,
+            //    paymentMethod: 'Razorpay',
+            //    totalPrice:totalCartAmount/100,
+            //    deliveryAddress:user.defaultAddress,
+            //    products:user.cart
+            //  });
+            //  await newOrder.save()
 
-             const orderDetails = await Order.aggregate([
+        //      const orderDetails = await Order.aggregate([
+        //       {
+        //           $match:{
+        //             orderId:order.id
+        //           }
+        //       },
+        //       {
+        //           $unwind:'$products'
+        //       },
+        //       {
+        //         $lookup: {
+        //           from: "products", 
+        //           localField: "products.product", 
+        //           foreignField: "_id", 
+        //           as: "products.product" 
+        //         }
+        //       },
+              
+        //     ]);
+              
+              
+
+            
+        //  console.log(orderDetails)
+        //  for(let i=0;i<orderDetails.length;i++){
+        //    let productId=orderDetails[i].products.product[0]._id
+        //    let orderQuantity = orderDetails[i].products.quantity
+        //    console.log(productId)
+        //    console.log(orderQuantity)
+        //    let product = await Product.findById(productId)
+        //    let stock=product.stock
+        //    let newStock = stock - orderQuantity
+        //    console.log('stock',stock)
+        //    console.log('newStock',newStock)
+        //    await Product.updateOne({_id:productId}, {$set:{stock:newStock}})
+        // }
+        
+        // await User.updateOne({_id:user._id},{$set:{cart:[],totalCartAmount:0}})
+        return res.render('user/razorpay-checkout', { order, key_id: process.env.KEY_ID, user });
+        
+      } catch (error) {
+            console.error('Razorpay error:', err)
+            req.flash('error', 'Razorpay payment failed. please try again.')
+            return res.redirect('/cart/checkout')
+      }
+    }
+}
+
+
+  
+exports.createOrder = async (req,res)=>{
+  try {
+    const user=await User.findById(req.session.user)
+    const totalCartAmount = user.totalCartAmount * 100
+    const newOrder = new Order({
+      customer:user._id,
+      orderId:req.query.orderId,
+      transactionId:req.query.transactionId,
+      paymentMethod: 'Razorpay',
+      totalPrice:totalCartAmount/100,
+      deliveryAddress:user.defaultAddress,
+      products:user.cart
+    });
+    await newOrder.save()
+
+    const orderDetails = await Order.aggregate([
               {
                   $match:{
-                    orderId:order.id
+                    orderId:req.params.id
                   }
               },
               {
@@ -150,33 +222,29 @@ exports.placeOrder=async (req,res)=>{
             ]);
               
               
+            console.log(orderDetails)
+            for(let i=0;i<orderDetails.length;i++){
+              let productId=orderDetails[i].products.product[0]._id
+              let orderQuantity = orderDetails[i].products.quantity
+              console.log(productId)
+              console.log(orderQuantity)
+              let product = await Product.findById(productId)
+              let stock=product.stock
+              let newStock = stock - orderQuantity
+              console.log('stock',stock)
+              console.log('newStock',newStock)
+              await Product.updateOne({_id:productId}, {$set:{stock:newStock}})
+           }
 
+           await User.updateOne({_id:user._id},{$set:{cart:[],totalCartAmount:0}})
+           res.redirect('/myOrders')
             
-         console.log(orderDetails)
-         for(let i=0;i<orderDetails.length;i++){
-           let productId=orderDetails[i].products.product[0]._id
-           let orderQuantity = orderDetails[i].products.quantity
-           console.log(productId)
-           console.log(orderQuantity)
-           let product = await Product.findById(productId)
-           let stock=product.stock
-           let newStock = stock - orderQuantity
-           console.log('stock',stock)
-           console.log('newStock',newStock)
-           await Product.updateOne({_id:productId}, {$set:{stock:newStock}})
-        }
         
-        await User.updateOne({_id:user._id},{$set:{cart:[],totalCartAmount:0}})
-        return res.render('user/razorpay-checkout', { order, key_id: process.env.KEY_ID, user });
-        
-      } catch (error) {
-            console.error('Razorpay error:', err)
-            req.flash('error', 'Razorpay payment failed. please try again.')
-            return res.redirect('/cart/checkout')
-      }
-    }
+  } catch (error) {
+    console.log(error.message)
+    res.status(500).send('Internal Server Error');
+  }
 }
-       
 
 
 

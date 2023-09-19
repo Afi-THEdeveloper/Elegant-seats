@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="zxx">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Elegant seats</title>
+  <link rel="icon" href="img/favicon.png">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <!-- animate CSS -->
+  <link rel="stylesheet" href="css/animate.css">
+  <!-- owl carousel CSS -->
+  <link rel="stylesheet" href="css/owl.carousel.min.css">
+  <!-- nice select CSS -->
+  <link rel="stylesheet" href="css/nice-select.css">
+  <!-- font awesome CSS -->
+  <link rel="stylesheet" href="css/all.css">
+  <!-- flaticon CSS -->
+  <link rel="stylesheet" href="css/flaticon.css">
+  <link rel="stylesheet" href="css/themify-icons.css">
+  <!-- font awesome CSS -->
+  <link rel="stylesheet" href="css/magnific-popup.css">
+  <!-- swiper CSS -->
+  <link rel="stylesheet" href="css/slick.css">
+  <link rel="stylesheet" href="css/price_rangs.css">
+  <!-- style CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <%- include('../partials/header') -%>
+
+  
+  
+    <!--================Home Banner Area =================-->
+    <!-- breadcrumb start-->
+    <section class="breadcrumb breadcrumb_bg">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <div class="breadcrumb_iner">
+              <div class="breadcrumb_iner_item">
+                <h2>My Wishlist</h2>
+                <p>Home <span>-</span>Wishlist</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section> 
+
+    
+    <!-- breadcrumb start-->
+  
+
+<!--================wishlist Area =================-->
+  <section class="cart_area padding_top">
+    <div class="container">
+      <div class="cart_inner">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Product</th>
+                <th scope="col">Price</th>
+                <th scope="col">action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+                <% if(noWishlist){ %>
+                    <h6>no items</h6>
+                <% }else{ %>    
+
+            <% user.forEach((wishItem,index) => { %> 
+              <tr>
+                <td>
+                  <div class="media">
+                    <div class="d-flex">
+                      <a href="/product/<%= wishItem.wishlist[0]._id %>">
+                      <img src="<%= wishItem.wishlist[0].images[0] %>" alt="" width="140" height="120" />
+                      </a>
+                    </div>
+                    <div class="media-body">
+                      <h5><%= wishItem.wishlist[0].name %></h5>
+                      <p><%= wishItem.wishlist[0].description %></p>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <h5>$<%= wishItem.wishlist[0].price %></h5>
+                </td>
+                <td>
+                  <a href="/wishlist/remove/<%= wishItem.wishlist[0]._id %>" class="btn btn-danger">remove</a>
+                </td>
+
+            </tr>
+            <% }) %>
+            <% } %>
+                
+            </tbody>
+          </table>
+              
+            
+          <div class="checkout_btn_inner float-right">
+            <a class="btn_1" href="/shop">Continue Shopping</a>
+            <hr>
+          </div>
+            
+        </div>
+      </div>
+  </section>
+  
+   
+
+    
+    <!-- jquery plugins here-->
+    <!-- jquery -->
+    <script src="/js/jquery-1.12.1.min.js"></script>
+    <!-- popper js -->
+    <script src="/js/popper.min.js"></script>
+    <!-- bootstrap js -->
+    <script src="/js/bootstrap.min.js"></script>
+    <!-- easing js -->
+    <script src="/js/jquery.magnific-popup.js"></script>
+    <!-- swiper js -->
+    <script src="/js/swiper.min.js"></script>
+    <!-- swiper js -->
+    <script src="/js/masonry.pkgd.js"></script>
+    <!-- particles js -->
+    <script src="/js/owl.carousel.min.js"></script>
+    <script src="/js/jquery.nice-select.min.js"></script>
+    <!-- slick js -->
+    <script src="/js/slick.min.js"></script>
+    <script src="/js/jquery.counterup.min.js"></script>
+    <script src="/js/waypoints.min.js"></script>
+    <script src="/js/contact.js"></script>
+    <script src="/js/jquery.ajaxchimp.min.js"></script>
+    <script src="/js/jquery.form.js"></script>
+    <script src="/js/jquery.validate.min.js"></script>
+    <script src="/js/mail-script.js"></script>
+    <script src="/js/stellar.js"></script>
+    <script src="/js/price_rangs.js"></script>
+    <!-- custom js -->
+    <script src="/js/custom.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  
+    
+    
+
+
+
+</body>
+</html>
+
+
+
+

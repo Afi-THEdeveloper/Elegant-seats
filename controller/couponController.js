@@ -122,8 +122,11 @@ exports.validateCoupon = async (req, res) => {
         return res.json({ invalidCoupon: true });
       }
 
-      
-      if (coupon.expiryDate < Date.now() || orderTotal < coupon.minPurchase || user.cart.length < 3) {
+      if(coupon.expiryDate < Date.now()){
+        return res.json({couponExpired:true})
+      }
+
+      if ( orderTotal < coupon.minPurchase || user.cart.length < 3) {
         return res.json({ criteriaFailure: true });
       }
   

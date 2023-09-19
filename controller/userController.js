@@ -298,7 +298,7 @@ exports.forgetVerifyOtp=async (req,res)=>{
 
 
 
-//products 
+//shop
 
 exports.showShop=async (req,res)=>{
     try {
@@ -307,21 +307,44 @@ exports.showShop=async (req,res)=>{
         const pageNumber = req.body.pageNumber || 0;
         const productsPerPage = 6;
         let neededFilter;
+        let filterName;
 
         if(req.query.category){  
           console.log(req.query.category)
-          neededFilter={ 'category.isDestroyed':false, 'category.name':req.query.category}
+          neededFilter={softDeleted:false, 'category.isDestroyed':false, 'category.name':req.query.category}
+          filterName=req.query.category  
         }else if(req.query.min && req.query.max){
             let min=parseInt(req.query.min) || 0
             let max=parseInt(req.query.max) || Number.MAX_SAFE_INTEGER
-            neededFilter={ 'category.isDestroyed':false, price:{ $gte:min,$lte:max } }
+            neededFilter={softDeleted:false, 'category.isDestroyed':false, price:{ $gte:min,$lte:max } }
+            filterName= `price: less than ${req.query.max},greater than ${req.query.min}`
         }else if(req.body.searchItem){
             const searched=req.body.searchItem
-            neededFilter={'category.isDestroyed':false, name:{ $regex: ".*" +searched+ ".*", $options:'i'}  }  
+
+            //check availibility in advance to avoid error from aggregation
+            const categories = await Category.find({isDestroyed:false})
+            const categoryIds = categories.map((category) => category._id);
+            const result = await Products.find({
+                softDeleted: 0,
+                category:{$in:categoryIds},
+                name: { $regex: '.*' + searched + '.*', $options:'i' }
+            })
+            console.log(result)
+            if(result.length===0){
+                req.flash('error','matching product not found, search another..')
+                return res.redirect('/shop')
+            }else{
+                neededFilter={ softDeleted:false,'category.isDestroyed':false, name:{ $regex: ".*" +searched+ ".*",  $options:'i'}  }
+                filterName=` ${searched}` 
+            }
+           
+        }else{
+            neededFilter={softDeleted:false,'category.isDestroyed':false}
+            filterName=``
         }
-        else{
-            neededFilter={'category.isDestroyed':false}
-        }
+           
+            
+           
 
       
         const aggragationPipeline =[
@@ -359,10 +382,18 @@ exports.showShop=async (req,res)=>{
         ]
 
         const prdt = await Products.aggregate(aggragationPipeline);
-        let totalPages = prdt[0].totalPages[0].total;
-        totalPages = Math.ceil(totalPages/6)
+        let totalItems = prdt[0].totalPages[0].total;
+        let totalPages = Math.ceil(totalItems/6)
         const products = prdt[0].products;
-        res.render('user/shop', { products, totalPages, categories});
+        res.render('user/shop', {
+             products,
+             totalPages,
+             categories,
+             totalItems,
+             filterName,
+             error:req.flash('error')
+
+        });
                 
         
     } catch (error) {
@@ -372,24 +403,7 @@ exports.showShop=async (req,res)=>{
 
 
         
-//search 
-// exports.searchProduct= async (req,res)=>{
-//     try {
-//         const searched=req.body.searchItem
-//         const searchedProduct = await Products.find({ name:{ $regex:".*"+searched+".*", $options:'i' }  }) 
-//         console.log(searchedProduct)
-//         if(searchedProduct.length > 0){
-
-//         }else{
-//             res.redirect('/')
-//         }
-//     } catch (error) {
-//         console.log(error.message)
-//         res.status(500).send('Internal Server Error');
-//     }
-// }
-                    
-                
+      
             
            
 
@@ -430,6 +444,7 @@ exports.showCart=async (req,res)=>{
     }
 }
 
+
 exports.addTocart=async (req,res)=>{
     
     try {
@@ -469,7 +484,8 @@ exports.addTocart=async (req,res)=>{
         res.status(500).send('Internal Server Error');
     }
 }
-       
+
+
 exports.destroyCartItem =async (req,res) => {
     try {
         const userId = req.session.user; 
@@ -490,6 +506,9 @@ exports.destroyCartItem =async (req,res) => {
         res.status(500).send('Internal Server Error');
     }
 }
+
+
+       
 
 
 exports.updateCartQauntity = async  (req,res) => {
@@ -533,8 +552,112 @@ exports.updateCartQauntity = async  (req,res) => {
 
     }
 }
+
+
+
+//wishlist
+exports.shoWishlist = async (req,res)=>{
+    try {
+        const currentuser = await User.findById(req.session.user)
+        if(currentuser.wishlist.length===0){
+            return res.render('user/wishlist',{noWishlist:true})
+        }
+        
+        const user=await User.aggregate([
+            {
+                $match:{
+                    _id:currentuser._id
+                }
+            },
+            {
+                $unwind:'$wishlist'
+            },
+            {
+                $lookup:{
+                    from:'products',
+                    localField:'wishlist',
+                    foreignField:'_id',
+                    as:'wishlist'
+                }
+            }
+        ]) 
+        console.log(user[0].wishlist[0].name)
+        return res.render('user/wishlist',{user,noWishlist:false})
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).send('Internal Server Error');
+    }
+}
+
+
+
+exports.addToWishlist = async (req,res)=>{
+    try {
+        const productid=req.params.id
+        const product = await Products.findById(productid)
+
+        const user=await User.findById(req.session.user)
+        const existingItemIndex=await user.wishlist.find(item=> item.equals(product._id))
+        if(existingItemIndex === undefined){
+            user.wishlist.push(product._id)
+        }
+        await user.save()
+            
+        //to redirect to origin page
+        const referer = req.headers.referer;
+        const originalPage = referer || '/';
+        res.redirect(originalPage)
+ 
+     } catch (error) {
+         console.log(error.message)
+         res.status(500).send('Internal Server Error');
+     }
+ }
+
+ exports.destroyWishitem = async(req,res)=>{
+    try {
+         const userId = req.session.user; 
+         const user = await User.findById(userId)
+         const wishItemId = req.params.id
+         const wishIndex = user.wishlist.findIndex((item) => item.equals(wishItemId) )
+         if(wishIndex !== -1){
+            user.wishlist.splice(wishIndex,1);
+            await user.save();
+         }
+         req.flash('error','item removed')
+         res.redirect('/wishlist')
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).send('Internal Server Error');
+    }
+ }
+
+
+ //logout
+ 
+ exports.logout= (req,res)=>{
+     req.session.user=null
+     res.redirect('/')
+ }
+
+ 
+
+ 
         
         
+        
+
+        
+        
+        
+        
+        
+
+
+        
+        
+
+
        
         
         
@@ -543,12 +666,6 @@ exports.updateCartQauntity = async  (req,res) => {
 
 
 
-//logout
-
-exports.logout= (req,res)=>{
-    req.session.user=null
-    res.redirect('/')
-}
   
 
 
