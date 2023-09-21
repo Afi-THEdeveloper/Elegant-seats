@@ -1,3 +1,5 @@
+
+
 (function($) {
   'use strict';
   $(function() {
@@ -182,15 +184,15 @@
       var SalesChart = new Chart(SalesChartCanvas, {
         type: 'bar',
         data: {
-          labels: ["Jan", "Feb", "Mar", "Apr", "May"],
+          labels: ["Jan", "Feb", "Mar", "Apr", "May","june","july","August","Sep","Oct","Nov","Dec"],
           datasets: [{
               label: 'Offline Sales',
-              data: [480, 230, 470, 210, 330],
+              data: [480, 230, 470, 210, 330,400,500,300,900,100,125,200],
               backgroundColor: '#98BDFF'
             },
             {
               label: 'Online Sales',
-              data: [400, 340, 550, 480, 170],
+              data: [400, 340, 550, 480, 170,400,500,300,654,100,129,100],
               backgroundColor: '#4B49AC'
             }
           ]

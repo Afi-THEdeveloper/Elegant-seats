@@ -31,9 +31,13 @@ router.get('/products/search',isAdminlogged,adminController.searchProduct)
 
 
 //orders
-router.get('/ordersTable', isAdminlogged, orderController.showOrdersTable)
-router.patch('/ordersTable', isAdminlogged, orderController.updateStatus)
+router.route('/ordersTable')
+    .get( isAdminlogged, orderController.showOrdersTable)
+    .patch( isAdminlogged, orderController.updateStatus)
 router.get('/orders/details/:id', isAdminlogged, orderController.orderDetails)
+router.route('/salesReport')
+      .get(isAdminlogged, adminController.salesReport)
+      .post(isAdminlogged, adminController.salesReport)
 
 
 

@@ -189,33 +189,61 @@
                 <div class="card">
                   <div class="card-body">
                     
-                  
+                    <form  action="/admin/salesReport" method="post" id="salesFilterForm"  class="mb-4 row">
+                        <div>
+                            <label for="startDate">Start Date:</label>
+                            <input type="date" id="startDate" name="startDate">
+                        </div>    
+                        <div>   
+                            <label for="endDate">End Date:</label>
+                            <input type="date" id="endDate" name="endDate">
+                        </div>
+                         <div class="mt-3">
+                             <button type="submit" class="btn btn-primary" type="button">Show report</button>
+                        </div>   
+                    </form>
+
+
+                       
+                        
 
                     <div class="table-responsive">
+
+                        <% if (error && error.length > 0) { %>
+                            <div class="alert alert-danger">
+                              <% error.forEach(function(message) { %>
+                                <p><%= message %></p>
+                              <% }); %>
+                            </div>
+                        <% } %>
 
                       <% if(orders.length){%>
                       <table class="table table-striped">
                         <thead>
                           <tr>
                             <th>
-                              Product 
+                              order Id 
+                            </th>
+                            <th>
+                             Ordered on 
+                            </th>
+                            <th>
+                              Delivered on 
                             </th>
                             
                             <th>
-                              Price
+                              Product
+                            </th>
+                            <th>
+                              price
                             </th>
                             <th>
                               shipping Address
                             </th>
                             <th>
-                              Status
-                            </th>
-                            <th>
                               Payment method
                             </th>
-                            <th>
-                              Details
-                            </th>
+                            
                           </tr>
                         </thead>
                         <tbody>
@@ -223,61 +251,48 @@
                           <% orders.forEach(order => { %>
 
                           <tr>
-                            
-                            
-                            
-                            <td class="py-1">
-                              <% order.products.product.forEach((prdt)=> { %>
-                                • <%= prdt.name  %><br>
-                              <% }) %>
-                            </td>
-                            <td>
-                              <%= order.totalPrice  %>
-                            </td>
-                            <td>
-                              <%=order.deliveryAddress[0].name  %>,
-                              <%=order.deliveryAddress[0].address%>,
-                              <%=order.deliveryAddress[0].locality%>,
-                              <%=order.deliveryAddress[0].landMark%>,<br>
-                              <%=order.deliveryAddress[0].pincode%>,
-                              <%=order.deliveryAddress[0].District%> District,
-                              <%=order.deliveryAddress[0].phone%>,
-                              <%=order.deliveryAddress[0].alternativePhoneNumber%>
-                            </td>
-
-                            <td>
-                              <% if (order.status !== 'Cancelled' && order.status !== 'Delivered') { %>
-                                <form action="/admin/ordersTable?_method=PATCH" method="POST">
-                                    <select name="status" class="status_order <%=order.status%>" id="floatingSelectGrid">
-                                        <%for (const option of ['Pending', 'Processing','Shipped', 'Delivered']){%>
-                                          <option value="<%=option%>" <% if(option == order.status) {%> selected <%} %>>
-                                            <%=option%> 
-                                          </option>
-                                        <% } %>
-                                    </select>
-                                    <input type="hidden" name="orderId" value="<%=order._id%>">
-                                    
-                                    <button type="submit" class="status_update btn btn-outline-primary">Update</button>
-                                </form>
-
-                                <% } else if (order.status === 'Delivered') { %> 
-                                <p class="Cancel text-success"><strong> Delivered on</strong> <br> <%= order.deliveredOn.toDateString() %></p>
+                              <td class="py-1">
+                                <%= order.orderId  %>
+                              </td>
+                              <td>
+                                <%= order.orderDate.toDateString() %>
+                              </td>
+                              <td>
+                                <%= order.deliveredOn.toDateString() %>
+                              </td>
+  
+                              <td>
+                                <% order.products.product.forEach((prdt)=> { %>
+                                    • <%= prdt.name  %><br>
+                                  <% }) %>
+                              </td>
+                              <td>
+                                  <%= order.totalPrice  %>
+                              </td>
+                              <td>
+                                  <%=order.deliveryAddress[0].name  %>,
+                                  <%=order.deliveryAddress[0].address%>,
+                                  <%=order.deliveryAddress[0].locality%>,
+                                  <%=order.deliveryAddress[0].landMark%>,<br>
+                                  <%=order.deliveryAddress[0].pincode%>,
+                                  <%=order.deliveryAddress[0].District%> District,
+                                  <%=order.deliveryAddress[0].phone%>,
+                                  <%=order.deliveryAddress[0].alternativePhoneNumber%>
+                                </td>
+                              <td>
+                                <%= order.paymentMethod  %>
+                              </td>
+  
                               
-                                <% } else { %>
-                                 <p class="Cancel text-danger"><strong> Cancelled on </strong><br> <%= order.cancelledOn.toDateString() %></p>
-                                <% } %>
-                            </td>
-
-                            <td>
-                              <%= order.paymentMethod  %>
-                            </td>
-                            <td>
-                              <a href="/admin/orders/details/<%= order.orderId  %>">details</a>
-                            </td>
-
+                            </tr>
+                            <% }) %>
                             
-                          </tr>
-                          <% }) %>
+                            
+                            
+                            
+                           
+                            
+
                           
                             
       
@@ -295,7 +310,7 @@
 
 
                     <% } else { %>
-                    <p>no orders</p>
+                    <p>no sales done yet</p>
                     <% } %>
 
                 </div>

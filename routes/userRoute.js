@@ -55,6 +55,7 @@ router.get('/myOrders', islogged, orderController.showOrders)
 router.post('/myOrders/orderDetails', islogged, orderController.orderDetails)
 router.post('/myOrders/cancel', islogged, orderController.cancelOrder)
 router.get('/razorpay/CreateOrder', orderController.createOrder)
+router.post('/myOrders/invoice', orderController.loadInvoice)
 
 //profile
 router.get('/profile', islogged, accountController.showProfile)

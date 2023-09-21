@@ -92,6 +92,8 @@
                                 <p>• <%= prdt.name  %></p>
  
                               <% }) %>
+                              <h6>payment Method :</h5>
+                              <span><p class="mb-1 me-1"> <%= order.paymentMethod  %></p></span>
                            </div>
                            
                            <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
@@ -101,14 +103,29 @@
                                <!-- <span class="text-danger"><s>$20.99</s></span> -->
                              </div>
                              <% if(order.status==='Cancelled'){  %>
-                                 <h6 class="text-danger"><%= order.status  %></h6>
+                              <p class="text-danger"><strong>Cancelled on: </strong><br><% if(order.cancelledOn){ %>   <%= order.cancelledOn.toDateString() %>  <% } %></p> 
+                            
+                             <% }else if(order.status === 'Delivered'){ %> 
+                              <p class="text-success"><strong>Delivered on: </strong><br><%if(order.deliveredOn){ %>  <%=order.deliveredOn.toDateString() %>   <%}%></p>
+                              <form action="/myOrders/invoice" method="post" novalidate="novalidate">
+                                <input type="hidden" name="orderId" value="<%= order.orderId %>">
+                                <button class="btn btn-outline-primary btn-sm mt-2"  type="submit">
+                                  download invoice
+                                </button>
+                              </form> 
                              <% } else { %>
-                                 <h6 class="text-success"><%= order.status  %></h6>
+                                 <h6 class="text-secondary"><%= order.status  %></h6>
                                  <div class="d-flex flex-column mt-4">
                                   <form action="/myOrders/orderDetails" method="post">
                                     <input type="hidden" name="orderId" value="<%= order.orderId %>">
                                     <button  class="btn btn-primary btn-sm" type="submit">Details</button>
                                   </form> 
+                                  <form action="/myOrders/invoice" method="post" novalidate="novalidate">
+                                    <input type="hidden" name="orderId" value="<%= order.orderId %>">
+                                    <button class="btn btn-outline-primary btn-sm mt-2"  type="submit">
+                                      download invoice
+                                    </button>
+                                  </form>
                                   <form action="/myOrders/cancel" method="post" novalidate="novalidate">
                                     <input type="hidden" name="orderId" value="<%= order.orderId %>">
                                     <button class="btn btn-outline-primary btn-sm mt-2" data-toggle="modal" data-target="#orderModal<%= order.orderId %>"  type="button">

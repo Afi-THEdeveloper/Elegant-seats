@@ -336,8 +336,15 @@ exports.showOrdersTable=async (req,res)=>{
 }
 
 
+
+
 exports.updateStatus=async (req,res)=>{
   try {
+     if(req.body.status === 'Delivered'){
+       await Order.findOneAndUpdate({_id:req.body.orderId},{$set:{status:req.body.status, deliveredOn:Date.now() }})
+       return res.redirect('/admin/ordersTable')
+     }
+
      await Order.findOneAndUpdate({_id:req.body.orderId},{$set:{status:req.body.status}})
      res.redirect('/admin/ordersTable')
   } catch (error) {
@@ -349,7 +356,7 @@ exports.updateStatus=async (req,res)=>{
 
 exports.cancelOrder=async (req,res)=>{
   try {
-    await Order.findOneAndUpdate({orderId:req.body.orderId}, {$set:{status:'Cancelled'}} )
+    await Order.findOneAndUpdate({orderId:req.body.orderId}, {$set:{status:'Cancelled', cancelledOn:Date.now()}} )
     const orderDetails = await Order.aggregate([
       {
           $match:{
@@ -393,6 +400,52 @@ exports.cancelOrder=async (req,res)=>{
     res.status(500).send('Internal Server Error');
   }
 }
+
+
+exports.loadInvoice = async (req,res)=>{
+  try {
+    const order=await Order.find({orderId:req.body.orderId})
+
+    const orderDetails = await Order.aggregate([
+      {
+          $match:{
+            orderId:req.body.orderId
+          }
+      },
+      {
+        $sort: { orderDate: -1 }
+      },
+      {
+          $unwind:'$products'
+      },
+      {
+        $lookup: {
+          from: "products", 
+          localField: "products.product", 
+          foreignField: "_id", 
+          as: "products.product" 
+        }
+      },
+      {
+        $lookup: {
+          from: "addresses", 
+          localField: "deliveryAddress", 
+          foreignField: "_id", 
+          as: "deliveryAddress" 
+        }
+      }
+    ]);
+    
+    res.render('user/invoice',{Details:orderDetails})
+  } catch (error) {
+    console.log(error.message)
+    res.status(500).send('Internal Server Error');
+  }
+}
+      
+
+
+
 
 
 
