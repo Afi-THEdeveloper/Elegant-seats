@@ -33,22 +33,26 @@
 
                     <div class="form-group">
                       <label for="name">Product Name</label>
-                      <input type="text" class="form-control" name="name" id="name" placeholder="Name" required>
+                      <input type="text" class="form-control" name="name" id="name" placeholder="Name">
+                      <small id="nameErr" class="text-danger"></small>
                     </div>
                     
                     <div class="form-group">
                       <label for="exampleInputName1">Product description</label>
-                      <input type="text" class="form-control" name="description" id="exampleInputName1" placeholder="description" required>
+                      <input type="text" class="form-control" name="description" id="description" placeholder="description">
+                      <small id="descriptionErr" class="text-danger"></small>
                     </div>
                     
                     <div class="form-group">
                       <label for="exampleInputName1">Product price</label>
-                      <input type="number" class="form-control" name="price" id="exampleInputName1" placeholder="price" required>
+                      <input type="number" class="form-control" name="price" id="price" placeholder="price">
+                      <small id="priceErr" class="text-danger"></small>
                     </div>
                     
                     <div class="form-group">
                       <label for="exampleInputName1">Product stock</label>
-                      <input type="number" class="form-control" name="stock" id="exampleInputName1" placeholder="stock" required>
+                      <input type="number" class="form-control" name="stock" id="stock" placeholder="stock">
+                      <small id="stockErr" class="text-danger"></small>
                     </div>
                     
                     <div class="form-group">
@@ -56,11 +60,11 @@
                       <select name="category" id="cat" class="form-control">
                         <option value="-1" disabled selected>Choose</option>
                         <% categories.forEach(cat => { %>
-                            <option value="<%= cat._id %>"><%= cat.name %></option>
+                            <option value="<%= cat._id %>"> <%= cat.name %> </option>
                         <% }) %>
-                      </select>  
+                      </select> 
                     </div>
-                  
+                    
                     <div class="row">
                       <div class="col-12">
                           <div class="form-group">
@@ -117,7 +121,7 @@
                     </div>
 
                     
-                      <button type="submit" class="btn btn-primary mr-2">Create</button>
+                      <button type="submit" onclick="return validateProduct()" class="btn btn-primary mr-2">Create</button>
                       <a href="/admin/category" class="btn btn-light">Cancel</a>
                 </form>
                 </div>
@@ -128,22 +132,16 @@
             </div>
           </div>
         </div>
-        <!-- content-wrapper ends -->
-        <!-- partial:../../partials/_footer.html -->
-        <!-- <footer class="footer">
-          <div class="d-sm-flex justify-content-center justify-content-sm-between">
-            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2021.  Premium <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap admin template</a> from BootstrapDash. All rights reserved.</span>
-            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="ti-heart text-danger ml-1"></i></span>
-          </div>
-        </footer> -->
-        <!-- partial -->
+        
+       
       </div>
       <!-- main-panel ends -->
     </div>
-    <!-- page-body-wrapper ends -->
   </div>
-  <!-- container-scroller -->
+    
+
      
+  <script src="/validations/productValidations.js"></script>
   <script>
     function hideErrorMessage() {
         var errorMessageElement = document.getElementById('error-message');
@@ -197,4 +195,10 @@
 </body>
 
 <%- include('../../partials/Afooter') -%>
+
+
+
+   
+
+
 

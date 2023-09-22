@@ -249,15 +249,21 @@
                </div>
 
 
-                <% if (error && error.length> 0) { %>
-                  <div class="alert alert-danger">
-                    <% error.forEach(function(message) { %>
-                      <p>
-                        <%= message %>
-                      </p>
-                      <% }); %>
-                  </div>
-                  <% } %>
+               <% if (error && error.length > 0) { %>
+                <div class="alert alert-danger text-center" id="error-message">
+                  <% error.forEach(function(message) { %>
+                    <p><%= message %></p>
+                  <% }); %>
+                </div>
+                <script>
+                    setTimeout(function() {
+                      var errorMessage = document.getElementById('error-message');
+                      if (errorMessage) {
+                        errorMessage.style.display = 'none';
+                      }
+                    }, 2000); 
+                  </script>
+              <% } %> 
                     <!-- <div class="creat_account">
               <input type="checkbox" id="f-option4" name="selector" />
               <label for="f-option4">I’ve read and accept the </label>

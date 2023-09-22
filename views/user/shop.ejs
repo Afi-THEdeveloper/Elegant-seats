@@ -27,6 +27,19 @@
     <link rel="stylesheet" href="css/price_rangs.css">
     <!-- style CSS -->
     <link rel="stylesheet" href="css/style.css">
+
+<style>
+.success {
+    display: none;
+    position: fixed;
+    top: 50%; /* Center vertically at 50% of the viewport height */
+    left: 60%; /* Center horizontally at 50% of the viewport width */
+    transform: translate(-50%, -50%); /* Move the element back by half of its own width and height */
+    background-color: lightgray;
+    padding: 20px;
+    z-index: 100;
+}
+</style>
 </head>
 
 <body>
@@ -36,7 +49,7 @@
 
     <!--================Home Banner Area =================-->
     <!-- breadcrumb start-->
-    <section class="breadcrumb breadcrumb_bg">
+    <!-- <section class="breadcrumb breadcrumb_bg">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-8">
@@ -49,7 +62,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
     <!-- breadcrumb start-->
 
     <!--================Category Product Area =================-->
@@ -101,73 +114,7 @@
                         
                                         
 
-                        <!-- <aside class="left_widgets p_filter_widgets">
-                            <div class="l_w_title">
-                                <h3>Product filters</h3>
-                            </div>
-                            <div class="widgets_inner">
-                                <ul class="list">
-                                    <li>
-                                        <a href="#">Apple</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Asus</a>
-                                    </li>
-                                    <li class="active">
-                                        <a href="#">Gionee</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Micromax</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Samsung</a>
-                                    </li>
-                                </ul>
-                                <ul class="list">
-                                    <li>
-                                        <a href="#">Apple</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Asus</a>
-                                    </li>
-                                    <li class="active">
-                                        <a href="#">Gionee</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Micromax</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Samsung</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </aside> -->
-
-                        <!-- <aside class="left_widgets p_filter_widgets">
-                            <div class="l_w_title">
-                                <h3>Color Filter</h3>
-                            </div>
-                            <div class="widgets_inner">
-                                <ul class="list">
-                                    <li>
-                                        <a href="#">Black</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Black Leather</a>
-                                    </li>
-                                    <li class="active">
-                                        <a href="#">Black with red</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Gold</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Spacegrey</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </aside> -->
-
+                        
                        
                     </div>
                 </div>
@@ -176,12 +123,23 @@
                         <div class="col-lg-12">
 
                             <% if (error && error.length > 0) { %>
-                                <div class="alert alert-danger">
+                                <div class="alert alert-danger text-center" id="error-message">
                                   <% error.forEach(function(message) { %>
                                     <p><%= message %></p>
                                   <% }); %>
                                 </div>
-                            <% } %>
+                                <script>
+                                    setTimeout(function() {
+                                      var errorMessage = document.getElementById('error-message');
+                                      if (errorMessage) {
+                                        errorMessage.style.display = 'none';
+                                      }
+                                    }, 2000); 
+                                  </script>
+                              <% }else{ %>
+                                <div id="success-message" class="alert alert-success success"></div>  
+                             <% } %>  
+   
 
                             <div class="product_top_bar d-flex justify-content-between align-items-center">
                                 <div class="single_product_menu">
@@ -228,14 +186,15 @@
                                             <div class="single_product_text">
                                                 <h4><%= product.name %></h4>
                                                 <h3>&#8377;<%= product.price %></h3>
-                                                <a href="/addTowishlist/<%= product._id %>" class="add_cart">Out of stock!</a>
+                                                <a href="/addTowishlist/<%= product._id %>" class="add_cart text-muted">Out of stock!</a>
                                                 <a href="/addTowishlist/<%= product._id %>"><i class="ti-heart"></i></a>
                                             </div>
                                             <% }else{ %>
                                             <div class="single_product_text">
                                                 <h4><%= product.name %></h4>
                                                 <h3>&#8377;<%= product.price %></h3>
-                                                <a href="/addToCart/<%= product._id  %>" class="add_cart">+ add to cart</a>
+                                                <a href="#" class="add_cart addToCartButton">+ Add to Cart</a>
+                                                <input type="hidden" class="productId" value="<%= product._id %>">
                                                 <a href="/addTowishlist/<%= product._id %>"><i class="ti-heart"></i></a>
                                             </div>
                                             <% } %>
@@ -373,7 +332,67 @@ $(document).ready(function () {
         // Redirect the user to the new URL
         window.location.href = url;
     });
+
+
+
+
+    
+    
+    
+   
+    
+    $(".addToCartButton").click(function() {
+
+        var productId = $(this).siblings(".productId").val();
+        var scrollPosition = $(window).scrollTop();
+       console.log(productId)
+        $.ajax({
+            url:'/addToCart',
+            method:"POST",
+            data: {
+                productId:productId,
+                quantity:1
+            },
+            success: function(response,status,xhr){
+                if(response.success){
+                    
+                    window.scrollTo(0, scrollPosition);
+                    displayFlashMessage(response.success)
+                    
+                }
+            },
+            error: function(xhr, stock, errorThrown) {
+                    // Handle the AJAX error
+                    if(xhr.status === 404){
+                      alert('an error occured')
+                    }
+            },
+                    
+
+
+         })
+     
+    });
+
+
+
+
 });
+
+
+function displayFlashMessage(message) {
+  const flashMessageElement = document.getElementById('success-message');
+  flashMessageElement.textContent = message;
+  flashMessageElement.style.display = 'block'; // Show the flash message
+  
+
+  setTimeout(() => {
+    flashMessageElement.style.display = 'none'; // Hide the flash message after 3 seconds (adjust as needed)
+  },1500);
+}
+
+
+
 
 </script>
 

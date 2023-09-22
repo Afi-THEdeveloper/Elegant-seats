@@ -391,7 +391,8 @@ exports.showShop=async (req,res)=>{
              categories,
              totalItems,
              filterName,
-             error:req.flash('error')
+             error:req.flash('error'),
+             success:req.flash('success')
 
         });
                 
@@ -448,13 +449,13 @@ exports.showCart=async (req,res)=>{
 exports.addTocart=async (req,res)=>{
     
     try {
+        console.log('hy')
         const quantity=parseInt(req.body.quantity) || 1
         let productid;
         if(req.body.productId){
             productid=req.body.productId
-        }else{
-            productid=req.params.id
         }
+        console.log(req.body.productId)
         const product=await Products.findById(productid)
         const user=await User.findById(req.session.user)
         const total=quantity*product.price
@@ -476,9 +477,10 @@ exports.addTocart=async (req,res)=>{
        await user.save()
 
        //to redirect to origin page
-       const referer = req.headers.referer;
-       const originalPage = referer || '/';
-       res.redirect(originalPage)
+    //    const referer = req.headers.referer;
+    //    const originalPage = referer || '/';
+       req.flash('success','Added to cart')
+       return res.json({success:req.flash('success')})
     }catch (error) {
         console.log(error.message)
         res.status(500).send('Internal Server Error');
@@ -529,7 +531,8 @@ exports.updateCartQauntity = async  (req,res) => {
         const product = await Products.findById(cartItem.product);
 
         if(newQuantity > product.stock){
-            return res.json({stock:product.stock});
+            req.flash('error','stock limit exceeded')
+            return res.json({stock:product.stock, error:req.flash('error') });
         }
             
         const newTotal = newQuantity * product.price;

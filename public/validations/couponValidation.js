@@ -82,7 +82,3 @@ function validateDescription(){
 function validateCoupon(){
     return validateCode() && validateDiscount() && validateMinPurchase() && validateExpiryDate() && validateDescription()
 }
-
-// function validateCoupon(){
-//     return false
-// }

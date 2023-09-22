@@ -43,7 +43,6 @@ router.post('/searchProduct', userController.showShop)
 //cart
 router.get('/cart', islogged, userController.showCart)
 router.post('/addToCart', islogged, userController.addTocart)
-router.get('/addToCart/:id', islogged, userController.addTocart)
 router.post('/update-cart-item-quantity', islogged, userController.updateCartQauntity)
 router.get('/destroyCartItem/:id', islogged, userController.destroyCartItem)
 
@@ -54,8 +53,8 @@ router.post('/checkout', islogged, orderController.placeOrder)
 router.get('/myOrders', islogged, orderController.showOrders)
 router.post('/myOrders/orderDetails', islogged, orderController.orderDetails)
 router.post('/myOrders/cancel', islogged, orderController.cancelOrder)
-router.get('/razorpay/CreateOrder', orderController.createOrder)
-router.post('/myOrders/invoice', orderController.loadInvoice)
+router.get('/razorpay/CreateOrder', islogged, orderController.createOrder)
+router.post('/myOrders/invoice', islogged, orderController.loadInvoice)
 
 //profile
 router.get('/profile', islogged, accountController.showProfile)

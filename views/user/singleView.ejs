@@ -25,6 +25,18 @@
   <link rel="stylesheet" href="/css/style.css">
   <!--link from cloud-->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.css">
+  <style>
+  .success {
+    display: none;
+    position: fixed;
+    top: 50%; /* Center vertically at 50% of the viewport height */
+    left: 60%; /* Center horizontally at 50% of the viewport width */
+    transform: translate(-50%, -50%); /* Move the element back by half of its own width and height */
+    background-color: lightgray;
+    padding: 20px;
+    z-index: 100;
+  }
+</style>
 </head>
 
 <body>
@@ -85,16 +97,16 @@
             <% if(product.stock === 0) { %>
               <h6 class="text-danger"> <center>Out of stock!</center></h6>
             <% }else{ %>
-            <form action="/addToCart" method="post">
+            
                <div class="card_area d-flex justify-content-between align-items-center">
                  
                    <input  type="hidden" name="quantity" value="1">
-                   <input type="hidden" name="productId" value="<%= product._id %>">
-                   <button type="submit" class="btn_3">add to cart</button>
+                   <button type="button" class="btn_3 addToCartButton">add to cart</button>
+                   <input type="hidden" class="productId" value="<%= product._id %>">
                  
                    <a href="#" class="like_us"> <i class="ti-heart"></i> </a>
                </div>
-            </form>
+          
             <div class="card_area d-flex justify-content-between align-items-center">
               <!-- <div class="product_count">
                 <span class="inumber-decrement"> <i class="ti-minus"></i></span>
@@ -102,7 +114,7 @@
                 <span class="number-increment"> <i class="ti-plus"></i></span>
               </div> -->
               <a href="/buyNow/<%= product._id %>" class="btn_3">Buy now</a>
-              
+              <div id="success-message" class="alert alert-success success"></div>
             </div>
             <% } %>
           </div>
@@ -628,13 +640,63 @@
   <!--cloud links-->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
-  <script>
+<script>
     $(document).ready(function () {
       $('.zoom-image').elevateZoom({
         zoomType: "inner", // Change the zoom type as needed (inner, lens, window)
         cursor: "crosshair", // Change the cursor style when hovering over the image
       });
-    });
-  </script>
+
+
+$(".addToCartButton").click(function() {
+
+var productId = $(this).siblings(".productId").val();
+var scrollPosition = $(window).scrollTop();
+console.log(productId)
+$.ajax({
+    url:'/addToCart',
+    method:"POST",
+    data: {
+        productId:productId,
+        quantity:1
+    },
+    success: function(response,status,xhr){
+        if(response.success){
+            
+            window.scrollTo(0, scrollPosition);
+            displayFlashMessage(response.success)
+        }
+    },
+    error: function(xhr, stock, errorThrown) {
+            // Handle the AJAX error
+            if(xhr.status === 404){
+              alert('an error occured')
+            }
+    },
+            
+
+
+   })
+
+  });
+
+
+
+
+});
+
+
+function displayFlashMessage(message) {
+  const flashMessageElement = document.getElementById('success-message');
+  flashMessageElement.textContent = message;
+  flashMessageElement.style.display = 'block'; // Show the flash message
+  
+
+  setTimeout(() => {
+    flashMessageElement.style.display = 'none'; // Hide the flash message after 3 seconds (adjust as needed)
+  },1500);
+}
+
+</script>
 </body>
 </html>

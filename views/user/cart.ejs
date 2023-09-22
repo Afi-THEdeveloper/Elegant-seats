@@ -36,7 +36,7 @@
   
     <!--================Home Banner Area =================-->
     <!-- breadcrumb start-->
-    <section class="breadcrumb breadcrumb_bg">
+    <!-- <section class="breadcrumb breadcrumb_bg">
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-8">
@@ -49,7 +49,7 @@
           </div>
         </div>
       </div>
-    </section>
+    </section> -->
     <!-- breadcrumb start-->
   
     <!--================Cart Area =================-->
@@ -57,21 +57,24 @@
       <div class="container">
         <div class="cart_inner">
 
-          <div class="invalid-feedback" id="afi"><p>Please enter a valid password.</p></div>
+          <div id="flash-message" class="alert alert-danger" style="display:none;"></div>
 
-          <% if (success && success.length > 0) { %>
-            <div class="alert alert-success">
-              <% success.forEach(function(message) { %>
-                <p><%= message %></p>
-              <% }); %>
-            </div>
-          <% } else if(error && error.length >0) { %>
-            <div class="alert alert-danger">
+          
+          <% if (error && error.length > 0) { %>
+            <div class="alert alert-danger text-center" id="error-message">
               <% error.forEach(function(message) { %>
                 <p><%= message %></p>
               <% }); %>
             </div>
-          <% } %>
+            <script>
+                setTimeout(function() {
+                  var errorMessage = document.getElementById('error-message');
+                  if (errorMessage) {
+                    errorMessage.style.display = 'none';
+                  }
+                }, 2000); 
+              </script>
+          <% } %> 
           
           <%if(cart.length){%>
           <div class="table-responsive">
@@ -299,7 +302,7 @@
                   if (response) {
 
                        if(response.stock){
-                        alert('out of stock')
+                        displayFlashMessage(response.error)
                         currentValue=response.stock
                         return inputElement.val(currentValue);
                       }
@@ -334,12 +337,24 @@
 });
 
 
+
+function displayFlashMessage(message) {
+  const flashMessageElement = document.getElementById('flash-message');
+  flashMessageElement.textContent = message;
+  flashMessageElement.style.display = 'block'; // Show the flash message
+
+  setTimeout(() => {
+    flashMessageElement.style.display = 'none'; // Hide the flash message after 3 seconds (adjust as needed)
+  },2000);
+}
+
+
 </script>
 
 
 
 
 
-  </body>
+</body>
   
-  </html>
+</html>
