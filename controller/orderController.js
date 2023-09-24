@@ -11,7 +11,13 @@ const Razorpay = require('razorpay')
 exports.showCheckout=async (req,res)=>{
     try {
       const user=await User.findById(req.session.user).populate('cart.product')
-      const coupons= await Coupon.find({})
+      const coupons= await Coupon.find({
+        $and:[
+        {expiryDate:{$gt:Date.now()}},
+        { isCancelled:false }
+        ]
+      })
+      console.log(coupons)
       //buy single
        if(req.params.id){
          var singleproduct = await Product.findById(req.params.id)
@@ -41,20 +47,43 @@ exports.showCheckout=async (req,res)=>{
  }) 
 
 exports.placeOrder=async (req,res)=>{
-    
+
+  let user=await User.findById(req.session.user)
         if(!req.body.paymentOptions){
             req.flash('error','please select a payment Method')
             return res.redirect('/cart/checkout')
         }
 
+        if(!user.defaultAddress){
+          req.flash('error','please add an Address')
+          return res.redirect('/cart/checkout')
+        }
+
+        if(req.body.discountTotal){
+          const coupon = await Coupon.findOne({code:req.session.couponCode})
+          console.log(coupon.code) 
+          const usedUser = coupon.usedUsers.find((item) => item.usedUser.toString() === user._id.toString() );
+          console.log(usedUser)
+          if(usedUser){
+            usedUser.usedCount += 1;
+            await coupon.save();
+          } else {
+            coupon.usedUsers.push({ usedUser: user._id, usedCount: 1 });
+            await coupon.save();
+          }
+
+          user.totalCartAmount = req.body.discountTotal
+          await user.save()
+          console.log(user.totalCartAmount)
+        }
+
+
+
+
       const paymentMethod = req.body.paymentOptions
       if(paymentMethod === 'cod'){
         try{
-          const user=await User.findById(req.session.user)
-          if(!user.defaultAddress){
-            req.flash('error','please add an Address')
-            return res.redirect('/cart/checkout')
-          }
+          console.log(user.totalCartAmount)
           const orderId = crypto.randomUUID();
           const order=await Order.create({
               orderId,
@@ -64,7 +93,7 @@ exports.placeOrder=async (req,res)=>{
               deliveryAddress:user.defaultAddress,
               paymentMethod:'cod'
           })
-          
+          req.session.couponCode=null
           const orderDetails = await Order.aggregate([
             {
                 $match:{
@@ -155,7 +184,7 @@ exports.createOrder = async (req,res)=>{
       products:user.cart
     });
     await newOrder.save()
-
+    req.session.couponCode=null
     const orderDetails = await Order.aggregate([
               {
                   $match:{

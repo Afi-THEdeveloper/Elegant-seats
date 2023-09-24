@@ -5,6 +5,7 @@ const User=require('../model/userModel')
 const Order = require('../model/orderModel')
 const Coupon = require('../model/couponModel')
 const crypto=require('crypto')
+const { Cookie } = require('express-session')
 
 
 exports.showCoupons=async (req,res)=>{
@@ -109,41 +110,40 @@ exports.validateCoupon = async (req, res) => {
     try {
       const userId = req.session.user;
       const couponCode = req.body.couponCode;
-      const orderTotal = req.body.orderTotal;
+      let orderTotal = req.body.orderTotal;
   
       // Find the user
       const user = await User.findById(userId);
-      if (!user) {
-        return res.json({ invalidUser: true });
-      }
+      
   
       const coupon = await Coupon.findOne({ code: couponCode });
+      console.log(coupon.discountAmount)
       if (!coupon) {
-        return res.json({ invalidCoupon: true });
+        req.flash('error','Invalid coupon')
+        return res.json({ invalidCoupon: true, error:req.flash('error') });
       }
 
-      if(coupon.expiryDate < Date.now()){
-        return res.json({couponExpired:true})
-      }
+      
 
       if ( orderTotal < coupon.minPurchase || user.cart.length < 3) {
-        return res.json({ criteriaFailure: true });
+        req.flash('error','You do not meet the coupon criteria')
+        return res.json({ criteriaFailure: true, error:req.flash('error') });
       }
   
       const usedUser = coupon.usedUsers.find((item) => item.usedUser.toString() === userId);
       if (usedUser) {
         if (usedUser.usedCount >= coupon.usageLimit) {
-          return res.json({ usageLimit: true });
+          req.flash('error','Usage limit exceeded')
+          return res.json({ usageLimit: true, error:req.flash('error') });
         }
-        
-        usedUser.usedCount += 1;
-        await coupon.save();
-      } else {
-          coupon.usedUsers.push({ usedUser: userId, usedCount: 1 });
-          await coupon.save();
-      }
-      return res.json({ validCoupon: true });
-        
+      } 
+       
+      
+      req.session.couponCode=couponCode
+      const discount = coupon.discountAmount
+      orderTotal= orderTotal - discount
+      return res.json({ validCoupon: true , discount, orderTotal});
+      
      
     } catch (error) {
       console.error(error.message);
@@ -151,6 +151,22 @@ exports.validateCoupon = async (req, res) => {
     }
   }
 
+
+  exports.destroyCoupon = async (req,res)=>{
+    const id = req.body.id;
+    const state = Boolean(req.body.state);
+    try {
+      await Coupon.findByIdAndUpdate(
+        id,
+        {$set: { isCancelled: state }},
+        { new: true }
+      );
+      return res.redirect('/admin/coupons')
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send('Internal Server Error');
+    }
+  }
 
   
   

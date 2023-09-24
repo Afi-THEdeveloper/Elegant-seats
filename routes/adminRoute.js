@@ -55,7 +55,9 @@ router.route('/coupon/addCoupon')
     
 router.route('/coupons/edit/:id')
     .get(couponController.showEditCoupon) 
-    .post(couponController.updateCoupon)   
+    .post(couponController.updateCoupon)  
+router.route('/coupon/destroy')
+    .post(isAdminlogged, couponController.destroyCoupon)     
 
 //logout
 router.get('/logout', isAdminlogged, adminController.logout)

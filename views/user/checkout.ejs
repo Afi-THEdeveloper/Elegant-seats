@@ -106,6 +106,8 @@
                 </div>
                 <% } %>
 
+
+                
                   <div class="cupon_area hidedAfterapply">
                     <div class="check_title">
                       <h2>
@@ -119,15 +121,16 @@
                     <button class="tp_btn apply-coupon-btn">Apply Coupon</button>
                     
                   </div>
+                  <div id="flash-message" class="alert alert-danger" style="display:none;"></div>
 
 
-
-
+                <% if(coupons.length){ %>
                   <div class="card ml-5 hidedAfterapply" style="width: 18rem;">
                     <h6>Available Coupons</h6><br>
                     <ul class="list-group list-group-light">
 
                     <% coupons.forEach((coupon, index) => { %>
+                      
                         <li class="list-group-item px-0">
                             <fieldset>
                                 <input type="text" id="textToCopy<%= index %>" style="display: none;" value="<%= coupon.code %>"><%= coupon.code %>
@@ -141,15 +144,20 @@
                         </li>
                     <% }) %>
                           
-
                     </ul>
                   </div>
 
+                <% } %>
+                 
 
-                  <div class="coupon-success" style="display: none;">
+                
+                  <!-- <div class="coupon-success">
                     <p>Coupon applied successfully!</p>
                     <button class="btn btn-secondary cancel-coupon-btn">Cancel</button>
-                  </div>
+                  </div> -->
+               
+
+
 
 
 
@@ -207,13 +215,11 @@
                     <span>Free</span>
                   </a>
                 </li>
-
-                <li>
+                <!-- <li>
                   <a href="#">Discount
-                    <span>0</span>
+                    <span id="discountAmount">0</span>
                   </a>
-                </li>
-
+                </li> -->
                 <li>
                   <a href="#">Total
                     <% if(singleproduct){ %>
@@ -223,21 +229,57 @@
                     <% } %>
                   </a>
                 </li>
+
               </ul>
 
 
+
+              
+              
+              
+
+            
+              
+
           <form id="orderForm" class="row contact_form" action="/checkout" method="post" novalidate="novalidate">
+
+
+            
+            <ul class="bg-white coupon-success">
+                
+              <p class="text-success">Coupon applied successfully!</p>
+              <li>
+                <input type="hidden" class="discountAmount" name="discount" value="">
+                <p>Discount <span class="discountAmount">0</span> </p>
+              </li>
+              <li>
+                <p>Total Amount
+                  <% if(singleproduct){ %>
+                    <span>$<%= singleproduct.price %></span>
+                  <% }else{ %>  
+                    <span class="TOTALamount">$<%= user.totalCartAmount %></span>
+                    <input type="hidden" class="TOTALamount" name="discountTotal" value="">
+                  <% } %>
+                  </p>
+              </li>
+              <button type="button" class="btn btn-sm btn-outline-secondary cancel-coupon-btn">Cancel</button>
+               
+            </ul>
+              
+            
+                
+              
 
 
             <div class="payment_item">
               <div class="radion_btn">
                  <input type="radio" id="f-option5" name="paymentOptions" value="cod" />
-                 
-                 <input type="hidden" name="">
                  <label for="f-option5">Cash on Delivery</label>
                  <div class="check"></div>
               </div>
            </div> 
+                 
+                 
                  
                <div class="payment_item active">
                   <div class="radion_btn">
@@ -361,41 +403,44 @@
     
 <script>
     $(document).ready(function() {
+      $(".coupon-success").hide();
+     
+    
     const couponCodeInput = $("#couponCodeInput"); // Select the input element by its ID
     const orderTotalInput = $("#orderTotal"); // Select the input element by its ID
     const applyCouponButton = $(".apply-coupon-btn");
-    const couponSuccessDiv = $(".coupon-success");
     const hidedDiv= $(".hidedAfterapply")
     const cancelCouponButton = $(".cancel-coupon-btn");
-
-
+    const discountAmount= $("#discountAmount")
+    
     applyCouponButton.on('click', function() {
         const couponCode = couponCodeInput.val(); // Get the value from the input field
         const orderTotal = parseFloat(orderTotalInput.val()); // Parse the value as a float
         
-
+        
         validateCoupon(couponCode, orderTotal);
+        
     });
 
-
-    function showCouponSuccess() {
-        couponSuccessDiv.show();
-    }
 
     function hideCouponArea(){
       hidedDiv.hide()
+      $(".coupon-success").show();
     }
-
     // Function to hide the success message and cancel button
     function showCouponArea() {
         hidedDiv.show()
+        $(".coupon-success").hide();
     }
 
+   
     // Function to handle cancel button click
     cancelCouponButton.on('click', function() {
        showCouponArea()
-       couponSuccessDiv.hide()
     });
+
+
+   
 
 
     function validateCoupon(couponCode, orderTotal) {
@@ -410,27 +455,48 @@
 
             success: function(response, status, xhr) {
                  if (response.invalidCoupon) {
-                     alert('Invalid coupon');
+                    displayFlashMessage(response.error)
                  } else if (response.usageLimit) {
-                     alert('Usage limit exceeded');
+                  displayFlashMessage(response.error)
                  } else if (response.criteriaFailure) {
-                     alert('You do not meet the coupon criteria');
-                 }else if(response.couponExpired){
-                     alert('coupon has expired]')
+                  displayFlashMessage(response.error)
+                 
                  }else if (response.validCoupon) {
-                      hideCouponArea()
-                      showCouponSuccess()
+
+                   hideCouponArea()
+                   $(".discountAmount").text("$" + response.discount)
+                   $(".discountAmount").val(response.discount);
+                   $(".TOTALamount").text("$" + response.orderTotal);
+                   $(".TOTALamount").val(response.orderTotal);
+                   
+                   
+                   
+                      
+                   
                   }else {
                       alert('Unknown response from server');
                   }
-             },
-             error: function(xhr, status, error) {
-                 console.error('Error:', status, error);
-                 alert('An error occurred while applying the coupon.');
-             }
-         });
-     }
- });
+
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', status, error);
+                    displayFlashMessage('invalid Coupon')
+                }
+            });
+        }
+
+    });
+        
+    
+  function displayFlashMessage(message) {
+  const flashMessageElement = document.getElementById('flash-message');
+  flashMessageElement.textContent = message;
+  flashMessageElement.style.display = 'block'; // Show the flash message
+
+   setTimeout(() => {
+    flashMessageElement.style.display = 'none'; // Hide the flash message after 3 seconds (adjust as needed)
+   },2000);
+ }
                  
 </script>
 <script>
