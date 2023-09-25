@@ -80,3 +80,33 @@ exports.resizeProfileImage =async  (req,res,next) => {
     console.log(error.message)
   }
 }
+
+
+//banner
+
+exports.uploadBannerImages = upload.fields([
+  {
+    name: 'images',
+    maxCount: 3
+  }
+])
+
+
+exports.resizeBannerImages = async (req, res, next) => {
+  if(!req.files.images) return next();
+  req.body.images = []
+  await Promise.all(
+    req.files.images.map(async(file) => {
+      const filename = `banners-${v4()}.png`
+      await sharp(file.buffer)
+        .resize({width:640, height:640})//640
+        .toFormat('png')
+        .png( { quality:90 } )
+        .toFile(path.join(__dirname, '../public', 'banners', filename))
+        
+
+        req.body.images.push(filename)
+    })
+  )
+  next()
+}

@@ -1,0 +1,176 @@
+<%- include('../../partials/Aheader') -%>
+
+    <body>
+        <div class="container-scroller">
+
+            <%- include('../../partials/AdminNav') -%>
+
+                <!-- partial -->
+                <div class="container-fluid page-body-wrapper">
+                    <!-- partial -->
+
+                    <!-- partial:../../partials/_sidebar.html -->
+                    <%- include('../../partials/Adminsidebar') -%>
+
+                        <!-- partial -->
+                        <div class="main-panel">
+
+                            <!-- error/success messages -->
+                            
+
+
+                                        <div class="content-wrapper">
+                                            <div class="row">
+
+
+                                                <div class="col-12 grid-margin stretch-card">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h4 class="card-title">Create new Banner</h4>
+
+                                                            <form class="forms-sample" action="/admin/Banners/create"
+                                                                method="post" enctype="multipart/form-data">
+                                                                <div class="form-group">
+                                                                    <label for="exampleInputName1">Banner title</label>
+                                                                    <input type="text" class="form-control" name="heading"
+                                                                        id="exampleInputName1" required/>
+                                                                </div>
+
+
+                                                                <div class="row">
+                                                                    <div class="col-12">
+                                                                        <div class="form-group">
+                                                                            <label>Images required(3)</label>
+                                                                            <!-- <input type="file" name="photo" class="file-upload-default"> -->
+                                                                            <div class="input-group col-xs-12">
+                                                                                <input type="file" multiple
+                                                                                    accept="image/*"
+                                                                                    data-target-index="1" name="images"
+                                                                                    class="form-control previewInput file-upload-info"
+                                                                                    id="preview-input" required/>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+
+
+
+                                                                <div class="form-group" id="preview-group"
+                                                                    style="display: none;">
+                                                                    <div class="card">
+                                                                        <div class="card-header">
+                                                                            Preview Images
+                                                                        </div>
+                                                                        <div class="card-body">
+                                                                            <div class="row">
+                                                                                <div class="col-4">
+                                                                                    <div class="img-preview-p">
+                                                                                        <img src="" alt=""
+                                                                                            class="preview"
+                                                                                            id="preview-img"
+                                                                                            data-img-index="1"
+                                                                                            style="max-width: 100%; object-fit: cover; display: block;" />
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-4">
+                                                                                    <div class="img-preview-p">
+                                                                                        <img src="" alt=""
+                                                                                            class="preview"
+                                                                                            data-img-index="2"
+                                                                                            style="max-width: 100%; object-fit: cover; display: block;" />
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-4">
+                                                                                    <div class="img-preview-p">
+                                                                                        <img src="" alt=""
+                                                                                            class="preview"
+                                                                                            id="preview-img"
+                                                                                            data-img-index="3"
+                                                                                            style="max-width: 100%; object-fit: cover; display: block;" />
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <button type="submit"
+                                                                    class="btn btn-primary mr-2">Create</button>
+                                                                <button type="button" class="btn btn-light" onclick="goBack()">Back</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                        </div>
+                       
+                        <!-- partial -->
+                </div>
+                <!-- main-panel ends -->
+        </div>
+        <!-- page-body-wrapper ends -->
+        </div>
+        <!-- container-scroller -->
+        <script>
+            function goBack() {
+                window.history.back()
+            }
+          </script>
+
+        <script>
+            function hideErrorMessage() {
+                var errorMessageElement = document.getElementById('error-message');
+                if (errorMessageElement) {
+                    setTimeout(() => {
+                        errorMessageElement.style.display = 'none';
+                    }, 4000);
+
+                }
+            }
+            hideErrorMessage();
+
+            const previewInput = document.querySelector('.previewInput')
+            const previewArea = document.getElementById('preview-group')
+
+            previewInput.addEventListener('change', function (e) {
+                console.log(e);
+                const previewImages = document.querySelectorAll('.preview')
+                console.log(previewImages);
+                if (e.target.files.length) {
+                    for (let i = 0; i < e.target.files.length; i++) {
+                        console.log(e.target.files.length, previewImages[i]);
+                        previewImages[i].src = URL.createObjectURL(e.target.files[i])
+                    }
+                    previewArea.style.display = 'block'
+                }
+            })
+
+
+            
+        </script>
+        <!-- plugins:js -->
+        <script src="/admin/vendors/js/vendor.bundle.base.js"></script>
+        <!-- endinject -->
+        <!-- Plugin js for this page -->
+        <script src="/admin/vendors/typeahead.js/typeahead.bundle.min.js"></script>
+        <script src="/admin/vendors/select2/select2.min.js"></script>
+        <!-- End plugin js for this page -->
+        <!-- inject:js -->
+        <script src="/admin/js/off-canvas.js"></script>
+        <script src="/admin/js/hoverable-collapse.js"></script>
+        <script src="/admin/js/template.js"></script>
+        <script src="/admin/js/settings.js"></script>
+        <script src="/admin/js/todolist.js"></script>
+        <!-- endinject -->
+        <!-- Custom js for this page-->
+        <script src="/admin/js/file-upload.js"></script>
+        <script src="/admin/js/typeahead.js"></script>
+        <script src="/admin/js/select2.js"></script>
+        <!-- End custom js for this page-->
+    </body>
+
+<%- include('../../partials/Afooter') -%>

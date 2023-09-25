@@ -22,13 +22,29 @@ exports.showCheckout=async (req,res)=>{
        if(req.params.id){
          var singleproduct = await Product.findById(req.params.id)
          const defAddress=await Address.findById(user.defaultAddress)
-         return res.render('user/checkout',{singleproduct,user,defAddress,coupons, error:req.flash('error')})
+         return res.render('user/checkout',{
+          singleproduct,
+          user,
+          defAddress,
+          coupons, 
+          error:req.flash('error'),
+          success:req.flash('success')
+        })
        }
 
         //cart checkout
         if(user.cart.length){
             const defAddress=await Address.findById(user.defaultAddress)
-            res.render('user/checkout',{user,defAddress,coupons, error:req.flash('error'), singleproduct})
+            const addresses = await Address.find({defaultAddress:false, softDeleted:false})
+            res.render('user/checkout',{
+              user,
+              defAddress, 
+              addresses, 
+              coupons, 
+              error:req.flash('error'), 
+              success:req.flash('success'),
+              singleproduct
+            })
         }else{
             req.flash('error','cart is empty')
             res.redirect('/cart')

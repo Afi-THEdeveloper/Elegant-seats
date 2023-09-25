@@ -196,44 +196,51 @@
               <div class="container">
                 <h3 class="mt-4">Add Coupon</h3>
                 <form action="/admin/coupon/addCoupon" method="POST">
-                    <div class="mb-3">
+                    <div class="form-group">
                         <label for="code" class="form-label">Coupon Code prefix:</label>
-                        <input type="text" class="form-control" id="code" name="codePrefix" placeholder="(eg:ELEGANT)" required>
+                        <input type="text" class="form-control" id="code" name="codePrefix" placeholder="(eg:ELEGANT)">
+                        <small id="prefixErr" class="text-danger"></small>
                     </div>
         
-                    <div class="mb-3">
+                    <div class="form-group">
                         <label for="description" class="form-label">Description:</label>
-                        <input type="text" class="form-control" id="description" name="description" required>
+                        <input type="text" class="form-control" id="description" name="description">
+                        <small id="descriptionErr" class="text-danger"></small>
                     </div>
         
-                    <div class="mb-3">
+                    <div class="form-group">
                         <label for="discountType" class="form-label">Discount Type:</label>
                         <select class="form-select" id="discountType" name="discountType" required>
                             <option value="Fixed Amount">Fixed Amount</option>
                         </select>
                     </div>
         
-                    <div class="mb-3">
+                    <div class="form-group">
                         <label for="discountAmount" class="form-label">Discount Amount (in Rs):</label>
-                        <input type="number" class="form-control" id="discountAmount" name="discountAmount" required>
+                        <input type="number" class="form-control" id="discountAmount" name="discountAmount">
+                        <small id="discountErr" class="text-danger"></small>
                     </div>
         
-                    <div class="mb-3">
+                    <div class="form-group">
                         <label for="minPurchase" class="form-label">Minimum Purchase Amount (in Rs):</label>
-                        <input type="number" class="form-control" id="minPurchase" name="minPurchase" required>
+                        <input type="number" class="form-control" id="minPurchase" name="minPurchase">
+                        <small id="minPurchaseErr" class="text-danger"></small>
                     </div>
         
-                    <div class="mb-3">
+                    <div class="form-group">
                         <label for="usageLimit" class="form-label">Usage Limit:</label>
-                        <input type="number" class="form-control" id="usageLimit" name="usageLimit" value="1" required>
+                        <input type="number" class="form-control" id="usageLimit" name="usageLimit">
+                        <small id="usagelimitErr" class="text-danger"></small>
                     </div>
         
-                    <div class="mb-3">
+                    <div class="form-group">
                         <label for="expiryDate" class="form-label">Expiry Date:</label>
-                        <input type="date" class="form-control" id="expiryDate" name="expiryDate" required>
+                        <input type="date" class="form-control" id="expiryDate" name="expiryDate">
+                        <small id="expiryDateErr" class="text-danger"></small>
                     </div>
         
-                    <button type="submit" class="btn btn-primary">Add Coupon</button>
+                    <button type="submit" onclick="return validateCoupon()"  class="btn btn-primary">Add Coupon</button>
+                    <button type="button" onclick="return back()" class="btn btn-light">Cancel</button>
                 </form>
             </div>
         
@@ -269,7 +276,12 @@
       <!-- page-body-wrapper ends -->
     </div>
 
-
+    <script src="/validations/couponValidation.js"></script>
+    <script>
+      function back() {
+        window.history.back()
+      }
+    </script>
     <!-- Include Bootstrap JS and Popper.js for Bootstrap functionality -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-lfS6p5SG5d8jjiZ/x/y3z5bD6b7KvHQ5j5uZ+8U8KGvb5K2cZ4Ck6F5b5b5b5b5b5b5" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-lfS6p5SG5d8jjiZ/x/y3z5bD6b7KvHQ5j5uZ+8U8KGvb5K2cZ4Ck6F5b5b5b5b5b5b5" crossorigin="anonymous"></script>
@@ -288,7 +300,8 @@
     <!-- endinject -->
     
     
-    <!-- <script src="/validations/couponValidation.js"></script> -->
+    
+   
   </body>
 
 

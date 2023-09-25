@@ -124,19 +124,32 @@ exports.editAddress=async (req,res)=>{
 
 exports.setDefaultAddress=async (req,res)=>{
     try {
+        let addressId;
+        if(req.body.id){
+            addressId = req.body.id
+        }else{
+            addressId = req.body.checkoutId
+        }
+        console.log(req.body)
         const user=await User.findById(req.session.user)
         const userAddresses=await Address.find({userId:user._id})
         let newDefault
         const oldDefault=await Address.findOne({defaultAddress:true})
         if(!oldDefault){
-            newDefault=await Address.findByIdAndUpdate({_id:req.body.id},{defaultAddress:true},{new:true})
+            newDefault=await Address.findByIdAndUpdate({_id:addressId},{defaultAddress:true},{new:true})
         }else{
             await Address.updateOne({defaultAddress:true},{defaultAddress:false})
-            newDefault=await Address.findByIdAndUpdate({_id:req.body.id},{defaultAddress:true},{new:true})
+            newDefault=await Address.findByIdAndUpdate({_id:addressId},{defaultAddress:true},{new:true})
         }
         user.defaultAddress=newDefault._id
         await user.save()
-        res.redirect('/profile/address')
+        if(req.body.id){
+            res.redirect('/profile/address')
+        }else{
+            req.flash('success','address changed successfully')
+            res.redirect('/cart/checkout')
+        }
+
     } catch (error) {
         console.log(error.message)
         res.status(500).send('Internal Server Error');

@@ -1,6 +1,7 @@
 const User=require('../model/userModel')
 const Products=require('../model/productModel')
 const Category=require('../model/categoryModel')
+const Banner = require('../model/bannerModel')
 const bcrypt=require('bcrypt')
 require('dotenv').config()
 const email=require('../util/email')
@@ -31,9 +32,11 @@ exports.showRegister= (req,res)=>{
 
 exports.showHome=async(req,res)=>{
     try {
+        const banner = await Banner.find({is_deleted:false})
         const products=await Products.find({})
         const categories=await Category.find({})
-        res.render('user/index',{ products,categories})
+        console.log(banner)
+        res.render('user/index',{ products,categories, banner})
     } catch (error) {
         console.log(error.message)
     }

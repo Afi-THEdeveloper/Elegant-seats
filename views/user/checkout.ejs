@@ -43,11 +43,30 @@
     <section class="checkout_area padding_top">
       <div class="container">
 
+
+
         <div class="billing_details">
           <div class="row">
             <div class="col-lg-8">
               <h3>Billing Details</h3>
 
+
+
+              <% if (success && success.length > 0) { %>
+                <div class="alert alert-success text-center" id="success-message">
+                  <% success.forEach(function(message) { %>
+                    <p><%= message %></p>
+                  <% }); %>
+                </div>
+                <script>
+                    setTimeout(function() {
+                      var successMessage = document.getElementById('success-message');
+                      if (successMessage) {
+                        successMessage.style.display = 'none';
+                      }
+                    }, 2000); 
+                  </script>
+              <% } %> 
 
               <div class="table-responsive">
                 <table class="table">
@@ -83,28 +102,48 @@
                 </table>
               </div>
 
+              
 
 
 
-              <!-- <div class="col-md-12 form-group">
-                <div class="creat_account">
-                  <input type="checkbox" id="f-option2" name="selector" />
-                  <label for="f-option2">use default address?</label>
-                </div>
-              </div> -->
-              <% if(defAddress){ %>
+
+              
+              
                 <div class="col-md-12 form-group">
                   <div class="creat_account">
+                    
+                  
                     <label for="f-option3">Ship to a different address?</label>
-                    <p>(add new address and make it default)</p>
-                    <a href="/profile/addAddress"><i class="fas fa-plus">Add</i>
-                    </a>
+                  
+                    <form action="/profile/setDefaultAddress" method="post" id="setDefaultForm"> 
+                      <select class="form-select" aria-label="Default select example" id="selectAddress">
+                        <option selected>Choose an address</option>
+                        <% addresses.forEach(function(address, index) { %>
+                          <option value="<%= address._id %>">
+                            <span><%= address.phone %></span><br>
+                            <span><%= address.address %>, <%= address.landMark %>, <%= address.locality %>,
+                              <%= address.district %> District, <%= address.state %>, <%= address.pincode %>.
+                            </span>
+                          </option>
+                        <% }) %>
+                      </select>
+                      <input type="hidden" name="checkoutId" id="addresId">
+                    </form>
+                    
+                     
+                    
+                    
+                  
+                   
+                    <p><a href="/profile/addAddress"><i class="fas fa-plus">Add New</i></a></p>
+                    
                   </div>
 
-                  <!-- <textarea class="form-control" name="message" id="message" rows="1"
-                  placeholder="Order Notes"></textarea> -->
+                  
                 </div>
-                <% } %>
+
+                
+                
 
 
                 
@@ -151,11 +190,7 @@
                  
 
                 
-                  <!-- <div class="coupon-success">
-                    <p>Coupon applied successfully!</p>
-                    <button class="btn btn-secondary cancel-coupon-btn">Cancel</button>
-                  </div> -->
-               
+                 
 
 
 
@@ -299,9 +334,9 @@
                 </div>
                 <script>
                     setTimeout(function() {
-                      var errorMessage = document.getElementById('error-message');
-                      if (errorMessage) {
-                        errorMessage.style.display = 'none';
+                      var successMessage = document.getElementById('error-message');
+                      if (successMessage) {
+                        successMessage.style.display = 'none';
                       }
                     }, 2000); 
                   </script>
@@ -366,7 +401,7 @@
   <!--================End Checkout Area =================-->
 
 
-  <%- include('../partials/footer') -%>
+  <hr>
 
 
 
@@ -401,8 +436,10 @@
     <script src="/js/custom.js"></script>
 
     
+      
+    
 <script>
-    $(document).ready(function() {
+  $(document).ready(function() {
       $(".coupon-success").hide();
      
     
@@ -485,6 +522,15 @@
             });
         }
 
+
+
+        $('#selectAddress').on('change', function() {
+          const selectedAddressId = $(this).val();
+          console.log(selectedAddressId)
+          $('#addresId').val(selectedAddressId)
+          $('#setDefaultForm').submit();
+        })
+
     });
         
     
@@ -496,7 +542,7 @@
    setTimeout(() => {
     flashMessageElement.style.display = 'none'; // Hide the flash message after 3 seconds (adjust as needed)
    },2000);
- }
+  }
                  
 </script>
 <script>
@@ -529,6 +575,13 @@
         });
     });
 
+
+
+
+
+
+
+
 </script>
 
 
@@ -542,6 +595,8 @@
 
 
 
+
+ 
 
 
 
