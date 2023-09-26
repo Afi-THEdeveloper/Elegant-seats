@@ -168,3 +168,17 @@ exports.deleteAddress=async (req,res)=>{
 
 
 
+//wallet
+
+exports.showWallet = async (req,res)=>{
+    try {
+        const user = await User.findById(req.session.user)
+        const walletBalance = user.wallet
+        const walletHistory = user.walletHistory
+        res.render('user/account/wallet', {user, walletBalance, walletHistory })
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).send('Internal Server Error');
+    }
+}
+

@@ -447,6 +447,32 @@ exports.cancelOrder=async (req,res)=>{
 }
 
 
+exports.refundOrder = async (req,res)=>{
+  try {
+    const order = await Order.findById(req.params.id)
+    const user = await User.findById(req.session.user)
+    console.log(order)
+    if(order){
+      const walletHistory = {
+        date:Date.now(),
+        amount:order.totalPrice,
+        message:"refund from razorpay Order"
+      }
+      user.wallet+= order.totalPrice
+      user.walletHistory.push(walletHistory)
+      await user.save()
+      req.flash('success','refund completed successfully')
+      res.redirect('/profile/wallet')
+    }
+  } catch (error) {
+    console.log(error.message)
+    res.status(500).send('Internal Server Error');
+  }
+}
+
+
+
+
 exports.loadInvoice = async (req,res)=>{
   try {
     const order=await Order.find({orderId:req.body.orderId})

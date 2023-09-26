@@ -104,7 +104,9 @@
                              </div>
                              <% if(order.status==='Cancelled'){  %>
                               <p class="text-danger"><strong>Cancelled on: </strong><br><% if(order.cancelledOn){ %>   <%= order.cancelledOn.toDateString() %>  <% } %></p> 
-                            
+                                <% if(order.paymentMethod === 'Razorpay'){ %>
+                                  <a href="/refund/<%= order._id %>">Refund</a>
+                                <% } %>
                              <% }else if(order.status === 'Delivered'){ %> 
                               <p class="text-success"><strong>Delivered on: </strong><br><%if(order.deliveredOn){ %>  <%=order.deliveredOn.toDateString() %>   <%}%></p>
                               <form action="/myOrders/invoice" method="post" novalidate="novalidate">
@@ -192,4 +194,3 @@
 
 
 
-<%- include('../../partials/accountFooter') -%>  

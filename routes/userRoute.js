@@ -53,6 +53,8 @@ router.post('/checkout', islogged, orderController.placeOrder)
 router.get('/myOrders', islogged, orderController.showOrders)
 router.post('/myOrders/orderDetails', islogged, orderController.orderDetails)
 router.post('/myOrders/cancel', islogged, orderController.cancelOrder)
+router.get('/refund/:id', islogged, orderController.refundOrder)
+
 router.get('/razorpay/CreateOrder', islogged, orderController.createOrder)
 router.post('/myOrders/invoice', islogged, orderController.loadInvoice)
 
@@ -69,6 +71,10 @@ router.get('/profile/editAddress/:id', islogged, accountController.showEditaddre
 router.put('/profile/editAddress/:id', islogged, accountController.editAddress)
 router.get('/profile/deleteAddress/:id', islogged, accountController.deleteAddress)
 router.post('/profile/setDefaultAddress', islogged, accountController.setDefaultAddress)
+
+
+//wallet
+router.get('/profile/wallet', islogged, accountController.showWallet)
 
 
 //coupon

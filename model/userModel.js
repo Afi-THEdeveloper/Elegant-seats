@@ -58,6 +58,21 @@ const userSchema = new mongoose.Schema({
         type:Number,
         createdAt:{type:Date,expires:'1m',default: Date.now()}
     },
+    wallet:{
+        type:Number,
+        default:0
+    },
+    walletHistory:[{
+        date:{
+            type:Date
+        },
+        amount:{
+            type:Number
+        },
+        message:{
+            type:String
+        }
+    }],
     verified: {
         type:Boolean,
         default:false
