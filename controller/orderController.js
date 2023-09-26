@@ -35,7 +35,7 @@ exports.showCheckout=async (req,res)=>{
         //cart checkout
         if(user.cart.length){
             const defAddress=await Address.findById(user.defaultAddress)
-            const addresses = await Address.find({defaultAddress:false, softDeleted:false})
+            const addresses = await Address.find({userId:req.session.user, defaultAddress:false, softDeleted:false})
             res.render('user/checkout',{
               user,
               defAddress, 
@@ -176,6 +176,78 @@ exports.placeOrder=async (req,res)=>{
               console.error('Razorpay error:', err)
               req.flash('error', 'Razorpay payment failed. please try again.')
               return res.redirect('/cart/checkout')
+        }
+      }
+
+
+
+      if(paymentMethod === 'wallet'){
+        try {
+           if(user.totalCartAmount > user.wallet){
+            req.flash('error', 'insufficient balance in the wallet')
+            return res.redirect('/cart/checkout')
+           }
+
+          const orderId = crypto.randomUUID();
+          const order= await Order.create({
+              orderId,
+              customer:user._id,
+              products:user.cart,
+              totalPrice:user.totalCartAmount,
+              deliveryAddress:user.defaultAddress,
+              paymentMethod:'wallet'
+          })
+          req.session.couponCode=null
+          const orderDetails = await Order.aggregate([
+            {
+                $match:{
+                  orderId:orderId
+                }
+            },
+            {
+                $unwind:'$products'
+            },
+            {
+              $lookup: {
+                from: "products", 
+                localField: "products.product", 
+                foreignField: "_id", 
+                as: "products.product" 
+              }
+            },
+            
+          ]);
+          
+          
+         console.log(orderDetails)
+         for(let i=0;i<orderDetails.length;i++){
+           let productId=orderDetails[i].products.product[0]._id
+           let orderQuantity = orderDetails[i].products.quantity
+           console.log(productId)
+           console.log(orderQuantity)
+           let product = await Product.findById(productId)
+           let stock=product.stock
+           let newStock = stock - orderQuantity
+           console.log('stock',stock)
+           console.log('newStock',newStock)
+           await Product.updateOne({_id:productId}, {$set:{stock:newStock}})
+          }
+
+          const walletbalance = user.wallet - user.totalCartAmount
+          const History = {
+            date:Date.now(),
+            amount:user.totalCartAmount,
+            message:'purchased via wallet'
+          }
+          user.walletHistory.push(History)
+          await user.save()
+          await User.updateOne({_id:user._id},{$set:{ cart:[], totalCartAmount:0, wallet:walletbalance } })
+          req.flash('success','Order placed successfully')
+          res.redirect('/myOrders')
+
+        } catch (error) {
+          console.log(error.message)
+          res.status(500).send('Internal Server Error');
         }
       }
              
@@ -458,9 +530,12 @@ exports.refundOrder = async (req,res)=>{
         amount:order.totalPrice,
         message:"refund from razorpay Order"
       }
+
       user.wallet+= order.totalPrice
       user.walletHistory.push(walletHistory)
       await user.save()
+      order.refunded = true
+      await order.save()
       req.flash('success','refund completed successfully')
       res.redirect('/profile/wallet')
     }

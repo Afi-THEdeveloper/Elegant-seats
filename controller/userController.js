@@ -42,7 +42,19 @@ exports.showHome=async(req,res)=>{
     }
 }
         
-
+function generateReferalCode() {
+    
+    const Rcode = randomString.generate({
+        length: 8
+    })
+    return User.findOne({ referalCode:Rcode  })
+      .then(existingRefer => {
+        if (existingRefer) {
+            return generateCouponCode();// If the code is not unique, generate a new one recursively
+        }
+        return Rcode; // Return the unique code
+        });
+  }
 
 
 // insert form data into database as an user
@@ -61,15 +73,46 @@ exports.insertUser=async (req,res)=>{
             length:4,
             charset:'numeric'
         })
+
+        const myReferCode =await generateReferalCode()
+        
+        console.log(myReferCode)
         const user=new User({
             name:req.body.name,
             email:req.body.email,
             password:secpassword,
             mobile:req.body.mobile,
+            referalCode:myReferCode,
             otp:otp
         })
         const userData=await user.save()
        
+        if(req.body.referalCode){
+          console.log(req.body.referalCode)
+          const referedUser = await User.findOne({referalCode:req.body.referalCode})
+          if(referedUser){
+                const wHistory = {
+                  date:Date.now(),
+                  amount:200,
+                  message:'Invitation bonus via referal code'
+                }
+                referedUser.wallet+=200
+                referedUser.walletHistory.push(wHistory)
+                await referedUser.save()
+
+
+                const W_history = {
+                   date:Date.now(),
+                   amount:100,
+                   message:'referal bonus'
+                }
+                user.wallet +=100
+                user.walletHistory.push(W_history)
+                await user.save()
+            }
+        }
+
+
 
         //otp
         if(userData){

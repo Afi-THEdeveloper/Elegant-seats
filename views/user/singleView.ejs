@@ -104,7 +104,7 @@
                    <button type="button" class="btn_3 addToCartButton">add to cart</button>
                    <input type="hidden" class="productId" value="<%= product._id %>">
                  
-                   <a href="#" class="like_us"> <i class="ti-heart"></i> </a>
+                   <a href="/addTowishlist/<%= product._id %>" class="like_us"> <i class="ti-heart"></i> </a>
                </div>
           
             <div class="card_area d-flex justify-content-between align-items-center">
@@ -113,7 +113,7 @@
                 <input class="input-number" type="text" value="1" min="0" max="10">
                 <span class="number-increment"> <i class="ti-plus"></i></span>
               </div> -->
-              <a href="/buyNow/<%= product._id %>" class="btn_3">Buy now</a>
+              <!-- <a href="/buyNow/productid" class="btn_3">Buy now</a> -->
               <div id="success-message" class="alert alert-success success"></div>
             </div>
             <% } %>

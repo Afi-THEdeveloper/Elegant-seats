@@ -49,42 +49,32 @@
                               
                              
                 <div class="card">
-                    
-                    
-                    <h5 class="card-title">Wallet Bal: <span class="text-success"> <%= walletBalance %>/-</span></h5>
-
-                      
-                      
+                    <h5 class="card-title">Wallet Bal: <span class="text-success"><%= walletBalance %>/-</span></h5>
                     <div class="card-header">Wallet History</div>
                     <div class="card-body">
-
-                      <table class="table">
-                        <thead>
-                          <tr>
-                            <th scope="col">Date</th>
-                            <th scope="col">Amount</th>
-                            <th scope="col">Message</th>
-                            
-                          </tr>
-                        </thead>
-                        <tbody>
-                        <% walletHistory.forEach((history)=>{ %>
-                          <tr>
-
-                            <th scope="row"><%= history.date.toDateString() %></th>
-                            <td><%= history.amount %></td>
-                            <td><%= history.message %></td>
-                            
-                          </tr>
-                        <% }) %>  
-                          
-                        </tbody>
-                      </table>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Amount</th>
+                                        <th scope="col">Message</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% walletHistory.forEach((history) => { %>
+                                        <tr>
+                                            <th scope="row"><%= history.date.toDateString() %></th>
+                                            <td><%= history.amount %></td>
+                                            <td><%= history.message %></td>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    
-                </div>          
+                </div>
                 
-                              
                               
                               
                               

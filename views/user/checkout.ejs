@@ -109,7 +109,7 @@
 
               
               
-                <div class="col-md-12 form-group">
+                <div class="col-md-12 col-sm-12 form-group">
                   <div class="creat_account">
                     
                   
@@ -138,16 +138,16 @@
                     <p><a href="/profile/addAddress"><i class="fas fa-plus">Add New</i></a></p>
                     
                   </div>
-
-                  
                 </div>
 
+                  
+
                 
                 
 
 
                 
-                  <div class="cupon_area hidedAfterapply">
+                  <div class="cupon_area hidedAfterapply col-md-12 col-sm-12">
                     <div class="check_title">
                       <h2>
                         Have a coupon?
@@ -160,11 +160,11 @@
                     <button class="tp_btn apply-coupon-btn">Apply Coupon</button>
                     
                   </div>
-                  <div id="flash-message" class="alert alert-danger" style="display:none;"></div>
+                  <div id="flash-message" class="alert alert-danger col-md-12" style="display:none;"></div>
 
 
                 <% if(coupons.length){ %>
-                  <div class="card ml-5 hidedAfterapply" style="width: 18rem;">
+                  <div class="card hidedAfterapply col-md-4 col-sm-4">
                     <h6>Available Coupons</h6><br>
                     <ul class="list-group list-group-light">
 
@@ -199,7 +199,7 @@
           </div>
           
           
-          <div class="col-lg-4">
+          <div class="col-lg-4 col-md-12">
             <div class="order_box">
               <h2>Your Order</h2>
 
@@ -215,7 +215,7 @@
                     <a href="#">
                       <%= singleproduct.name %>
                         <span class="middle">x 1</span>
-                        <span class="last">$ <%= singleproduct.price %></span>
+                        <span class="last">&#8377; <%= singleproduct.price %></span>
                     </a>
                   </li>
                 <% }else{ %>  
@@ -225,7 +225,7 @@
                     <a href="#">
                       <%= item.product.name %>
                         <span class="middle">x <%=item.quantity %></span>
-                        <span class="last">$ <%=item.total %></span>
+                        <span class="last">&#8377; <%=item.total %></span>
                     </a>
                   </li>
                   <%})%>
@@ -239,9 +239,9 @@
                 <li>
                   <a href="#">Subtotal
                     <% if(singleproduct){ %>
-                      <span>$<%= singleproduct.price %></span>
+                      <span>&#8377;<%= singleproduct.price %></span>
                     <% }else{ %>  
-                      <span>$<%= user.totalCartAmount %></span>
+                      <span>&#8377;<%= user.totalCartAmount %></span>
                     <% } %>  
                   </a>
                 </li>
@@ -258,9 +258,9 @@
                 <li>
                   <a href="#">Total
                     <% if(singleproduct){ %>
-                      <span>$<%= singleproduct.price %></span>
+                      <span>&#8377;<%= singleproduct.price %></span>
                     <% }else{ %>  
-                      <span>$<%= user.totalCartAmount %></span>
+                      <span>&#8377;<%= user.totalCartAmount %></span>
                     <% } %>
                   </a>
                 </li>
@@ -276,11 +276,11 @@
             
               
 
-          <form id="orderForm" class="row contact_form" action="/checkout" method="post" novalidate="novalidate">
+        <form id="orderForm" class="row contact_form" action="/checkout" method="post" novalidate="novalidate">
 
 
             
-            <ul class="bg-white coupon-success">
+            <ul class="bg-white coupon-success col-md-12 col-sm-12">
                 
               <p class="text-success">Coupon applied successfully!</p>
               <li>
@@ -290,9 +290,9 @@
               <li>
                 <p>Total Amount
                   <% if(singleproduct){ %>
-                    <span>$<%= singleproduct.price %></span>
+                    <span>&#8377;<%= singleproduct.price %></span>
                   <% }else{ %>  
-                    <span class="TOTALamount">$<%= user.totalCartAmount %></span>
+                    <span class="TOTALamount">&#8377;<%= user.totalCartAmount %></span>
                     <input type="hidden" class="TOTALamount" name="discountTotal" value="">
                   <% } %>
                   </p>
@@ -306,24 +306,32 @@
               
 
 
-            <div class="payment_item">
+            <div class="payment_item col-md-12 col-sm-12">
               <div class="radion_btn">
                  <input type="radio" id="f-option5" name="paymentOptions" value="cod" />
                  <label for="f-option5">Cash on Delivery</label>
                  <div class="check"></div>
               </div>
-           </div> 
+            </div> 
                  
                  
                  
-               <div class="payment_item active">
+               <div class="payment_item active col-md-12 col-sm-12">
                   <div class="radion_btn">
                      <input type="radio" id="f-option6" name="paymentOptions" value="razorpay"/>
                      <label for="f-option6">Razorpay</label>
-                     <img src="img/product/single-product/card.jpg" alt="" />
                      <div class="check"></div>
                   </div>
                </div>
+
+               <div class="payment_item active col-md-12 col-sm-12">
+                <div class="radion_btn">
+                   <input type="radio" id="f-option7" name="paymentOptions" value="wallet"/>
+                   <label for="f-option7">Wallet</label>
+                   <p class="text-success">current Bal: <%= user.wallet %>/-</p>
+                   <div class="check"></div>
+                </div>
+              </div>
 
 
                <% if (error && error.length > 0) { %>
@@ -501,9 +509,9 @@
                  }else if (response.validCoupon) {
 
                    hideCouponArea()
-                   $(".discountAmount").text("$" + response.discount)
+                   $(".discountAmount").text(response.discount + "/-");
                    $(".discountAmount").val(response.discount);
-                   $(".TOTALamount").text("$" + response.orderTotal);
+                   $(".TOTALamount").text(response.orderTotal + "/-");
                    $(".TOTALamount").val(response.orderTotal);
                    
                    

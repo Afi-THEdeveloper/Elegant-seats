@@ -56,6 +56,10 @@ const orderSchema = new mongoose.Schema({
     paymentMethod:{
         type:String,
         required:true
+    },
+    refunded:{
+        type:Boolean,
+        default:false
     }
 });
 

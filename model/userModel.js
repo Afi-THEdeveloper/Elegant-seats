@@ -77,6 +77,9 @@ const userSchema = new mongoose.Schema({
         type:Boolean,
         default:false
     },
+    referalCode:{
+        type:String,
+    }
 
 })
 
