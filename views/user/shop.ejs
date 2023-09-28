@@ -159,14 +159,7 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <!-- <div class="single_product_menu d-flex">
-                                    <form action="/products/search" method="GET">
-                                        <div class="d-flex">
-                                            <input type="search" name="q" placeholder="Search Product" class="form-control rounded-pill" />
-                                            <button type="submit" class="btn btn-success rounded-pill ms-2">Search</button>
-                                        </div>
-                                     </form>
-                               </div> -->
+                                
                            </div>
                        </div>
                                                 
@@ -191,8 +184,15 @@
                                             </div>
                                             <% }else{ %>
                                             <div class="single_product_text">
-                                                <h4><%= product.name %></h4>
-                                                <h3>&#8377;<%= product.price %></h3>
+                                                <% if(product.offerPrice !==0 && product.offer[0].status === 'Available' ) { %>
+                                                    <h4><%= product.name %></h4>
+                                                    <h3 style="text-decoration: line-through; color: #999;">&#8377;<%= product.price %></h3>
+                                                    <h5 class="text-success"><%= product.offer[0].discount  %>% <%= product.offer[0].name %> off</h5>
+                                                    <h6 class="text-success"><%= product.offerPrice %>/- only</h6>
+                                                <% }else{ %>
+                                                    <h4><%= product.name %></h4>
+                                                    <h3>&#8377;<%= product.price %></h3>
+                                                <% } %>
                                                 <a class="add_cart addToCartButton" style="cursor: pointer;">+ Add to Cart</a>
                                                 <input type="hidden" class="productId" value="<%= product._id %>">
                                                 <a href="/addTowishlist/<%= product._id %>"><i class="ti-heart"></i></a>

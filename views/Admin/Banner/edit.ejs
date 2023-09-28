@@ -102,80 +102,61 @@
   </div>
   <!-- container-scroller -->
      
-  <script>
+<script>
+    function goBack() {
+        window.history.back()
+    }
+</script>
+
+<script>
     function hideErrorMessage() {
-      var errorMessageElement = document.getElementById('error-message');
-      if (errorMessageElement) {
-        setTimeout(()=>{
-          errorMessageElement.style.display = 'none';
-        }, 4000);
-        
-      }
+        var errorMessageElement = document.getElementById('error-message');
+        if (errorMessageElement) {
+            setTimeout(() => {
+                errorMessageElement.style.display = 'none';
+            }, 4000);
+
+        }
     }
     hideErrorMessage();
 
+    const previewInput = document.querySelector('.previewInput')
     const previewArea = document.getElementById('preview-group')
-    const previewInput = document.getElementById('preview-input')
-    const previewImg = document.getElementById('preview-img')
-    const uploadImg = document.getElementById('uploadImg')
-    const appendError = document.getElementById('appendError')
-    
-    let validateUpload;
 
-    uploadImg.addEventListener('submit', function(e) {
-      const error = `
-          <div class="alert alert-danger mt-3">
-            Please select image to upload.  
-          </div>
-        `
-      const el = document.createElement('div')
-      el.setAttribute('id', 'error-el')
-      el.innerHTML = error
-      if (typeof  validateUpload === "undefined" || validateUpload?.length === 0) {
-        e.preventDefault()
-        if (!appendError.hasAttribute('hasError')) {
-          appendError.setAttribute('hasError', true)
-          appendError.appendChild(el)
+    previewInput.addEventListener('change', function (e) {
+        console.log(e);
+        const previewImages = document.querySelectorAll('.preview')
+        console.log(previewImages);
+        if (e.target.files.length) {
+            for (let i = 0; i < e.target.files.length; i++) {
+                console.log(e.target.files.length, previewImages[i]);
+                previewImages[i].src = URL.createObjectURL(e.target.files[i])
+            }
+            previewArea.style.display = 'block'
         }
-      } else {
-        const errorEl = document.getElementById('error-el')
-        appendError.removeAttribute('hasError')
-        appendError.removeChild(el)
-        this.submit()
-      }
-      
     })
 
-    previewInput.onchange = e => {
 
-      validateUpload = e.target.files
-      
-      if (e.target.files && e.target.files.length) {
-          const imgSrc = URL.createObjectURL(e.target.files[0])
-          previewImg.src = imgSrc
-          previewArea.style.display = 'block'
-      }
-    }
-  </script>
+    
+</script>
   <!-- plugins:js -->
-  <script src="/admin/vendors/js/vendor.bundle.base.js"></script>
-  <!-- endinject -->
-  <!-- Plugin js for this page -->
-  <script src="/admin/vendors/typeahead.js/typeahead.bundle.min.js"></script>
-  <script src="/admin/vendors/select2/select2.min.js"></script>
-  <!-- End plugin js for this page -->
-  <!-- inject:js -->
-  <script src="/admin/js/off-canvas.js"></script>
-  <script src="/admin/js/hoverable-collapse.js"></script>
-  <script src="/admin/js/template.js"></script>
-  <script src="/admin/js/settings.js"></script>
-  <script src="/admin/js/todolist.js"></script>
-  <!-- endinject -->
-  <!-- Custom js for this page-->
-  <script src="/admin/js/file-upload.js"></script>
-  <script src="/admin/js/typeahead.js"></script>
-  <script src="/admin/js/select2.js"></script>
-  <!-- End custom js for this page-->
+       <script src="../vendors/js/vendor.bundle.base.js"></script>
+        <!-- endinject -->
+        <!-- Plugin js for this page -->
+        <script src="../vendors/typeahead.js/typeahead.bundle.min.js"></script>
+        <script src="../vendors/select2/select2.min.js"></script>
+        <!-- End plugin js for this page -->
+        <!-- inject:js -->
+        <script src="../js/off-canvas.js"></script>
+        <script src="../js/hoverable-collapse.js"></script>
+        <script src="../js/template.js"></script>
+        <script src="../js/settings.js"></script>
+        <script src="../js/todolist.js"></script>
+        <!-- endinject -->
+        <!-- Custom js for this page-->
+        <script src="../js/file-upload.js"></script>
+        <script src="../js/typeahead.js"></script>
+        <script src="../js/select2.js"></script>
 </body>
 
 

@@ -1,0 +1,61 @@
+const nameInput = document.getElementById('offerName')
+const discountInput = document.getElementById('Discount')
+const startingDate = document.getElementById('startDate')
+const endDate = document.getElementById('Expiry')
+
+nameInput.addEventListener('input', validateName)
+discountInput.addEventListener('input', validateDiscount)
+startingDate.addEventListener('input', validateStartingDate)
+endDate.addEventListener('input', validateExpiryDate)
+
+function validateName(){
+    const name = nameInput.value.trim()
+    if(name.length === 0){
+        nameErr.innerHTML = 'Name required'
+        return false
+    }
+    nameErr.innerHTML = ''
+    return true;
+}
+
+function validateDiscount(){
+    const discount =  discountInput.value.trim()
+    if(discount.length === 0){
+        DiscountErr.innerHTML = 'Discount required'
+        return false
+    }
+    if(discount < 1 || discount > 90 ){
+        DiscountErr.innerHTML = 'Discount must be >= 1 or <= 90'
+        return false
+    }
+    DiscountErr.innerHTML = ''
+    return true
+}
+
+function validateStartingDate(){
+    const sDate = startingDate.value
+    if(!sDate){
+        startDateErr.innerHTML = 'Starting Date required'
+        return false
+    }
+    startDateErr.innerHTML = ''
+    return true
+}
+
+function validateExpiryDate(){
+    const expiryDate = endDate.value
+    if(!expiryDate){
+        ExpiryErr.innerHTML = 'Expiry Date required'
+        return false
+    }
+    if(new Date(expiryDate) <= new Date()){
+        ExpiryErr.innerHTML = 'Add a date in future';
+        return false
+    }
+    ExpiryErr.innerHTML = '';
+    return true
+}
+
+function validateOffer(){
+    return validateName() && validateDiscount() && validateStartingDate() && validateExpiryDate()
+}

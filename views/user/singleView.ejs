@@ -81,7 +81,12 @@
         <div class="col-lg-5 col-xl-4">
           <div class="s_product_text">
             <h3><%= product.name %></h3>
-            <h2><%= product.price %></h2>
+            <% if(product.offerPrice !==0 && product.offer.status === 'Available' ) { %>
+              <h2><%= product.price %></h2>
+              <h2></h2>
+            <% }else{ %>  
+               <h2><%= product.price %></h2>
+            <% } %>   
             <ul class="list">
               <li>
                 <a class="active" href="#">

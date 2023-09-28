@@ -3,6 +3,7 @@ const Product = require("../model/productModel");
 const Category = require("../model/categoryModel");
 const User=require('../model/userModel')
 const Order = require('../model/orderModel')
+const Offer = require('../model/offerModel')
 const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcrypt");
@@ -398,7 +399,7 @@ exports.CreateCategory = async (req, res) => {
       req.flash('error','All fields are required')
       res.redirect('/admin/category/create')
     }
-    const duplicateCategory =await Category.find({name:req.body.name})
+    const duplicateCategory =await Category.find({name:{ $regex: new RegExp('^' + req.body.name + '$', 'i') } } )
     if(duplicateCategory.length){
       req.flash('error','category already exists')
       res.redirect('/admin/category/create')
@@ -457,7 +458,7 @@ exports.destroyCategory = async (req, res) => {
   const id = req.body.id;
   const state = Boolean(req.body.state);
   try {
-    const category = await Category.findByIdAndUpdate(
+     await Category.findByIdAndUpdate(
       id,
       { $set: { isDestroyed: state } },
       { new: true }
@@ -473,23 +474,37 @@ exports.destroyCategory = async (req, res) => {
 //products managment
 exports.showProducts= async (req,res)=>{
     const products = await Product.find({}).populate('category')
-    res.render('Admin/products/products',{products,success:req.flash('success')})
+    res.render('Admin/products/products',{products, success:req.flash('success')})
 }
 
 exports.showAddProduct= async (req,res) => {
     const categories = await Category.find({})
-    res.render('Admin/products/new', { categories })
+    const offers = await Offer.find({})
+    res.render('Admin/products/new', { categories,offers })
 }
 
 exports.createProduct = async (req, res) => {
     const { name, description, price, images, stock, category } = req.body
     const imagesWithPath = images.map(img => '/products/' + img)
     try {
-        const product = await Product.create({
+        let offerPrice
+        let offerId
+        if(req.body.offerId !== '-1'){
+          const offer = await Offer.findById(req.body.offerId)
+          offerPrice = (offer.discount/100) * price
+          offerPrice =Math.ceil(price - offerPrice)
+          offerId = req.body.offerId
+        }else{
+          offerPrice = 0
+          offerId=null
+        }     
+        await Product.create({
             name,
             description,
             stock,
             price,
+            offer:offerId,
+            offerPrice,
             category,
             images: imagesWithPath,
         })
@@ -505,7 +520,8 @@ exports.showEditProduct = async (req, res)=>{
   try {
       const product = await Product.findById(id)
       const category = await Category.find({})
-      res.render('Admin/products/edit',{ product, category,success:req.flash('success') })
+      const offers = await Offer.find({})
+      res.render('Admin/products/edit',{ product, category, offers, success:req.flash('success') })
   } catch (error) {
       console.log(error.message)
   }
@@ -513,14 +529,28 @@ exports.showEditProduct = async (req, res)=>{
 
 exports.updateProduct = async (req, res) => {
   const { id } = req.params
-  const { name, description, price, stock, category } = req.body
+  const { name, description, price, stock, category} = req.body
   try {
-    const product = await Product.findByIdAndUpdate(id, {$set: {
+        let offerPrice
+        let offerId
+    
+        if(req.body.offerId !== '-1'){
+          const offer = await Offer.findById(req.body.offerId)
+          offerPrice = (offer.discount/100) * price
+          offerPrice =Math.ceil( price - offerPrice )
+          offerId = req.body.offerId
+        }else{
+          offerPrice = 0
+          offerId=null
+        }     
+    await Product.findByIdAndUpdate(id, {$set: {
       name,
       description,
       price,
       stock,
       category,
+      offer:offerId,
+      offerPrice
     }}, { new: true })
 
     req.flash('success','product updated successfully')

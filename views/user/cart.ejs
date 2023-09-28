@@ -97,16 +97,21 @@
                     <div class="media">
                       <div class="d-flex">
                         <a href="/product/<%= cartprdt.product._id %>">
-                        <img src="<%= cartprdt.product.images[0] %>" alt="" width="140" height="120">
+                        <img src="<%= cartprdt.product.images[0] %>" alt="" width="50" height="50">
                         </a>
                       </div>
                       <div class="media-body">
-                        <p><%= cartprdt.product.name  %></p>
+                        <span><%= cartprdt.product.name  %></span>
                       </div>
                     </div>
                   </td>
                   <td>
-                    <h5><%= cartprdt.product.price %></h5>
+                    <% if(cartprdt.product.offerPrice === 0){ %>
+                     <h5><%= cartprdt.product.price %></h5>
+                    <% }else{ %> 
+                      <h5><%= cartprdt.product.offerPrice %></h5>
+                      <small class="text-success">offer price</small>
+                    <% } %>
                   </td>
                   <td>
                     <div class="input-group" style="width: 100px">
@@ -173,7 +178,10 @@
                     <div class="shipping_box">
                       <ul class="list">
                         <li>
-                          <h5>Subtotal: &#8377;<%= totalCartAmount %></h5>
+                          <h5>
+                            <span>SubTotal: </span>
+                            <span id="subtotalAmount">&#8377;<%= totalCartAmount %></span>
+                          </h5>
                         </li>
                         
                         <li>

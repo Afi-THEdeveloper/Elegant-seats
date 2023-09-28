@@ -22,6 +22,14 @@ const productSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category',
     },
+    offer:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Offers'
+    },
+    offerPrice:{
+        type:Number,
+        default:0
+    },
     softDeleted:{
         type:Boolean,
         default:false

@@ -24,7 +24,8 @@ exports.createBanner  = async (req,res) => {
     
         res.redirect('/admin/Banners')
     }catch(error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.status(500).send('Internal Server Error');
     }
 }
 
@@ -34,7 +35,8 @@ exports.showBannerEdit = async (req,res)=>{
         const banners = await Banner.findById(req.params.id)
         res.render('Admin/Banner/edit', {banners})
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.status(500).send('Internal Server Error');
     }
 }
 
@@ -50,7 +52,8 @@ exports.updateBanner = async (req,res) => {
         res.redirect('/admin/Banners')
         
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.status(500).send('Internal Server Error');
     }
 }
 
@@ -67,7 +70,8 @@ exports.updateBannerImages =  async (req,res) => {
         res.redirect(`/admin/Banners/${id}/edit`)
         
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.status(500).send('Internal Server Error');
     }
 }
 
@@ -83,7 +87,8 @@ exports.destroyBannerImage =  async (req,res) => {
         res.redirect(`/admin/banners/${id}/edit`)
         
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.status(500).send('Internal Server Error');
     }
 }
 
@@ -97,6 +102,7 @@ exports.deleteBanner = async (req,res) => {
         res.redirect('/admin/Banners')
         
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.status(500).send('Internal Server Error');
     }
 }

@@ -3,6 +3,7 @@ const adminController = require('../controller/adminController')
 const orderController = require('../controller/orderController')
 const couponController = require('../controller/couponController')
 const bannerController = require('../controller/bannerController')
+const offerController = require('../controller/offerController')
 const Imagemiddleware = require('../middlewares/imageUpload')
 const { isAdminLogout, isAdminlogged } = require('../middlewares/auth')
 
@@ -39,12 +40,14 @@ router.get('/orders/details/:id', isAdminlogged, orderController.orderDetails)
 router.route('/salesReport')
       .get(isAdminlogged, adminController.salesReport)
       .post(isAdminlogged, adminController.salesReport)
+      
 
 
 
 //users
 router.get('/users',isAdminlogged,adminController.showUsers)
 router.post('/users/block',isAdminlogged,adminController.blockUser)
+
 
 //coupons
 router.get('/coupons', isAdminlogged, couponController.showCoupons)
@@ -55,11 +58,21 @@ router.route('/coupons/edit/:id')
     .get(isAdminlogged, couponController.showEditCoupon) 
     .post(isAdminlogged, couponController.updateCoupon) 
 router.post('/coupon/destroy', isAdminlogged, couponController.destroyCoupon)
+
+
     
+//offers
+router.get('/offers', isAdminlogged, offerController.showOffers)
+router.route('/offers/create')
+      .get(isAdminlogged, offerController.showAddOffer)
+      .post(isAdminlogged, offerController.createOffer)
+router.get('/offers/:id/edit', isAdminlogged, offerController.showEditOffer)
+router.post('/offers/edit', isAdminlogged, offerController.updateOffer)     
+router.post('/offers/delete', isAdminlogged, offerController.destroyOffer)  
+
 
 
 //banner
-
 router.get('/Banners', isAdminlogged, bannerController.showBannerIndex) 
 router.route('/Banners/create')
     .get( isAdminlogged, bannerController.showCreatebanner)    

@@ -1,6 +1,7 @@
 const User=require('../model/userModel')
 const Products=require('../model/productModel')
 const Category=require('../model/categoryModel')
+const Offers = require('../model/offerModel')
 const Banner = require('../model/bannerModel')
 const bcrypt=require('bcrypt')
 require('dotenv').config()
@@ -110,8 +111,8 @@ exports.insertUser=async (req,res)=>{
                 user.walletHistory.push(W_history)
                 await user.save()
             }
-        }
 
+        }
 
 
         //otp
@@ -403,6 +404,14 @@ exports.showShop=async (req,res)=>{
                 }
             },
             {
+                $lookup:{
+                    from:'offers',
+                    localField:'offer',
+                    foreignField:'_id',
+                    as:'offer'
+                }
+            },
+            {
                 $unwind:'$category'
             },
             {
@@ -431,6 +440,7 @@ exports.showShop=async (req,res)=>{
         let totalItems = prdt[0].totalPages[0].total;
         let totalPages = Math.ceil(totalItems/6)
         const products = prdt[0].products;
+        console.log(products[0].offer[0])
         res.render('user/shop', {
              products,
              totalPages,
@@ -465,7 +475,7 @@ exports.showShop=async (req,res)=>{
 exports.showSingle=async (req,res)=>{
    
     try {
-        const product=await Products.findOne({_id:req.params.id})
+        const product=await Products.findOne({_id:req.params.id}).populate('offer')
         const category=await Category.findOne({_id:product.category})
         res.render('user/singleView',{product,category})
     } catch (error) {
@@ -489,7 +499,7 @@ exports.showCart=async (req,res)=>{
         console.log(error.message)
         res.status(500).send('Internal Server Error');
     }
-}
+} 
 
 
 exports.addTocart=async (req,res)=>{
@@ -502,15 +512,22 @@ exports.addTocart=async (req,res)=>{
             productid=req.body.productId
         }
         console.log(req.body.productId)
-        const product=await Products.findById(productid)
+        const product=await Products.findById(productid).populate('offer')
+        console.log(product)
         const user=await User.findById(req.session.user)
-        const total=quantity*product.price
+        let total;
+        if(product.offerPrice !== 0 && product.offer.status === 'Available'){
+            total = quantity * product.offerPrice
+        }else{
+            total=quantity*product.price
+        }
+            
 
         let totalCartAmount = 0;
         user.cart.forEach(item => {
            totalCartAmount +=  item.total;
         })
-        const existingCartItemIndex=await user.cart.find(item=> item.product.equals(product._id))
+        const existingCartItemIndex= await user.cart.find(item=> item.product.equals(product._id))
         if(existingCartItemIndex){
             existingCartItemIndex.quantity+=quantity
             existingCartItemIndex.total+=total
@@ -574,14 +591,19 @@ exports.updateCartQauntity = async  (req,res) => {
         }
 
         // Calculate the new total based on the product's price and new quantity
-        const product = await Products.findById(cartItem.product);
+        const product = await Products.findById(cartItem.product).populate('offer');
 
         if(newQuantity > product.stock){
             req.flash('error','stock limit exceeded')
             return res.json({stock:product.stock, error:req.flash('error') });
         }
-            
-        const newTotal = newQuantity * product.price;
+        let newTotal
+        if(product.offerPrice !== 0 && product.offer.status === 'Available'){
+            newTotal = newQuantity * product.offerPrice
+        }else{
+            newTotal = newQuantity * product.price;
+        }
+        
         
         // Update cart item properties
         cartItem.quantity = newQuantity;

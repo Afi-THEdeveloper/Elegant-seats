@@ -26,46 +26,53 @@
             <div class="col-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Add new category</h4>
+                  <h4 class="card-title">Add new Offer</h4>
                   
 
-                  <form class="forms-sample" action="/admin/categories" method="post" enctype="multipart/form-data">
+                <form class="forms-sample" action="/admin/offers/create" method="post">
 
                     <% if (error && error.length > 0) { %>
-                      <div class="alert alert-danger">
-                        <% error.forEach(function(message) { %>
-                          <p><%= message %></p>
-                        <% }); %>
-                      </div>
-                    <% } %>
-
-
-                    <div class="form-group">
-                      <label for="exampleInputName1">Category Name</label>
-                      <input type="text" class="form-control" name="name" id="exampleInputName1" placeholder="Name" >
-                    </div>
-                  
-                    <div class="form-group">
-                      <label>Image upload</label>
-                      <!-- <input type="file" name="photo" class="file-upload-default"> -->
-                      <div class="input-group col-xs-12">
-                        <input type="file" accept="image/*" name="photo" class="form-control file-upload-info" placeholder="Upload Image" id="preview-input"  />
-                      </div>
-                    </div>
-
-                    <div class="form-group" id="preview-group" style="display: none;">
-                        <div class="card">
-                            <div class="card-header">
-                                Preview Image
-                            </div>
-                            <div class="card-body">
-                                <img src="" alt="img" class="preview" id="preview-img" style="max-width: 440px; object-fit: cover;" />
-                            </div>
+                        <div class="alert alert-danger text-center" id="error-message">
+                          <% error.forEach(function(message) { %>
+                            <p><%= message %></p>
+                          <% }); %>
                         </div>
+                        <script>
+                            setTimeout(function() {
+                              var successMessage = document.getElementById('error-message');
+                              if (successMessage) {
+                                successMessage.style.display = 'none';
+                              }
+                            }, 2000); 
+                          </script>
+                    <% } %> 
+
+
+                    <div class="form-group">
+                      <label for="exampleInputName1">offer Name</label>
+                      <input type="text" class="form-control" name="name" id="offerName" placeholder="Name" >
+                      <small id="nameErr" class="text-danger"></small>
                     </div>
+                    <div class="form-group">
+                        <label for="exampleInputName1">Discount</label>
+                        <input type="number" class="form-control" name="Discount"  id="Discount" placeholder="Discount" >
+                        <small id="DiscountErr" class="text-danger"></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName1">Start Date</label>
+                        <input type="date" class="form-control" name="startDate" id="startDate" placeholder="start date" >
+                        <small id="startDateErr" class="text-danger"></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName1">end Date</label>
+                        <input type="date" class="form-control" name="Expiry" id="Expiry" placeholder="Expiry date" >
+                        <small id="ExpiryErr" class="text-danger"></small>
+                    </div>
+
                     
-                    <button type="submit" class="btn btn-primary mr-2">Add</button>
-                      <a href="/admin/category" class="btn btn-light">Cancel</a>
+                    
+                    <button type="submit" onclick="return validateOffer()" class="btn btn-primary mr-2">Add</button>
+                    <a href="/admin/offers" class="btn btn-light">Cancel</a>
                   </form>
                 </div>
               </div>
@@ -91,30 +98,7 @@
   </div>
   <!-- container-scroller -->
      
-  <script>
-    function hideErrorMessage() {
-      var errorMessageElement = document.getElementById('error-message');
-      if (errorMessageElement) {
-        setTimeout(()=>{
-          errorMessageElement.style.display = 'none';
-        }, 4000);
-        
-      }
-    }
-    hideErrorMessage();
-
-    const previewArea = document.getElementById('preview-group')
-    const previewInput = document.getElementById('preview-input')
-    const previewImg = document.getElementById('preview-img')
-
-    previewInput.onchange = e => {
-        if (e.target.files && e.target.files.length) {
-            const imgSrc = URL.createObjectURL(e.target.files[0])
-            previewImg.src = imgSrc
-            previewArea.style.display = 'block'
-        }
-    }
-  </script>
+  <script src="/validations/offerValidations"></script>
   <!-- plugins:js -->
   <script src="../../vendors/js/vendor.bundle.base.js"></script>
   <!-- endinject -->
