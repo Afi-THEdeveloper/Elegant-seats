@@ -101,7 +101,7 @@ exports.updateOffer  = async (req,res)=>{
                 offerExistingProducts[i].offerPrice = offerPrice
                 await offerExistingProducts[i].save()
             }
-            console.log( offerExistingProducts)
+            
         }
         
         await Offers.findByIdAndUpdate(id,{$set:{
@@ -126,6 +126,19 @@ exports.destroyOffer = async (req, res) => {
     const id = req.body.id;
     const state = Boolean(req.body.state);
     try {
+
+    if(state === true){
+        const offerExistingProducts = await Products.find({offer:id})
+        if(offerExistingProducts){
+           for(let i=0;i<offerExistingProducts.length;i++){
+              offerExistingProducts[i].offerPrice = 0
+              offerExistingProducts[i].offer = null
+              await offerExistingProducts[i].save()
+           }
+        }
+    }
+
+
       await Offers.findByIdAndUpdate(
         id,
         { $set: { deleted: state } },
@@ -136,4 +149,4 @@ exports.destroyOffer = async (req, res) => {
       console.log(error.message);
     }
 }
-    
+ 

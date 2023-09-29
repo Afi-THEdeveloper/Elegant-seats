@@ -81,9 +81,10 @@
         <div class="col-lg-5 col-xl-4">
           <div class="s_product_text">
             <h3><%= product.name %></h3>
-            <% if(product.offerPrice !==0 && product.offer.status === 'Available' ) { %>
-              <h2><%= product.price %></h2>
-              <h2></h2>
+            <% if(product.offerPrice !==0 && product.offer.status === 'Available' && product.offer.deleted === false ) { %>
+              <h2 style="text-decoration: line-through;">&#8377;<%= product.price %></h2>
+              <h4 class="text-success"><%= product.offer.discount  %>% <%= product.offer.name %> off</h4>
+              <h5 class="text-success"><%= product.offerPrice %>/- only</h5>
             <% }else{ %>  
                <h2><%= product.price %></h2>
             <% } %>   

@@ -68,9 +68,11 @@
                     <div class="form-group">
                       <label for="cat">apply Offers</label>
                       <select name="offerId" id="cat" class="form-control">
-                        <option value="-1">Choose</option>
+                        <option value="-1">Non</option>
                         <% offers.forEach( (offer) => { %>
+                          <% if(offer.deleted === false){ %>
                             <option value="<%= offer._id %>"> <%= offer.name %> </option>
+                          <% } %>  
                         <% }) %>
                       </select> 
                     </div>
@@ -132,7 +134,7 @@
 
                     
                       <button type="submit" onclick="return validateProduct()" class="btn btn-primary mr-2">Create</button>
-                      <a href="/admin/category" class="btn btn-light">Cancel</a>
+                      <a href="/admin/products" class="btn btn-light">Cancel</a>
                 </form>
                 </div>
               </div>

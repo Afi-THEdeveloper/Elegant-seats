@@ -516,7 +516,7 @@ exports.addTocart=async (req,res)=>{
         console.log(product)
         const user=await User.findById(req.session.user)
         let total;
-        if(product.offerPrice !== 0 && product.offer.status === 'Available'){
+        if(product.offerPrice !== 0 && product.offer.status === 'Available' && product.offer.deleted === false){
             total = quantity * product.offerPrice
         }else{
             total=quantity*product.price
@@ -598,7 +598,7 @@ exports.updateCartQauntity = async  (req,res) => {
             return res.json({stock:product.stock, error:req.flash('error') });
         }
         let newTotal
-        if(product.offerPrice !== 0 && product.offer.status === 'Available'){
+        if(product.offerPrice !== 0 && product.offer.status === 'Available' && product.offer.deleted === false ){
             newTotal = newQuantity * product.offerPrice
         }else{
             newTotal = newQuantity * product.price;
