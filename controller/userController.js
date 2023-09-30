@@ -485,7 +485,8 @@ exports.showSingle=async (req,res)=>{
    
     try {
         const product=await Products.findOne({_id:req.params.id}).populate('offer')
-        const category=await Category.findOne({_id:product.category})
+        const category=await Category.findOne({_id:product.category}).populate('offer')
+        console.log(category)
         res.render('user/singleView',{product,category})
     } catch (error) {
         console.log(error.message)

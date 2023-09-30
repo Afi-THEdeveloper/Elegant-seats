@@ -29,12 +29,12 @@ router.post('/forgetVerifyOtp',userController.forgetVerifyOtp)
 router.patch('/resendOtp',userController.resendOtp)
 
 //shop
-router.get('/product/:id',userController.showSingle)
-router.get('/shop',userController.showShop)
-router.post('/shop',userController.showShop)
-router.get('/wishlist', userController.shoWishlist)
-router.get('/addTowishlist/:id', userController.addToWishlist)
-router.get('/wishlist/remove/:id', userController.destroyWishitem)
+router.get('/product/:id', userController.showSingle)
+router.get('/shop', userController.showShop)
+router.post('/shop', userController.showShop)
+router.get('/wishlist', islogged, userController.shoWishlist)
+router.get('/addTowishlist/:id', islogged,  userController.addToWishlist)
+router.get('/wishlist/remove/:id', islogged, userController.destroyWishitem)
 //search
 router.post('/searchProduct', userController.showShop)
 
