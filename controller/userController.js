@@ -415,6 +415,14 @@ exports.showShop=async (req,res)=>{
                 $unwind:'$category'
             },
             {
+                $lookup: {
+                    from: 'offers',
+                    localField: 'category.offer',
+                    foreignField: '_id',
+                    as: 'category.offer'
+                }
+            },
+            {
                 $match:neededFilter
             },
             {
@@ -437,10 +445,11 @@ exports.showShop=async (req,res)=>{
         ]
 
         const prdt = await Products.aggregate(aggragationPipeline);
+        console.log(prdt)
         let totalItems = prdt[0].totalPages[0].total;
         let totalPages = Math.ceil(totalItems/6)
         const products = prdt[0].products;
-        console.log(products[0].offer[0])
+        console.log(products[0].category)
         res.render('user/shop', {
              products,
              totalPages,
@@ -492,6 +501,7 @@ exports.showSingle=async (req,res)=>{
 exports.showCart=async (req,res)=>{
     try {
         const user=await User.findById(req.session.user).populate('cart.product')  
+        console.log(user.cart)
         const cart=user.cart
         const totalCartAmount=user.totalCartAmount   
         res.render('user/cart',{success:req.flash('success'), error:req.flash('error'), cart,totalCartAmount,user})       
@@ -512,15 +522,18 @@ exports.addTocart=async (req,res)=>{
             productid=req.body.productId
         }
         console.log(req.body.productId)
-        const product=await Products.findById(productid).populate('offer')
+        const product=await Products.findById(productid).populate(['offer','category'])
         console.log(product)
         const user=await User.findById(req.session.user)
         let total;
-        if(product.offerPrice !== 0 && product.offer.status === 'Available' && product.offer.deleted === false){
+        const categoryOffer = await Offers.findById(product.category.offer)
+        if(product.category.offer !== null && categoryOffer.status === 'Available' && categoryOffer.deleted === false ){
+            total = quantity * product.categoryOfferPrice
+        }else if(product.offerPrice !== 0 && product.offer.status === 'Available' && product.offer.deleted === false){
             total = quantity * product.offerPrice
         }else{
             total=quantity*product.price
-        }
+        } 
             
 
         let totalCartAmount = 0;
@@ -591,14 +604,18 @@ exports.updateCartQauntity = async  (req,res) => {
         }
 
         // Calculate the new total based on the product's price and new quantity
-        const product = await Products.findById(cartItem.product).populate('offer');
+        const product = await Products.findById(cartItem.product).populate(['offer','category']);
 
         if(newQuantity > product.stock){
             req.flash('error','stock limit exceeded')
             return res.json({stock:product.stock, error:req.flash('error') });
         }
+
+        const categoryOffer = await Offers.findById(product.category.offer)
         let newTotal
-        if(product.offerPrice !== 0 && product.offer.status === 'Available' && product.offer.deleted === false ){
+        if(product.category.offer !==null && categoryOffer.status === 'Available' && categoryOffer.deleted === false ){
+            newTotal = newQuantity * product.categoryOfferPrice
+        }else if(product.offerPrice !== 0 && product.offer.status === 'Available' && product.offer.deleted === false ){
             newTotal = newQuantity * product.offerPrice
         }else{
             newTotal = newQuantity * product.price;

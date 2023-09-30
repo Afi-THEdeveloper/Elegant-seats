@@ -106,12 +106,26 @@
                     </div>
                   </td>
                   <td>
-                    <% if(cartprdt.product.offerPrice === 0){ %>
-                     <h5><%= cartprdt.product.price %></h5>
-                    <% }else{ %> 
-                      <h5><%= cartprdt.product.offerPrice %></h5>
-                      <small class="text-success">offer price</small>
-                    <% } %>
+                    <% if(cartprdt.product.categoryOfferPrice !== 0){ %>
+
+                      <% if(cartprdt.product.categoryOfferPrice === 0){ %>
+                       <h5><%= cartprdt.product.price %></h5>
+                      <% }else{ %> 
+                        <h5><%= cartprdt.product.categoryOfferPrice %></h5>
+                        <small class="text-success">category offer</small>
+                      <% } %> 
+
+                    <% }else { %>
+
+                      <% if(cartprdt.product.offerPrice === 0){ %>
+                        <h5><%= cartprdt.product.price %></h5>
+                      <% }else{ %> 
+                         <h5><%= cartprdt.product.offerPrice %></h5>
+                         <small class="text-success">offer price</small>
+                      <% } %>
+
+                    <% } %>  
+                     
                   </td>
                   <td>
                     <div class="input-group" style="width: 100px">

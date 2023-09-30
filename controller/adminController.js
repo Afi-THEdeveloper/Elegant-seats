@@ -383,13 +383,21 @@ exports.ShowCategory = async (req, res) => {
     const categories = await Category.find({});
     res.render("Admin/categories/index", { categories,success:req.flash('success') });
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message)
+    res.status(500).send('Internal Server Error');
   }
 };
 
 
-exports.showAdd = (req, res) => {
-  res.render("Admin/categories/new",{error:req.flash('error')});
+exports.showAdd =async (req, res) => {
+  try {
+    const offers = await Offer.find({deleted:false})
+    res.render("Admin/categories/new",{offers, error:req.flash('error')});
+    
+  } catch (error) {
+    console.log(error.message)
+    res.status(500).send('Internal Server Error');
+  }
 };
 
 exports.CreateCategory = async (req, res) => {
@@ -405,15 +413,23 @@ exports.CreateCategory = async (req, res) => {
       res.redirect('/admin/category/create')
     }
     else{
+      let offer;
+      if(req.body.offerId !== '-1'){
+        offer = req.body.offerId
+      }else{
+        offer=null
+      }  
       await Category.create({
         name,
+        offer,
         image: "/category/" + photo,
       });
       req.flash('success','category added successfully')
       res.redirect("/admin/category");
     }
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message)
+    res.status(500).send('Internal Server Error');
   }
 }
 
@@ -422,9 +438,11 @@ exports.showEdit = async (req, res) => {
   const { id } = req.params;
   try {
     const category = await Category.findById(id);
-    res.render("Admin/categories/edit", { category })   
+    const offers = await Offer.find({deleted:false})
+    res.render("Admin/categories/edit", { category, offers, error:req.flash('error') })   
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message)
+    res.status(500).send('Internal Server Error');
   }
 };
 
@@ -434,8 +452,47 @@ exports.updateCategory = async (req, res) => {
   const { name, photo } = req.body;
   try {
     const category = await Category.findById(id);
+    const duplicateCategory =await Category.find({name:{$ne: category.name, $regex: new RegExp('^' + req.body.name + '$', 'i') } } )
+    if(duplicateCategory.length){
+      req.flash('error','category already exists')
+      return  res.redirect(`/admin/categories/${id}/edit`)
+    }
+
+    let offer;
+    if(req.body.offerId !== '-1'){
+      offer = req.body.offerId
+      const choosedoffer = await Offer.findById(offer)
+      let categoryProducts = await Product.find({category:id})
+      console.log(categoryProducts)
+
+      if(categoryProducts){  
+         for(let i=0;i<categoryProducts.length;i++){
+           let price =categoryProducts[i].price
+           let categoryOfferPrice = categoryProducts[i].categoryOfferPrice
+
+           categoryOfferPrice = (choosedoffer.discount/100) * price
+           categoryOfferPrice = Math.ceil(price-categoryOfferPrice)
+           categoryProducts[i].categoryOfferPrice = categoryOfferPrice
+           await categoryProducts[i].save()
+
+        }
+      }
+      console.log(categoryProducts)
+    }else{
+      offer=null
+      let categoryProducts = await Product.find({category:id})
+      if(categoryProducts){
+        for(let i=0;i<categoryProducts.length;i++){
+          categoryProducts[i].categoryOfferPrice = 0
+          categoryProducts[i].save()
+        }
+      }
+    }  
+
+    
       let updatedObj = {
         name,
+        offer,
       };
       if (typeof photo !== "undefined") {
         fs.unlink(path.join(__dirname, "../public", category.image), (err) => {
@@ -449,7 +506,8 @@ exports.updateCategory = async (req, res) => {
       res.redirect("/admin/category");
     
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message)
+    res.status(500).send('Internal Server Error');
   }
 };
       
@@ -465,7 +523,8 @@ exports.destroyCategory = async (req, res) => {
     );
     return res.redirect("/admin/category");
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message)
+    res.status(500).send('Internal Server Error');
   }
 }
   
@@ -479,7 +538,7 @@ exports.showProducts= async (req,res)=>{
 
 exports.showAddProduct= async (req,res) => {
     const categories = await Category.find({})
-    const offers = await Offer.find({})
+    const offers = await Offer.find({deleted:false})
     res.render('Admin/products/new', { categories,offers })
 }
 
@@ -487,6 +546,18 @@ exports.createProduct = async (req, res) => {
     const { name, description, price, images, stock, category } = req.body
     const imagesWithPath = images.map(img => '/products/' + img)
     try {
+        const choosedCategory  = await Category.findById(category).populate('offer')
+        if(choosedCategory.offer && choosedCategory.offer.status === 'Available'){
+            const cOffer = choosedCategory.offer
+            console.log(cOffer);
+            var categoryOfferPrice = (cOffer.discount/100) * price
+            categoryOfferPrice = Math.ceil(price-categoryOfferPrice)
+        }
+
+ 
+ 
+          
+
         let offerPrice
         let offerId
         if(req.body.offerId !== '-1'){
@@ -505,6 +576,7 @@ exports.createProduct = async (req, res) => {
             price,
             offer:offerId,
             offerPrice,
+            categoryOfferPrice,
             category,
             images: imagesWithPath,
         })
@@ -520,7 +592,7 @@ exports.showEditProduct = async (req, res)=>{
   try {
       const product = await Product.findById(id)
       const category = await Category.find({})
-      const offers = await Offer.find({})
+      const offers = await Offer.find({deleted:false })
       res.render('Admin/products/edit',{ product, category, offers, success:req.flash('success') })
   } catch (error) {
       console.log(error.message)
@@ -618,7 +690,8 @@ exports.destroyProduct = async (req, res) => {
       );
       return res.redirect("/admin/products");
     } catch (error) {
-      console.log(error.message);
+      console.log(error.message)
+        res.status(500).send('Internal Server Error');
     }
 }
 

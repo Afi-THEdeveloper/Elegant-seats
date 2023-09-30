@@ -69,7 +69,7 @@
                       <select name="offerId" id="cat" class="form-control">
                           <option value="-1">Choose</option>
                           <% offers.forEach(offer => { %>
-                            <% if(offer.deleted ===false){ %>  
+                              
 
                                 <% if(product.offer ===null){ %>
                                   <option value="<%= offer._id %>"><%= offer.name %></option>
@@ -80,7 +80,7 @@
                                 <% } %>   
 
                                 
-                            <% } %>        
+                                   
                           <% }) %>
                       </select>     
                     </div>

@@ -1,5 +1,6 @@
 const Offers = require('../model/offerModel')
 const Products = require('../model/productModel')
+const Category = require('../model/categoryModel')
 
 exports.showOffers = async (req,res)=>{
     try {
@@ -90,8 +91,29 @@ exports.updateOffer  = async (req,res)=>{
             status = 'Starting Soon'
         }
 
+
+        const offerExistingCategories = await Category.find({offer:id})
+        console.log(offerExistingCategories)
+        if(offerExistingCategories.length > 0){
+            for(let i=0;i<offerExistingCategories.length;i++){
+                let category = await Category.findById(offerExistingCategories[i]._id)
+                let catProducts = await Products.find({category:category._id})
+                if(catProducts.length > 0){
+                 for(let j=0;j<catProducts.length;j++){
+                    let price = catProducts[j].price
+                    let categoryOfferPrice = catProducts[j].categoryOfferPrice
+
+                    categoryOfferPrice = (Discount/100) * price
+                    categoryOfferPrice = Math.ceil(price - categoryOfferPrice)
+                    catProducts[j].categoryOfferPrice = categoryOfferPrice
+                    await catProducts[j].save()
+                 }
+                }
+            }
+        }
+
         const offerExistingProducts = await Products.find({offer:id})
-        if(offerExistingProducts){
+        if(offerExistingProducts.length >0){
             for(let i=0;i<offerExistingProducts.length;i++){
                 let price =offerExistingProducts[i].price
                 let offerPrice = offerExistingProducts[i].offerPrice
@@ -135,6 +157,25 @@ exports.destroyOffer = async (req, res) => {
               offerExistingProducts[i].offer = null
               await offerExistingProducts[i].save()
            }
+        }
+        const offerExistingCategories = await Category.find({offer:id})
+        console.log(offerExistingCategories)
+        if(offerExistingCategories){
+            for(let i=0;i<offerExistingCategories.length;i++){
+                let category = await Category.findById(offerExistingCategories[i]._id)
+                category.offer = null
+                await category.save()
+
+                
+                let catProducts = await Products.find({category:category._id})
+                if(catProducts.length > 0){
+                  for(let j=0;j<catProducts.length;j++){
+                    catProducts[j].categoryOfferPrice = 0
+                    await catProducts[j].save()
+                  }
+                }
+                
+            }
         }
     }
 

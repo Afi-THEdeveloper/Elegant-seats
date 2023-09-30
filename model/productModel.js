@@ -30,6 +30,10 @@ const productSchema = new mongoose.Schema({
         type:Number,
         default:0
     },
+    categoryOfferPrice:{
+        type:Number,
+        default:0
+    },
     softDeleted:{
         type:Boolean,
         default:false

@@ -10,7 +10,11 @@ const categorySchema = new mongoose.Schema({
     isDestroyed:{
         type:Boolean,
         default:false
-    }
+    },
+    offer:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Offers'
+    },
 })
 
 const Category = mongoose.model('Category',categorySchema);
