@@ -7,6 +7,7 @@ const Offer = require('../model/offerModel')
 const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcrypt");
+const json2csv = require('json2csv');
 const { Console, error } = require("console");
 
 //login 
@@ -364,7 +365,7 @@ exports.salesReport=async (req,res)=>{
         
       ])
 
-    console.log(allOrders)  
+    console.log(allOrders[0].products.product)  
     res.render('Admin/orders/salesReport',{orders:allOrders, error:req.flash('error')})
   } catch (error) {
     console.log(error.message)
@@ -372,6 +373,57 @@ exports.salesReport=async (req,res)=>{
   }
 }
 
+
+exports.downloadSalesReport = async (req,res)=>{
+  try {
+    const data = req.body
+    console.log(data)
+    let dataLength;
+    let transformedData=[]
+    if( Array.isArray(data.orderId) ){
+      dataLength = data.orderId.length
+      for(let i=0; i<dataLength; i++){
+        transformedData.push({
+            orderDate: data.orderDate[i],
+            deliveredOn: data.deliveredOn[i],
+            orderId: data.orderId[i],
+            products:data.ProductsName[i],
+            paymentMethod:data.paymentMethod[i],
+        })
+      }
+    }else{
+       dataLength = 1
+       transformedData = [];
+      transformedData.push({
+        orderDate: data.orderDate,
+        deliveredOn: data.deliveredOn,
+        orderId: data.orderId,
+        products:data.ProductsName,
+        paymentMethod:data.paymentMethod,
+      })
+
+    }
+    // const transformedData = [];
+    // for(let i=0; i<dataLength; i++){
+    //     transformedData.push({
+    //         orderDate: data.orderDate[i],
+    //         deliveredOn: data.deliveredOn[i],
+    //         orderId: data.orderId[i],
+    //         products:data.ProductsName[i],
+    //         paymentMethod:data.paymentMethod[i],
+    //     })
+    // }
+    console.log(transformedData)
+    const fields = ['orderDate',"orderId","deliveredOn","products","paymentMethod"]
+    const csv = json2csv.parse(transformedData, { fields });
+    res.attachment('salesReport.csv');
+    res.status(200).send(csv);
+
+  } catch (error) {
+    console.log(error.message)
+    res.status(500).send('Internal Server Error');
+  }
+}
 
 
 

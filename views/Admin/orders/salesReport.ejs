@@ -206,9 +206,9 @@
 
                        
                         
-
+                <form action="/admin/salesReport/download" method="post">
                     <div class="table-responsive">
-
+                        
                         <% if (error && error.length > 0) { %>
                             <div class="alert alert-danger">
                               <% error.forEach(function(message) { %>
@@ -217,7 +217,9 @@
                             </div>
                         <% } %>
 
-                      <% if(orders.length){%>
+                    <% if(orders.length){%>
+                      <a href=""><button class="btn-primary btn-sm" type="submit">Download Report</button></a>
+
                       <table class="table table-striped">
                         <thead>
                           <tr>
@@ -252,21 +254,26 @@
 
                           <tr>
                               <td class="py-1">
+                                <input type="hidden" name="orderId" value="<%= order.orderId  %>">
                                 <%= order.orderId  %>
                               </td>
                               <td>
+                                <input type="hidden" name="orderDate" value="<%= order.orderDate.toDateString() %>" >
                                 <%= order.orderDate.toDateString() %>
                               </td>
                               <td>
+                                <input type="hidden" name="deliveredOn" value="<%= order.deliveredOn.toDateString() %>">
                                 <%= order.deliveredOn.toDateString() %>
                               </td>
   
                               <td>
+                                <input type="hidden" name="ProductsName" value="<%= order.products.product[0].name %>">
                                 <% order.products.product.forEach((prdt)=> { %>
                                     • <%= prdt.name  %><br>
-                                  <% }) %>
+                                <% }) %>
                               </td>
                               <td>
+                                <input type="hidden" name="totalPrice" value="<%= order.totalPrice  %>">
                                   <%= order.totalPrice  %>
                               </td>
                               <td>
@@ -280,6 +287,7 @@
                                   <%=order.deliveryAddress[0].alternativePhoneNumber%>
                                 </td>
                               <td>
+                                <input type="hidden" name="paymentMethod" value="<%= order.paymentMethod  %>">
                                 <%= order.paymentMethod  %>
                               </td>
   
@@ -307,7 +315,7 @@
 
                       
                     </div>
-
+                  </form>
 
                     <% } else { %>
                     <p>no sales done yet</p>
@@ -367,6 +375,8 @@
             img.addEventListener('click', () => zoomImg(img))
         })
     </script>
+
+
     <!-- container-scroller -->
     <!-- plugins:js -->
     <script src="../../vendors/js/vendor.bundle.base.js"></script>

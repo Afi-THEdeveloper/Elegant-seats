@@ -37,9 +37,12 @@ router.route('/ordersTable')
     .get( isAdminlogged, orderController.showOrdersTable)
     .patch( isAdminlogged, orderController.updateStatus)
 router.get('/orders/details/:id', isAdminlogged, orderController.orderDetails)
+
+//sales Report
 router.route('/salesReport')
       .get(isAdminlogged, adminController.salesReport)
       .post(isAdminlogged, adminController.salesReport)
+router.post('/salesReport/download', isAdminlogged, adminController.downloadSalesReport)      
       
 
 

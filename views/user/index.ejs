@@ -125,10 +125,10 @@
                 <% categories.forEach(function(category) { %>
                 <% if (!category.isDestroyed) { %>
                    
-                <div class="col-lg-5 col-sm-6">
-                    <div class="single_feature_post_text">
+                <div class="col-lg-5 col-sm-6 mt-5">
+                    <div class="single_feature_post_text mt-5">
                         <p><%=category.name%></p>
-                        <a href="#" class="feature_btn">EXPLORE NOW <i class="fas fa-play"></i></a>
+                        <a href="/shop?category=<%= category.name %>" class="feature_btn">EXPLORE NOW <i class="fas fa-play"></i></a>
                         <img src="<%= category.image %>" alt="">
                     </div>
                 </div>
@@ -167,6 +167,9 @@
     </section>
     <!-- upcoming_event part start-->
 
+
+        
+
     <!-- product_list start-->
     <section class="product_list section_padding">
         <div class="container">
@@ -182,22 +185,22 @@
                     <div class="product_list_slider owl-carousel">  
                         <div class="single_product_list_slider">
                             <div class="row align-items-center justify-content-between">
-                                <% products.forEach((product)=> { %>
-                                <% if (!product.softDeleted) { %>
+                            <% for (let i = 0; i < products.length && i < 8; i++) { %>
+                                <% if (!products[i].softDeleted) { %>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="single_product_item">
-                                        <a href="/product/<%= product._id %>">
-                                            <img  src="<%= product.images[0] %>" alt="">
+                                        <a href="/product/<%= products[i]._id %>">
+                                            <img  src="<%= products[i].images[0] %>" alt="">
                                         </a>
                                         <div class="single_product_text">
-                                            <h4><%= product.name %></h4>
-                                            <h3><%= product.price %></h3>
-                                            <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
+                                            <h4><%= products[i].name %></h4>
+                                            <h3><%= products[i].price %></h3>
+                                            <a href="/addTowishlist/<%= products[i]._id %>" class="add_cart"><i class="ti-heart"></i></a>
                                         </div>
                                     </div>
                                 </div>
                                 <% } %>
-                            <% }); %> 
+                            <% } %> 
                             </div>
                         </div>
                     </div>
@@ -214,7 +217,7 @@
     <!-- product_list part start-->
 
     <!-- awesome_shop start-->
-    <section class="our_offer section_padding">
+    <!-- <section class="our_offer section_padding">
         <div class="container">
             <div class="row align-items-center justify-content-between">
                 <div class="col-lg-6 col-md-6">
@@ -245,7 +248,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
     <!-- awesome_shop part start-->
 
     <!-- product_list part start-->
@@ -311,7 +314,8 @@
     <!-- product_list part end-->
 
     <!-- subscribe_area part start-->
-    <section class="subscribe_area section_padding">
+
+    <!-- <section class="subscribe_area section_padding">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-7">
@@ -330,11 +334,12 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
+
     <!--::subscribe_area part end::-->
 
     <!-- subscribe_area part start-->
-    <section class="client_logo padding_top">
+    <!-- <section class="client_logo padding_top">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-12">
@@ -371,7 +376,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
     <!--::subscribe_area part end::-->
 
 

@@ -37,7 +37,7 @@ exports.showHome=async(req,res)=>{
         const products=await Products.find({})
         const categories=await Category.find({})
         console.log(banner)
-        res.render('user/index',{ products,categories, banner})
+        res.render('user/index',{ products,categories, banner, success:req.flash('success') })
     } catch (error) {
         console.log(error.message)
     }
@@ -695,6 +695,7 @@ exports.addToWishlist = async (req,res)=>{
         //to redirect to origin page
         const referer = req.headers.referer;
         const originalPage = referer || '/';
+        req.flash('success','Added to wishlist')
         res.redirect(originalPage)
  
      } catch (error) {
