@@ -44,7 +44,21 @@
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
 
-                
+                <% if (success && success.length > 0) { %>
+                    <div class="alert alert-success text-center" id="success-message">
+                      <% success.forEach(function(message) { %>
+                        <p><%= message %></p>
+                      <% }); %>
+                    </div>
+                    <script>
+                        setTimeout(function() {
+                          var successMessage = document.getElementById('success-message');
+                          if (successMessage) {
+                            successMessage.style.display = 'none';
+                          }
+                        }, 2000); 
+                      </script>
+                  <% } %> 
             
                               
                              

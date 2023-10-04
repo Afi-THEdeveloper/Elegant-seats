@@ -346,10 +346,8 @@ exports.forgetVerifyOtp=async (req,res)=>{
 
 
 //shop
-
 exports.showShop=async (req,res)=>{
     try {
-        
         const categories= await Category.find({isDestroyed:false})
         const pageNumber = req.body.pageNumber || 0;
         const productsPerPage = 6;

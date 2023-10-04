@@ -309,6 +309,7 @@ exports.createOrder = async (req,res)=>{
            }
 
            await User.updateOne({_id:user._id},{$set:{cart:[],totalCartAmount:0}})
+           req.flash('success','Order placed successfully')
            res.redirect('/myOrders')
             
         
@@ -352,7 +353,7 @@ exports.showOrders=async (req,res)=>{
             }
           ]);
         // console.log(myOrders)
-        res.render('user/account/myOrders',{user,orders:myOrders})
+        res.render('user/account/myOrders',{user,orders:myOrders, success:req.flash('success') })
 
     } catch (error) {
         console.log(error.message)
