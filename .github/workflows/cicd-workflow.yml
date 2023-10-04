@@ -1,0 +1,29 @@
+name: CICD
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+      - name: Login to docker hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build docker image
+        run: docker build -t "integrationninjas/PROJECT(W11-W15)" .
+      - name: Publish image to docker hub
+        run: docker push "integrationninjas/PROJECT(W11-W15)":latest
+        
+  deploy:
+    needs: build
+    runs-on: self-hosted-aws-ec2
+    steps:
+      - name: Pull image from docker hub
+        run: docker pull "integrationninjas/PROJECT(W11-W15)":latest
+      - name: Delete old container
+        run: docker rm -f PROJECT-W11-W15-container
+      - name: Run docker container
+        run: docker run -d -p 3000:3000 --name PROJECT-W11-W15-container "integrationninjas/PROJECT(W11-W15)"
