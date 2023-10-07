@@ -446,7 +446,7 @@ exports.showOrdersTable=async (req,res)=>{
       ])
 
     console.log(allOrders)  
-    res.render('admin/orders/Aorders',{orders:allOrders})
+    res.render('Admin/orders/Aorders',{orders:allOrders})
   } catch (error) {
     console.log(error.message)
     res.status(500).send('Internal Server Error');
