@@ -73,86 +73,86 @@
                   <div class="row">
                    
 
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="fname">Name</label>
-                                <input type="text" id="fname" name="name" class="form-control" placeholder="" value="<%= address.name %>">
-                            </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="fname">Name</label>
+                            <input type="text" id="name" name="name" class="form-control" placeholder="Your fullname" value="<%=address.name %>">
+                            <small id="nameErr" class="text-danger"></small>
                         </div>
-                        
+                    </div>
+                    
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="phone">phone</label>
+                        <input type="number" id="phone" name="phone" class="form-control" placeholder="Enter your phone" value="<%= address.phone %>">
+                        <small id="phoneErr" class="text-danger"></small>
+                    </div>
+                </div>
+                  
+            
+               <div class="col-md-12">
+                        <div class="form-group">
+                        <label for="pincode">pincode</label>
+                        <input type="number" id="pincode" name="pincode" class="form-control" placeholder="Enter your pincode" value="<%= address.pincode %>">
+                        <small id="pinErr" class="text-danger"></small>
+                  </div>
+               </div>
+            
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="locality">Locality</label>
+                            <input type="text" id="locality" name="locality" class="form-control" placeholder="locality" value="<%= address.locality %>">
+                            <small id="localityErr" class="text-danger"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="city">district</label>
+                            <input type="text" id="district" name="district" class="form-control" placeholder="district" value="<%= address.district %>">
+                            <small id="districtErr" class="text-danger"></small>
+                        </div>
+                    </div>
+                
+                
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="email">Address</label>
+                            <input type="text" id="address" name="address" class="form-control" placeholder="(house name,post,street)" value="<%= address.address %>">
+                            <small id="addressErr" class="text-danger"></small>
+                        </div>
+                    </div>
 
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="phone">phone</label>
-                            <input type="number" id="phone" name="phone" class="form-control" placeholder="" value="<%= address.phone %>">
-                      </div>
+                            <label for="state">State</label>
+                            <input type="text" id="state" name="state" class="form-control" placeholder="Enter your state" value="<%= address.state  %>">
+                            <small id="stateErr" class="text-danger"></small>
+                        </div>
                     </div>
-                      
-                
-                   <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="pincode">pincode</label>
-                            <input type="number" id="pincode" name="pincode" class="form-control" placeholder="" value="<%= address.pincode %>">
-                      </div>
-                   </div>
-                
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="locality">Locality</label>
-                                <input type="text" id="locality" name="locality" class="form-control" placeholder="" value="<%= address.locality  %>">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="city">district</label>
-                                <input type="text" id="district" name="district" class="form-control" placeholder="" value="<%= address.district  %>">
-                            </div>
-                        </div>
-                    
-                    
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="email">Address</label>
-                                <input type="text" id="address" name="address" class="form-control" placeholder="" value="<%= address.address  %>">
-                            </div>
-                        </div>
+
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="landmark">landmark</label>
-                                <input type="text" id="landmark" name="landMark" class="form-control" placeholder="" value="<%= address.landMark  %>">
+                                <input type="text" id="landmark" name="landMark" class="form-control" placeholder="Enter your landMark" value="<%= address.landMark  %>">
                             </div>
                         </div>
                         
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="number">phone</label>
-                                <input type="number" id="phone" name="altNo" class="form-control" placeholder="" value="<%= address.alternativePhoneNumber  %>">
+                                <label for="number">Alternate phone</label>
+                                <input type="number" id="phone" name="altNo" class="form-control" placeholder="Enter your Alternate number" value="<%= address.alternativePhoneNumber  %>">
                           </div>
                         </div>
                         
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="state">Select state</label>
-                                <div class="form-field">
-                                    <i class="icon icon-arrow-down3"></i>
-                                    <select name="state" id="state" class="form-control">
-                                        <option value="#">Select state</option>
-                                        <option value="Kerala">Kerala</option>
-                                        <option value="Tamil Nadu">Tamil Nadu</option>
-                                        <option value="Karnataka">Karnataka</option>
-                                        <option value="Odissia">Odissia</option>
-                                        <option value="Goa">Goa</option>
-                                        <option value="Maharashtra">Maharashtra</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+                        
                         
                         
 
                       <span>
-                          <button type="submit" class="btn btn-primary">Update</button>
+                          <button type="submit" onclick="return validateNewAddress()" class="btn btn-primary">Update</button>
                           <a onclick="return back()" class="btn btn-light">Cancel</a>
+                          <hr>
                       </span>
                         
 
@@ -165,5 +165,5 @@
         </div>
     </div>
     
-    
+<script src="/validations/addressValidation.js"></script>    
 <%- include('../../partials/accountFooter') -%>  

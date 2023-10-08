@@ -960,7 +960,7 @@ exports.updateProductImages = async (req, res) => {
       } else {
           products=await Product.find({ softDeleted: 0 })   // Fetch all users from the database
       }
-      res.render('admin/products/products',{products})
+      res.render('Admin/products/products',{products})
   } catch (error) {
       console.log(error.message)
   }

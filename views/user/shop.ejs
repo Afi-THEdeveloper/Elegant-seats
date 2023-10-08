@@ -187,12 +187,12 @@
                                                 <% if(product.category.offer.length && product.category.offer[0].status === 'Available' && product.category.offer[0].deleted === false){ %>
                                                     <h4><%= product.name %></h4>
                                                     <h3 style="text-decoration: line-through; color: #999;">&#8377;<%= product.price %></h3>
-                                                    <h4 class="text-success"><%= product.categoryOfferPrice %>/- only</h4>
+                                                    <h4 class="text-success">&#8377;<%= product.categoryOfferPrice %>/- only</h4>
                                                     <h5 class="text-success"><%= product.category.offer[0].discount  %>% <%= product.category.offer[0].name %> offer on <%= product.category.name %></h5>
                                                 <% }else if(product.offerPrice !==0 && product.offer[0].status === 'Available' && product.offer[0].deleted === false) { %>
                                                     <h4><%= product.name %></h4>
                                                     <h3 style="text-decoration: line-through; color: #999;">&#8377;<%= product.price %></h3>
-                                                    <h4 class="text-success"><%= product.offerPrice %>/- only</h4>
+                                                    <h4 class="text-success">&#8377;<%= product.offerPrice %>/- only</h4>
                                                     <h5 class="text-success"><%= product.offer[0].discount  %>% <%= product.offer[0].name %> off</h5>
                                                 <% }else{ %>
                                                     <h4><%= product.name %></h4>
@@ -278,7 +278,7 @@
                         </a>
                         <div class="single_product_text">
                             <h4><%= prdt.name %></h4>
-                            <h3><%= prdt.price %></h3>
+                            <h3>&#8377;<%= prdt.price %></h3>
                         </div>
                     </div>
                     <% } %>
