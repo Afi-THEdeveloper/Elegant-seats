@@ -19,8 +19,12 @@ exports.verifyAdminLogin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const admin = await Admin.findOne({ email });
+    console.log(admin)
+    console.log(email,password)
 
     if (admin) {
+      // req.session.admin = admin._id;
+      // res.redirect("/admin/dashboard");
       const passwordMatch = await bcrypt.compare(password, admin.password);
       if (passwordMatch) {
         req.session.admin = admin._id;

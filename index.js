@@ -34,7 +34,7 @@ app.use(express.json());
 app.use('/', require('./routes/userRoute'))
 app.use('/admin',require('./routes/adminRoute'))
 
-app.use((req,res)=>{res.send('<h1> <center>404-page not found</center> </h1>')})
+// app.use('*',(req,res)=>{res.send('<h1> <center>404-page not found</center> </h1>')})
 
 
 
